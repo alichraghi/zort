@@ -3,7 +3,7 @@ const mem = std.mem;
 const math = std.math;
 const testing = std.testing;
 
-pub const Algorithm = enum { Quick, Insertion, Selection };
+pub const Algorithm = enum { Quick, Insertion, Selection, Bubble };
 
 /// sort and return the result (arr param)
 pub fn sortR(comptime T: anytype, algorithm: ?Algorithm, arr: []T, desc: bool) []T {
@@ -24,9 +24,22 @@ pub fn sort(comptime T: anytype, algorithm: ?Algorithm, arr: []T, desc: bool) vo
         quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc);
     } else {
         switch (algorithm.?) {
+            .Bubble => bubbleSort(T, arr, desc),
             .Quick => quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc),
             .Insertion => insertionSort(T, arr, desc),
             .Selection => selectionSort(T, arr, desc),
+        }
+    }
+}
+
+pub fn bubbleSort(comptime T: anytype, arr: []T, desc: bool) void {
+    var i: usize = 0;
+    while (i < arr.len - 1) : (i += 1) {
+        var j: usize = 0;
+        while (j < arr.len - i - 1) : (j += 1) {
+            if (flow(T, arr[j + 1], arr[j], desc)) {
+                mem.swap(T, &arr[j], &arr[j + 1]);
+            }
         }
     }
 }
@@ -84,6 +97,19 @@ fn flow(comptime T: type, a: T, b: T, desc: bool) bool {
 const items = [_]u8{ 9, 1, 4, 12, 3, 4 };
 const expectedASC = [_]u8{ 1, 3, 4, 4, 9, 12 };
 const expectedDESC = [_]u8{ 12, 9, 4, 4, 3, 1 };
+
+test "bubble" {
+    {
+        var arr = items;
+        bubbleSort(u8, &arr, false);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
+    {
+        var arr = items;
+        bubbleSort(u8, &arr, true);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
 
 test "quick" {
     {

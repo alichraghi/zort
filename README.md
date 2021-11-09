@@ -5,7 +5,7 @@ a lot of sorting algorithms in zig
 - [x] Quick
 - [x] Insertion
 - [x] Selection
-- [ ] Bubble
+- [x] Bubble
 - [ ] Merge
 - [ ] Counting
 - [ ] Radix
