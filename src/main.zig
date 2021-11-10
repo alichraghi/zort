@@ -37,7 +37,7 @@ pub fn bubbleSort(comptime T: anytype, arr: []T, desc: bool) void {
     while (i < arr.len - 1) : (i += 1) {
         var j: usize = 0;
         while (j < arr.len - i - 1) : (j += 1) {
-            if (flow(T, arr[j + 1], arr[j], desc)) {
+            if (flow(arr[j + 1], arr[j], desc)) {
                 mem.swap(T, &arr[j], &arr[j + 1]);
             }
         }
@@ -50,7 +50,7 @@ pub fn quickSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
         var i = left;
         var j = left;
         while (j < right) : (j += 1) {
-            if (flow(T, arr[j], pivot, desc)) {
+            if (flow(arr[j], pivot, desc)) {
                 mem.swap(T, &arr[i], &arr[j]);
                 i += 1;
             }
@@ -66,7 +66,7 @@ pub fn insertionSort(comptime T: anytype, arr: []T, desc: bool) void {
     while (i < arr.len) : (i += 1) {
         const x = arr[i];
         var j: usize = i;
-        while (j > 0 and flow(T, x, arr[j - 1], desc)) : (j -= 1) {
+        while (j > 0 and flow(x, arr[j - 1], desc)) : (j -= 1) {
             arr[j] = arr[j - 1];
         }
         arr[j] = x;
@@ -79,19 +79,12 @@ pub fn selectionSort(comptime T: anytype, arr: []T, desc: bool) void {
         var pos = i - 1;
         var j = i;
         while (j < arr.len) : (j += 1) {
-            if (flow(T, arr[j], arr[pos], desc)) {
+            if (flow(arr[j], arr[pos], desc)) {
                 pos = j;
             }
         }
         mem.swap(T, &arr[pos], &arr[i - 1]);
     }
-}
-
-fn flow(comptime T: type, a: T, b: T, desc: bool) bool {
-    if (desc)
-        return a > b
-    else
-        return a < b;
 }
 
 pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime right: usize, desc: bool) void {
@@ -119,7 +112,7 @@ pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime r
     var j: usize = 0;
     var k = left;
     while (i < n1 and j < n2) : (k += 1) {
-        if (flow(T, L[i], R[j], desc)) {
+        if (flow(L[i], R[j], desc)) {
             arr[k] = L[i];
             i += 1;
         } else {
@@ -137,6 +130,28 @@ pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime r
         j += 1;
         k += 1;
     }
+}
+
+pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
+    var gap = arr.len / 2;
+    while (gap > 0) : (gap /= 2) {
+        var i: usize = gap;
+        while (i < arr.len) : (i += 1) {
+            const x = arr[i];
+            var j = i;
+            while (j >= gap and flow(x, arr[j - gap], desc)) : (j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = x;
+        }
+    }
+}
+
+fn flow(a: anytype, b: @TypeOf(a), desc: bool) bool {
+    if (desc)
+        return a > b
+    else
+        return a < b;
 }
 
 const items = [_]u8{ 9, 1, 4, 12, 3, 4 };
@@ -204,6 +219,19 @@ test "Merge" {
     {
         var arr = items;
         mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
+
+test "shell" {
+    {
+        var arr = items;
+        shellSort(u8, &arr, false);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
+    {
+        var arr = items;
+        shellSort(u8, &arr, true);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }

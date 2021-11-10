@@ -11,4 +11,4 @@ a lot of sorting algorithms in zig
 - [ ] Radix
 - [ ] Bucket
 - [ ] Comb
-- [ ] Shell
+- [x] Shell
