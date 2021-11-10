@@ -96,11 +96,11 @@ fn flow(comptime T: type, a: T, b: T, desc: bool) bool {
 
 pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime right: usize, desc: bool) void {
     if (left >= right) return;
-    const m = left + (right - left) / 2;
-    mergeSort(T, arr, left, m, desc);
-    mergeSort(T, arr, m + 1, right, desc);
-    const n1 = m - left + 1;
-    const n2 = right - m;
+    const mid = left + (right - left) / 2;
+    mergeSort(T, arr, left, mid, desc);
+    mergeSort(T, arr, mid + 1, right, desc);
+    const n1 = mid - left + 1;
+    const n2 = right - mid;
     var L: [n1]T = undefined;
     var R: [n2]T = undefined;
     {
@@ -112,13 +112,13 @@ pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime r
     {
         var j: usize = 0;
         while (j < n2) : (j += 1) {
-            R[j] = arr[m + 1 + j];
+            R[j] = arr[mid + 1 + j];
         }
     }
     var i: usize = 0;
     var j: usize = 0;
-    var k: usize = left;
-    while (i < n1 and j < n2) {
+    var k = left;
+    while (i < n1 and j < n2) : (k += 1) {
         if (flow(T, L[i], R[j], desc)) {
             arr[k] = L[i];
             i += 1;
@@ -126,7 +126,6 @@ pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime r
             arr[k] = R[j];
             j += 1;
         }
-        k += 1;
     }
     while (i < n1) {
         arr[k] = L[i];
@@ -197,11 +196,11 @@ test "selection" {
 }
 
 test "Merge" {
-    // {
-    //     var arr = items;
-    //     mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false);
-    //     try testing.expect(mem.eql(u8, &arr, &expectedASC));
-    // }
+    {
+        var arr = items;
+        mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
     {
         var arr = items;
         mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true);
