@@ -134,6 +134,7 @@ pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime r
 
 pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
     var gap = arr.len / 2;
+    //std.debug.print("\n\n{s}\n\n", .{@typeName(@TypeOf(gap))});
     while (gap > 0) : (gap /= 2) {
         var i: usize = gap;
         while (i < arr.len) : (i += 1) {
@@ -143,6 +144,23 @@ pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
                 arr[j] = arr[j - gap];
             }
             arr[j] = x;
+        }
+    }
+}
+
+pub fn combSort(comptime T: anytype, arr: []T, desc: bool) void {
+    var gap = arr.len;
+    var f = true;
+    while (gap != 1 or f == true) {
+        gap = @floatToInt(usize, @intToFloat(f32, gap) / 1.3);
+        if (gap < 1) gap = 1;
+        f = false;
+        var i: usize = 0;
+        while (i < arr.len - gap) : (i += 1) {
+            if (flow(arr[i + gap], arr[i], desc)) {
+                mem.swap(T, &arr[i], &arr[i + gap]);
+                f = true;
+            }
         }
     }
 }
@@ -233,6 +251,14 @@ test "shell" {
         var arr = items;
         shellSort(u8, &arr, true);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
+
+test "comb" {
+    {
+        var arr = items;
+        combSort(u8, &arr, false);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
     }
 }
 

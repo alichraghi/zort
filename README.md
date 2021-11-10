@@ -8,7 +8,7 @@ a lot of sorting algorithms in zig
 - [x] Bubble
 - [x] Merge
 - [x] Shell
-- [ ] Comb
+- [x] Comb
 - [ ] Counting (requires allocator)
 - [ ] Radix (requires allocator)
 - [ ] Bucket (requires allocator)
