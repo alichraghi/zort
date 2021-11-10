@@ -94,6 +94,52 @@ fn flow(comptime T: type, a: T, b: T, desc: bool) bool {
         return a < b;
 }
 
+pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime right: usize, desc: bool) void {
+    if (left >= right) return;
+    const m = left + (right - left) / 2;
+    mergeSort(T, arr, left, m, desc);
+    mergeSort(T, arr, m + 1, right, desc);
+    const n1 = m - left + 1;
+    const n2 = right - m;
+    var L: [n1]T = undefined;
+    var R: [n2]T = undefined;
+    {
+        var i: usize = 0;
+        while (i < n1) : (i += 1) {
+            L[i] = arr[left + i];
+        }
+    }
+    {
+        var j: usize = 0;
+        while (j < n2) : (j += 1) {
+            R[j] = arr[m + 1 + j];
+        }
+    }
+    var i: usize = 0;
+    var j: usize = 0;
+    var k: usize = left;
+    while (i < n1 and j < n2) {
+        if (flow(T, L[i], R[j], desc)) {
+            arr[k] = L[i];
+            i += 1;
+        } else {
+            arr[k] = R[j];
+            j += 1;
+        }
+        k += 1;
+    }
+    while (i < n1) {
+        arr[k] = L[i];
+        i += 1;
+        k += 1;
+    }
+    while (j < n2) {
+        arr[k] = R[j];
+        j += 1;
+        k += 1;
+    }
+}
+
 const items = [_]u8{ 9, 1, 4, 12, 3, 4 };
 const expectedASC = [_]u8{ 1, 3, 4, 4, 9, 12 };
 const expectedDESC = [_]u8{ 12, 9, 4, 4, 3, 1 };
@@ -146,6 +192,19 @@ test "selection" {
     {
         var arr = items;
         selectionSort(u8, &arr, true);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
+
+test "Merge" {
+    // {
+    //     var arr = items;
+    //     mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false);
+    //     try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    // }
+    {
+        var arr = items;
+        mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }
