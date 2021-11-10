@@ -3,32 +3,44 @@ const mem = std.mem;
 const math = std.math;
 const testing = std.testing;
 
-pub const Algorithm = enum { Quick, Insertion, Selection, Bubble };
+pub const Error = error{ OutOfMemory, AllocatorRequired };
+
+pub const Algorithm = enum { Bubble, Quick, Insertion, Selection, Merge, Shell, Comb, Count };
 
 /// sort and return the result (arr param)
-pub fn sortR(comptime T: anytype, algorithm: ?Algorithm, arr: []T, desc: bool) []T {
-    sort(T, algorithm, arr, desc);
+pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?*mem.Allocator) Error![]T {
+    try sort(T, arr, desc, algorithm, allocator);
     return arr;
 }
 
 /// sort to a owned slice
-pub fn sortC(comptime T: anytype, algorithm: ?Algorithm, arr: []const T, desc: bool, allocator: *mem.Allocator) ![]T {
-    var result = try allocator.alloc(T, arr.len);
-    mem.copy(T, result, arr);
-    return sortR(T, algorithm, result, desc);
+pub fn sortC(comptime T: anytype, arr: []const T, desc: bool, algorithm: ?Algorithm, allocator: *mem.Allocator) Error![]T {
+    return try sortR(T, try allocator.dupe(T, arr), desc, algorithm, allocator);
 }
 
 /// sort array by given algorithm. default algorithm is Quick Sort
-pub fn sort(comptime T: anytype, algorithm: ?Algorithm, arr: []T, desc: bool) void {
-    if (algorithm == null) {
-        quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc);
-    } else {
-        switch (algorithm.?) {
+pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm, allocator_opt: ?*mem.Allocator) Error!void {
+    if (algorithm_opt) |algorithm| {
+        switch (algorithm) {
             .Bubble => bubbleSort(T, arr, desc),
             .Quick => quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc),
             .Insertion => insertionSort(T, arr, desc),
             .Selection => selectionSort(T, arr, desc),
+            .Shell => shellSort(T, arr, desc),
+            .Comb => combSort(T, arr, desc),
+            else => {
+                if (allocator_opt) |allocator| {
+                    switch (algorithm) {
+                        .Merge => try mergeSort(T, arr, 0, math.max(arr.len, 1) - 1, desc, allocator),
+                        else => {},
+                    }
+                } else {
+                    return error.AllocatorRequired;
+                }
+            },
         }
+    } else {
+        quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc);
     }
 }
 
@@ -87,15 +99,19 @@ pub fn selectionSort(comptime T: anytype, arr: []T, desc: bool) void {
     }
 }
 
-pub fn mergeSort(comptime T: anytype, arr: []T, comptime left: usize, comptime right: usize, desc: bool) void {
+pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool, allocator: *mem.Allocator) Error!void {
     if (left >= right) return;
     const mid = left + (right - left) / 2;
-    mergeSort(T, arr, left, mid, desc);
-    mergeSort(T, arr, mid + 1, right, desc);
+    try mergeSort(T, arr, left, mid, desc, allocator);
+    try mergeSort(T, arr, mid + 1, right, desc, allocator);
     const n1 = mid - left + 1;
     const n2 = right - mid;
-    var L: [n1]T = undefined;
-    var R: [n2]T = undefined;
+    var L = try allocator.alloc(T, n1);
+    var R = try allocator.alloc(T, n1);
+    defer {
+        allocator.free(L);
+        allocator.free(R);
+    }
     {
         var i: usize = 0;
         while (i < n1) : (i += 1) {
@@ -231,12 +247,12 @@ test "selection" {
 test "Merge" {
     {
         var arr = items;
-        mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false);
+        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false, testing.allocator);
         try testing.expect(mem.eql(u8, &arr, &expectedASC));
     }
     {
         var arr = items;
-        mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true);
+        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true, testing.allocator);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }
@@ -265,18 +281,24 @@ test "comb" {
 test "sort" {
     {
         var arr = items;
-        sort(u8, null, &arr, false);
+        try sort(u8, &arr, false, .Quick, null);
         try testing.expect(mem.eql(u8, &arr, &expectedASC));
     }
     {
-        var arr = items;
-        try testing.expect(mem.eql(u8, sortR(u8, null, &arr, false), &expectedASC));
+        sort(u8, &[_]u8{}, false, .Merge, null) catch |err| {
+            try testing.expect(err == Error.AllocatorRequired);
+        };
     }
     {
         var arr = items;
-        const c = try sortC(u8, null, &arr, false, std.testing.allocator);
-        defer std.testing.allocator.free(c);
-        try testing.expect(mem.eql(u8, c, &expectedASC));
+        const res = try sortR(u8, &arr, false, null, null);
+        try testing.expect(mem.eql(u8, res, &expectedASC));
+    }
+    {
+        var arr = items;
+        const res = try sortC(u8, &arr, false, null, testing.allocator);
+        defer testing.allocator.free(res);
+        try testing.expect(mem.eql(u8, res, &expectedASC));
         try testing.expect(mem.eql(u8, &arr, &items));
     }
 }
