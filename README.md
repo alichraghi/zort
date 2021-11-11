@@ -18,6 +18,6 @@ const zort = @import("zort");
 
 pub fn main() void {
     var arr = [_]u8{ 9, 1, 4, 12, 3, 4 };
-    sort(u8, .Quick, &arr, false);
+    sort(u8, arr, false, .Quick, null);
 }
 ```
