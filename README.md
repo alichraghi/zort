@@ -12,7 +12,7 @@ a lot of sorting algorithms in zig
 | Comb | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Heap | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Merge | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| Radix | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: (using mem.reverse) | :x: |
+| Radix | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
 | Tim | :x: | :x: | :x: | :x: |
 | Block | :x: | :x: | :x: | :x: |
 | Cube | :x: | :x: | :x: | :x: |
