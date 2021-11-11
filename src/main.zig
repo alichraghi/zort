@@ -192,7 +192,7 @@ pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allo
         var res = try allocator.alloc(T, arr.len);
         defer allocator.free(res);
 
-        var count: [10]usize = .{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        var count = [_]usize{0} ** 10;
         for (arr) |item| {
             count[(item / x) % 10] += 1;
         }
