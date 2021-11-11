@@ -3,7 +3,7 @@
 a lot of sorting algorithms in zig
 
 | Algorithm | Implemented | ASC | DESC | No Allocation |
-| ------------ | ------------- | ------------- | ------------- |
+| ------------ | ------------- | ------------- | ------------- | ------------- |
 | Quick | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Insertion | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Selection | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
