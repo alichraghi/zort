@@ -183,9 +183,6 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
 }
 
 pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) !void {
-    if (desc) {
-        return Error.NotImplemented;
-    }
     const m = mem.max(T, arr);
     var x: usize = 1;
     while (m / x > 0) : (x *= 10) {
@@ -215,6 +212,7 @@ pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allo
         for (arr) |*item, i|
             item.* = res[i];
     }
+    mem.reverse(T, arr);
 }
 
 fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
@@ -370,6 +368,11 @@ test "radix" {
         var arr = items;
         try radixSort(u8, &arr, false, testing.allocator);
         try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
+    {
+        var arr = items;
+        try radixSort(u8, &arr, false, testing.allocator);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }
 
