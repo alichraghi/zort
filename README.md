@@ -11,15 +11,15 @@ a lot of sorting algorithms in zig
 | Shell | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Comb | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Heap | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| Merge | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: |
-| Radix | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: | :white_check_mark: |
-| Tim | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| Blcok | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| Cube | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| Tree | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| Patience | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_check_mark: |
-| Smoothsort | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
-| Tournament | :x: | :heavy_minus_sign: | :heavy_minus_sign: | :heavy_minus_sign: |
+| Merge | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
+| Radix | :heavy_check_mark: | :heavy_check_mark: | :x: | :x: |
+| Tim | :x: | :x: | :x: | :x: |
+| Blcok | :x: | :x: | :x: | :x: |
+| Cube | :x: | :x: | :x: | :x: |
+| Tree | :x: | :x: | :x: | :x: |
+| Patience | :x: | :x: | :x: | :x: |
+| Smoothsort | :x: | :x: | :x: | :x: |
+| Tournament | :x: | :x: | :x: | :x: |
 
 ## Usage:
 ```zig
