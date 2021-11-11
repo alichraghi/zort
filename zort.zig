@@ -214,14 +214,14 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
 
 pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) Error!void {
     if (arr.len == 0) return;
-    var x: usize = 1;
-    while (mem.max(T, arr) / x > 0) : (x *= 10) {
+    var x: T = 1;
+    while (@divFloor(mem.max(T, arr), x )> 0) : (x *= 10) {
         var res = allocator.alloc(T, arr.len) catch return Error.OutOfMemory;
         defer allocator.free(res);
 
         var count = [_]usize{0} ** 10;
         for (arr) |item|
-            count[(item / x) % 10] += 1;
+            count[@intCast(usize, @mod(@divFloor(item, x), 10))] += 1;
 
         var j: usize = 1;
         while (j < 10) : (j += 1) {
@@ -230,8 +230,8 @@ pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allo
 
         for (arr) |_, i| {
             const item = arr[arr.len - i - 1];
-            res[count[(item / x) % 10] - 1] = item;
-            count[(item / x) % 10] -= 1;
+            res[count[@intCast(usize, @mod(@divFloor(item, x), 10))] - 1] = item;
+            count[@intCast(usize, @mod(@divFloor(item, x), 10))] -= 1;
         }
 
         for (arr) |*item, i|
