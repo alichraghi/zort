@@ -10,7 +10,7 @@ a lot of sorting algorithms in zig
 - [x] Shell
 - [x] Comb
 - [x] Heap
-- [x] Radix
+- [x] Radix (ASC Only)
 - [ ] Tim
 - [ ] Blcok
 - [ ] Cube
