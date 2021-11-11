@@ -28,7 +28,7 @@ pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm
             .Selection => selectionSort(T, arr, desc),
             .Comb => combSort(T, arr, desc),
             .Shell => shellSort(T, arr, desc),
-            .Heap => heapSort(T, arr, desc),
+            .Heap => try heapSort(T, arr, desc),
             else => {
                 if (allocator_opt) |allocator| {
                     switch (algorithm) {
