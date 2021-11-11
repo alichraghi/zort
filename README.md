@@ -20,6 +20,7 @@ a lot of sorting algorithms in zig
 | Patience | :x: | :x: | :x: | :x: |
 | Smoothsort | :x: | :x: | :x: | :x: |
 | Tournament | :x: | :x: | :x: | :x: |
+| Stalin | :x: | :x: | :x: | :x: |
 | Thanos | :x: | :x: | :x: | :x: |
 
 ## Usage:
