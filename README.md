@@ -1,6 +1,6 @@
 # Zort
 
-a lot of sorting algorithms in zig
+implemention of 9 sorting algorithms
 
 | Algorithm | ASC | DESC | Zero Allocation |
 | ------------ | ------------- | ------------- | ------------- |

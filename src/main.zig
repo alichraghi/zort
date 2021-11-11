@@ -3,17 +3,17 @@ const mem = std.mem;
 const math = std.math;
 const testing = std.testing;
 
-pub const Error = error{ OutOfMemory, AllocatorRequired, NotImplemented };
+pub const Error = error{ OutOfMemory, AllocatorRequired };
 
 pub const Algorithm = enum { Bubble, Quick, Insertion, Selection, Comb, Shell, Heap, Merge, Radix };
 
-/// sort and return the result (arr param)
+/// sort and return the result
 pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?*mem.Allocator) Error![]T {
     try sort(T, arr, desc, algorithm, allocator);
     return arr;
 }
 
-/// sort to a owned slice
+/// sort to an owned slice. don't forgot to free
 pub fn sortC(comptime T: anytype, arr: []const T, desc: bool, algorithm: ?Algorithm, allocator: *mem.Allocator) Error![]T {
     return try sortR(T, try allocator.dupe(T, arr), desc, algorithm, allocator);
 }
@@ -30,13 +30,13 @@ pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm
             .Shell => shellSort(T, arr, desc),
             .Heap => try heapSort(T, arr, desc),
             else => {
-                if (allocator_opt) |allocator| {
+                if (allocator_opt) |allocator|
                     switch (algorithm) {
                         .Merge => try mergeSort(T, arr, 0, math.max(arr.len, 1) - 1, desc, allocator),
                         .Radix => try radixSort(T, arr, desc, allocator),
                         else => {},
                     }
-                } else {
+                else {
                     return error.AllocatorRequired;
                 }
             },
@@ -47,8 +47,7 @@ pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm
 }
 
 pub fn bubbleSort(comptime T: anytype, arr: []T, desc: bool) void {
-    var i: usize = 0;
-    while (i < arr.len - 1) : (i += 1) {
+    for (arr) |_, i| {
         var j: usize = 0;
         while (j < arr.len - i - 1) : (j += 1) {
             if (flow(arr[j + 1], arr[j], desc)) {
@@ -59,20 +58,19 @@ pub fn bubbleSort(comptime T: anytype, arr: []T, desc: bool) void {
 }
 
 pub fn quickSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool) void {
-    if (left < right) {
-        const pivot = arr[right];
-        var i = left;
-        var j = left;
-        while (j < right) : (j += 1) {
-            if (flow(arr[j], pivot, desc)) {
-                mem.swap(T, &arr[i], &arr[j]);
-                i += 1;
-            }
+    if (left >= right) return;
+    const pivot = arr[right];
+    var i = left;
+    var j = left;
+    while (j < right) : (j += 1) {
+        if (flow(arr[j], pivot, desc)) {
+            mem.swap(T, &arr[i], &arr[j]);
+            i += 1;
         }
-        mem.swap(T, &arr[i], &arr[right]);
-        quickSort(T, arr, left, math.max(i, 1) - 1, desc);
-        quickSort(T, arr, i + 1, right, desc);
     }
+    mem.swap(T, &arr[i], &arr[right]);
+    quickSort(T, arr, left, math.max(i, 1) - 1, desc);
+    quickSort(T, arr, i + 1, right, desc);
 }
 
 pub fn insertionSort(comptime T: anytype, arr: []T, desc: bool) void {
@@ -88,31 +86,30 @@ pub fn insertionSort(comptime T: anytype, arr: []T, desc: bool) void {
 }
 
 pub fn selectionSort(comptime T: anytype, arr: []T, desc: bool) void {
-    var i: usize = 1;
-    while (i < arr.len) : (i += 1) {
-        var pos = i - 1;
-        var j = i;
+    for (arr) |*item, i| {
+        var pos = i;
+        var j = i + 1;
         while (j < arr.len) : (j += 1) {
             if (flow(arr[j], arr[pos], desc)) {
                 pos = j;
             }
         }
-        mem.swap(T, &arr[pos], &arr[i - 1]);
+        mem.swap(T, &arr[pos], item);
     }
 }
 
 pub fn combSort(comptime T: anytype, arr: []T, desc: bool) void {
+    if (arr.len == 0) return;
     var gap = arr.len;
-    var f = true;
-    while (gap != 1 or f == true) {
-        gap = @floatToInt(usize, @intToFloat(f32, gap) / 1.3);
-        if (gap < 1) gap = 1;
-        f = false;
+    var swapped = true;
+    while (gap != 1 or swapped) {
+        gap = (gap * 10 / 13) ^ 1;
+        swapped = false;
         var i: usize = 0;
         while (i < arr.len - gap) : (i += 1) {
             if (flow(arr[i + gap], arr[i], desc)) {
                 mem.swap(T, &arr[i], &arr[i + gap]);
-                f = true;
+                swapped = true;
             }
         }
     }
@@ -121,7 +118,7 @@ pub fn combSort(comptime T: anytype, arr: []T, desc: bool) void {
 pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
     var gap = arr.len / 2;
     while (gap > 0) : (gap /= 2) {
-        var i: usize = gap;
+        var i = gap;
         while (i < arr.len) : (i += 1) {
             const x = arr[i];
             var j = i;
@@ -152,12 +149,13 @@ fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
 }
 
 pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
+    if (arr.len == 0) return;
     {
-        var i = @intCast(isize, arr.len / 2 - 1);
-        while (i >= 0) : (i -= 1)
-            heapify(T, arr, arr.len, @intCast(usize, i), desc);
+        var i = arr.len / 2 - 1;
+        while (i > 0) : (i -= 1) {
+            heapify(T, arr, arr.len, i - 1, desc);
+        }
     }
-
     var i: usize = arr.len - 1;
     while (i > 0) : (i -= 1) {
         mem.swap(T, &arr[0], &arr[i]);
@@ -172,8 +170,8 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
     try mergeSort(T, arr, mid + 1, right, desc, allocator);
     const n1 = mid - left + 1;
     const n2 = right - mid;
-    var L = try allocator.alloc(T, n1);
-    var R = try allocator.alloc(T, n1);
+    var L = allocator.alloc(T, n1) catch return Error.OutOfMemory;
+    var R = allocator.alloc(T, n1) catch return Error.OutOfMemory;
     defer {
         allocator.free(L);
         allocator.free(R);
@@ -185,9 +183,9 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
         }
     }
     {
-        var j: usize = 0;
-        while (j < n2) : (j += 1) {
-            R[j] = arr[mid + 1 + j];
+        var i: usize = 0;
+        while (i < n2) : (i += 1) {
+            R[i] = arr[mid + 1 + i];
         }
     }
     var i: usize = 0;
@@ -214,31 +212,26 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
     }
 }
 
-pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) !void {
-    const m = mem.max(T, arr);
+pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) Error!void {
+    if (arr.len == 0) return;
     var x: usize = 1;
-    while (m / x > 0) : (x *= 10) {
-        var res = try allocator.alloc(T, arr.len);
+    while (mem.max(T, arr) / x > 0) : (x *= 10) {
+        var res = allocator.alloc(T, arr.len) catch return Error.OutOfMemory;
         defer allocator.free(res);
 
         var count = [_]usize{0} ** 10;
-        for (arr) |item| {
+        for (arr) |item|
             count[(item / x) % 10] += 1;
+
+        var j: usize = 1;
+        while (j < 10) : (j += 1) {
+            count[j] += count[j - 1];
         }
 
-        {
-            var i: usize = 1;
-            while (i < 10) : (i += 1) {
-                count[i] += count[i - 1];
-            }
-        }
-
-        {
-            var i = @intCast(isize, arr.len - 1);
-            while (i >= 0) : (i -= 1) {
-                res[count[(arr[@intCast(usize, i)] / x) % 10] - 1] = arr[@intCast(usize, i)];
-                count[(arr[@intCast(usize, i)] / x) % 10] -= 1;
-            }
+        for (arr) |_, i| {
+            const item = arr[arr.len - i - 1];
+            res[count[(item / x) % 10] - 1] = item;
+            count[(item / x) % 10] -= 1;
         }
 
         for (arr) |*item, i|
