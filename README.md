@@ -13,9 +13,6 @@ a lot of sorting algorithms in zig
 | Heap | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Merge | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | Radix | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
-| Tim | :x: | :x: | :x: | :x: |
-| Block | :x: | :x: | :x: | :x: |
-| Cube | :x: | :x: | :x: | :x: |
 | Tree | :x: | :x: | :x: | :x: |
 | Patience | :x: | :x: | :x: | :x: |
 | Smoothsort | :x: | :x: | :x: | :x: |
