@@ -9,9 +9,8 @@ a lot of sorting algorithms in zig
 - [x] Merge
 - [x] Shell
 - [x] Comb
-- [ ] Counting (requires allocator)
-- [ ] Radix (requires allocator)
-- [ ] Bucket (requires allocator)
+- [x] Heap
+- [x] Radix
 
 ## Usage:
 ```zig
