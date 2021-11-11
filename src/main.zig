@@ -3,9 +3,9 @@ const mem = std.mem;
 const math = std.math;
 const testing = std.testing;
 
-pub const Error = error{ OutOfMemory, AllocatorRequired };
+pub const Error = error{ OutOfMemory, AllocatorRequired, NotImplemented };
 
-pub const Algorithm = enum { Bubble, Quick, Insertion, Selection, Merge, Shell, Comb, Count };
+pub const Algorithm = enum { Bubble, Quick, Insertion, Selection, Comb, Shell, Heap, Merge, Radix };
 
 /// sort and return the result (arr param)
 pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?*mem.Allocator) Error![]T {
@@ -26,12 +26,14 @@ pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm
             .Quick => quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc),
             .Insertion => insertionSort(T, arr, desc),
             .Selection => selectionSort(T, arr, desc),
-            .Shell => shellSort(T, arr, desc),
             .Comb => combSort(T, arr, desc),
+            .Shell => shellSort(T, arr, desc),
+            .Heap => heapSort(T, arr, desc),
             else => {
                 if (allocator_opt) |allocator| {
                     switch (algorithm) {
                         .Merge => try mergeSort(T, arr, 0, math.max(arr.len, 1) - 1, desc, allocator),
+                        .Radix => try radixSort(T, arr, desc, allocator),
                         else => {},
                     }
                 } else {
@@ -99,6 +101,38 @@ pub fn selectionSort(comptime T: anytype, arr: []T, desc: bool) void {
     }
 }
 
+pub fn combSort(comptime T: anytype, arr: []T, desc: bool) void {
+    var gap = arr.len;
+    var f = true;
+    while (gap != 1 or f == true) {
+        gap = @floatToInt(usize, @intToFloat(f32, gap) / 1.3);
+        if (gap < 1) gap = 1;
+        f = false;
+        var i: usize = 0;
+        while (i < arr.len - gap) : (i += 1) {
+            if (flow(arr[i + gap], arr[i], desc)) {
+                mem.swap(T, &arr[i], &arr[i + gap]);
+                f = true;
+            }
+        }
+    }
+}
+
+pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
+    var gap = arr.len / 2;
+    while (gap > 0) : (gap /= 2) {
+        var i: usize = gap;
+        while (i < arr.len) : (i += 1) {
+            const x = arr[i];
+            var j = i;
+            while (j >= gap and flow(x, arr[j - gap], desc)) : (j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = x;
+        }
+    }
+}
+
 pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool, allocator: *mem.Allocator) Error!void {
     if (left >= right) return;
     const mid = left + (right - left) / 2;
@@ -148,36 +182,71 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
     }
 }
 
-pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
-    var gap = arr.len / 2;
-    //std.debug.print("\n\n{s}\n\n", .{@typeName(@TypeOf(gap))});
-    while (gap > 0) : (gap /= 2) {
-        var i: usize = gap;
-        while (i < arr.len) : (i += 1) {
-            const x = arr[i];
-            var j = i;
-            while (j >= gap and flow(x, arr[j - gap], desc)) : (j -= gap) {
-                arr[j] = arr[j - gap];
-            }
-            arr[j] = x;
+pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) !void {
+    if (desc) {
+        return Error.NotImplemented;
+    }
+    const m = mem.max(T, arr);
+    var x: usize = 1;
+    while (m / x > 0) : (x *= 10) {
+        var res = try allocator.alloc(T, arr.len);
+        defer allocator.free(res);
+
+        var count: [10]usize = .{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        for (arr) |item| {
+            count[(item / x) % 10] += 1;
         }
+
+        {
+            var i: usize = 1;
+            while (i < 10) : (i += 1) {
+                count[i] += count[i - 1];
+            }
+        }
+
+        {
+            var i = @intCast(isize, arr.len - 1);
+            while (i >= 0) : (i -= 1) {
+                res[count[(arr[@intCast(usize, i)] / x) % 10] - 1] = arr[@intCast(usize, i)];
+                count[(arr[@intCast(usize, i)] / x) % 10] -= 1;
+            }
+        }
+
+        for (arr) |*item, i|
+            item.* = res[i];
     }
 }
 
-pub fn combSort(comptime T: anytype, arr: []T, desc: bool) void {
-    var gap = arr.len;
-    var f = true;
-    while (gap != 1 or f == true) {
-        gap = @floatToInt(usize, @intToFloat(f32, gap) / 1.3);
-        if (gap < 1) gap = 1;
-        f = false;
-        var i: usize = 0;
-        while (i < arr.len - gap) : (i += 1) {
-            if (flow(arr[i + gap], arr[i], desc)) {
-                mem.swap(T, &arr[i], &arr[i + gap]);
-                f = true;
-            }
-        }
+fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
+    // in ASC this should be largest, in desc smallest. so i just named this los = largest or samallest
+    var los = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left < n and flow(arr[los], arr[left], desc))
+        los = left;
+
+    if (right < n and flow(arr[los], arr[right], desc))
+        los = right;
+
+    if (los != i) {
+        mem.swap(T, &arr[i], &arr[los]);
+        heapify(T, arr, n, los, desc);
+    }
+}
+
+pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
+    _ = desc;
+    {
+        var i = @intCast(isize, arr.len / 2 - 1);
+        while (i >= 0) : (i -= 1)
+            heapify(T, arr, arr.len, @intCast(usize, i), desc);
+    }
+
+    var i: usize = arr.len - 1;
+    while (i > 0) : (i -= 1) {
+        mem.swap(T, &arr[0], &arr[i]);
+        heapify(T, arr, i, 0, desc);
     }
 }
 
@@ -244,15 +313,15 @@ test "selection" {
     }
 }
 
-test "Merge" {
+test "comb" {
     {
         var arr = items;
-        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false, testing.allocator);
+        combSort(u8, &arr, false);
         try testing.expect(mem.eql(u8, &arr, &expectedASC));
     }
     {
         var arr = items;
-        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true, testing.allocator);
+        combSort(u8, &arr, true);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }
@@ -270,10 +339,36 @@ test "shell" {
     }
 }
 
-test "comb" {
+test "heap" {
     {
         var arr = items;
-        combSort(u8, &arr, false);
+        try heapSort(u8, &arr, false);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
+    {
+        var arr = items;
+        try heapSort(u8, &arr, true);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
+
+test "merge" {
+    {
+        var arr = items;
+        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, false, testing.allocator);
+        try testing.expect(mem.eql(u8, &arr, &expectedASC));
+    }
+    {
+        var arr = items;
+        try mergeSort(u8, &arr, 0, comptime math.max(arr.len, 1) - 1, true, testing.allocator);
+        try testing.expect(mem.eql(u8, &arr, &expectedDESC));
+    }
+}
+
+test "radix" {
+    {
+        var arr = items;
+        try radixSort(u8, &arr, false, testing.allocator);
         try testing.expect(mem.eql(u8, &arr, &expectedASC));
     }
 }
