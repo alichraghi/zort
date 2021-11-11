@@ -2,7 +2,7 @@
 
 a lot of sorting algorithms in zig
 
-| Algorithm | Implemented | ASC | DESC | No Allocation |
+| Algorithm | Implemented | ASC | DESC | Zero Allocation |
 | ------------ | ------------- | ------------- | ------------- | ------------- |
 | Quick | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Insertion | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
@@ -13,12 +13,6 @@ a lot of sorting algorithms in zig
 | Heap | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Merge | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x: |
 | Radix | :heavy_check_mark: | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
-| Tree | :x: | :x: | :x: | :x: |
-| Patience | :x: | :x: | :x: | :x: |
-| Smoothsort | :x: | :x: | :x: | :x: |
-| Tournament | :x: | :x: | :x: | :x: |
-| Stalin | :x: | :x: | :x: | :x: |
-| Thanos | :x: | :x: | :x: | :x: |
 
 ## Usage:
 ```zig

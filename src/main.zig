@@ -133,6 +133,38 @@ pub fn shellSort(comptime T: anytype, arr: []T, desc: bool) void {
     }
 }
 
+fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
+    // in ASC this should be largest, in desc smallest. so i just named this los = largest or samallest
+    var los = i;
+    const left = 2 * i + 1;
+    const right = 2 * i + 2;
+
+    if (left < n and flow(arr[los], arr[left], desc))
+        los = left;
+
+    if (right < n and flow(arr[los], arr[right], desc))
+        los = right;
+
+    if (los != i) {
+        mem.swap(T, &arr[i], &arr[los]);
+        heapify(T, arr, n, los, desc);
+    }
+}
+
+pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
+    {
+        var i = @intCast(isize, arr.len / 2 - 1);
+        while (i >= 0) : (i -= 1)
+            heapify(T, arr, arr.len, @intCast(usize, i), desc);
+    }
+
+    var i: usize = arr.len - 1;
+    while (i > 0) : (i -= 1) {
+        mem.swap(T, &arr[0], &arr[i]);
+        heapify(T, arr, i, 0, desc);
+    }
+}
+
 pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool, allocator: *mem.Allocator) Error!void {
     if (left >= right) return;
     const mid = left + (right - left) / 2;
@@ -212,40 +244,8 @@ pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allo
         for (arr) |*item, i|
             item.* = res[i];
     }
-    mem.reverse(T, arr);
-}
-
-fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
-    // in ASC this should be largest, in desc smallest. so i just named this los = largest or samallest
-    var los = i;
-    const left = 2 * i + 1;
-    const right = 2 * i + 2;
-
-    if (left < n and flow(arr[los], arr[left], desc))
-        los = left;
-
-    if (right < n and flow(arr[los], arr[right], desc))
-        los = right;
-
-    if (los != i) {
-        mem.swap(T, &arr[i], &arr[los]);
-        heapify(T, arr, n, los, desc);
-    }
-}
-
-pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
-    _ = desc;
-    {
-        var i = @intCast(isize, arr.len / 2 - 1);
-        while (i >= 0) : (i -= 1)
-            heapify(T, arr, arr.len, @intCast(usize, i), desc);
-    }
-
-    var i: usize = arr.len - 1;
-    while (i > 0) : (i -= 1) {
-        mem.swap(T, &arr[0], &arr[i]);
-        heapify(T, arr, i, 0, desc);
-    }
+    if (desc)
+        mem.reverse(T, arr);
 }
 
 fn flow(a: anytype, b: @TypeOf(a), desc: bool) bool {
@@ -371,7 +371,7 @@ test "radix" {
     }
     {
         var arr = items;
-        try radixSort(u8, &arr, false, testing.allocator);
+        try radixSort(u8, &arr, true, testing.allocator);
         try testing.expect(mem.eql(u8, &arr, &expectedDESC));
     }
 }
