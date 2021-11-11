@@ -11,6 +11,13 @@ a lot of sorting algorithms in zig
 - [x] Comb
 - [x] Heap
 - [x] Radix
+- [ ] Tim
+- [ ] Blcok
+- [ ] Cube
+- [ ] Tree
+- [ ] Patience
+- [ ] Smoothsort
+- [ ] Tournament
 
 ## Usage:
 ```zig
