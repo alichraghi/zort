@@ -151,7 +151,7 @@ fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
 pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
     if (arr.len == 0) return;
     {
-        var i = arr.len / 2 - 1;
+        var i = arr.len / 2;
         while (i > 0) : (i -= 1) {
             heapify(T, arr, arr.len, i - 1, desc);
         }
@@ -342,7 +342,9 @@ test "heap" {
     {
         var arr = items;
         try heapSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC)) catch {
+            std.debug.print("\n\n{any}\n\n", .{arr});
+        };
     }
 }
 
