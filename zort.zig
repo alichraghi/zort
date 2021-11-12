@@ -5,7 +5,17 @@ const testing = std.testing;
 
 pub const Error = error{ OutOfMemory, AllocatorRequired };
 
-pub const Algorithm = enum { Bubble, Quick, Insertion, Selection, Comb, Shell, Heap, Merge, Radix };
+pub const Algorithm = enum {
+    Bubble,
+    Quick,
+    Insertion,
+    Selection,
+    Comb,
+    Shell,
+    Heap,
+    Merge,
+    Radix,
+};
 
 /// sort and return the result
 pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?*mem.Allocator) Error![]T {
@@ -28,7 +38,7 @@ pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm
             .Selection => selectionSort(T, arr, desc),
             .Comb => combSort(T, arr, desc),
             .Shell => shellSort(T, arr, desc),
-            .Heap => try heapSort(T, arr, desc),
+            .Heap => heapSort(T, arr, desc),
             else => {
                 if (allocator_opt) |allocator|
                     switch (algorithm) {
@@ -148,7 +158,7 @@ fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
     }
 }
 
-pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
+pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) void {
     if (arr.len == 0) return;
 
     var i = arr.len / 2;
@@ -171,7 +181,7 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
     const n1 = mid - left + 1;
     const n2 = right - mid;
     var L = allocator.alloc(T, n1) catch return Error.OutOfMemory;
-    var R = allocator.alloc(T, n1) catch return Error.OutOfMemory;
+    var R = allocator.alloc(T, n2) catch return Error.OutOfMemory;
     defer {
         allocator.free(L);
         allocator.free(R);
@@ -255,95 +265,98 @@ const items = [_]i32{ 9, 1, 4, 12, 3, 4 };
 const expectedASC = [_]i32{ 1, 3, 4, 4, 9, 12 };
 const expectedDESC = [_]i32{ 12, 9, 4, 4, 3, 1 };
 
+const ItemsT = @TypeOf(items[0]);
+
 test "bubble" {
     {
         var arr = items;
-        bubbleSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        bubbleSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        bubbleSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        bubbleSort(ItemsT, &arr, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "quick" {
     {
         var arr = items;
-        quickSort(@TypeOf(items[0]), &arr, 0, math.max(arr.len, 1) - 1, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        quickSort(ItemsT, &arr, 0, math.max(arr.len, 1) - 1, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        quickSort(@TypeOf(items[0]), &arr, 0, math.max(arr.len, 1) - 1, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        quickSort(ItemsT, &arr, 0, math.max(arr.len, 1) - 1, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "insertion" {
     {
         var arr = items;
-        insertionSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        insertionSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        insertionSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        insertionSort(ItemsT, &arr, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "selection" {
     {
         var arr = items;
-        selectionSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        selectionSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        selectionSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        selectionSort(ItemsT, &arr, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "comb" {
     {
         var arr = items;
-        combSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        combSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        combSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        combSort(ItemsT, &arr, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "shell" {
     {
         var arr = items;
-        shellSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        shellSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        shellSort(@TypeOf(items[0]), &arr, true);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        shellSort(ItemsT, &arr, true);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "heap" {
     {
         var arr = items;
-        try heapSort(@TypeOf(items[0]), &arr, false);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        heapSort(ItemsT, &arr, false);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try heapSort(@TypeOf(items[0]), &arr, true);
-        testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC)) catch {
+        heapSort(ItemsT, &arr, true);
+        testing.expectEqualSlices(ItemsT, &arr, &expectedDESC) catch |err| {
             std.debug.print("\n\n{any}\n\n", .{arr});
+            return err;
         };
     }
 }
@@ -351,50 +364,48 @@ test "heap" {
 test "merge" {
     {
         var arr = items;
-        try mergeSort(@TypeOf(items[0]), &arr, 0, comptime math.max(arr.len, 1) - 1, false, testing.allocator);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        try mergeSort(ItemsT, &arr, 0, comptime math.max(arr.len, 1) - 1, false, testing.allocator);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try mergeSort(@TypeOf(items[0]), &arr, 0, comptime math.max(arr.len, 1) - 1, true, testing.allocator);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        try mergeSort(ItemsT, &arr, 0, comptime math.max(arr.len, 1) - 1, true, testing.allocator);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "radix" {
     {
         var arr = items;
-        try radixSort(@TypeOf(items[0]), &arr, false, testing.allocator);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        try radixSort(ItemsT, &arr, false, testing.allocator);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try radixSort(@TypeOf(items[0]), &arr, true, testing.allocator);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedDESC));
+        try radixSort(ItemsT, &arr, true, testing.allocator);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
 }
 
 test "sort" {
     {
         var arr = items;
-        try sort(@TypeOf(items[0]), &arr, false, .Quick, null);
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &expectedASC));
+        try sort(ItemsT, &arr, false, .Quick, null);
+        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
-        sort(@TypeOf(items[0]), &[_]@TypeOf(items[0]){}, false, .Merge, null) catch |err| {
-            try testing.expect(err == Error.AllocatorRequired);
-        };
-    }
-    {
-        var arr = items;
-        const res = try sortR(@TypeOf(items[0]), &arr, false, null, null);
-        try testing.expect(mem.eql(@TypeOf(items[0]), res, &expectedASC));
+        try testing.expectError(Error.AllocatorRequired, sort(ItemsT, &[_]ItemsT{}, false, .Merge, null));
     }
     {
         var arr = items;
-        const res = try sortC(@TypeOf(items[0]), &arr, false, null, testing.allocator);
+        const res = try sortR(ItemsT, &arr, false, null, null);
+        try testing.expectEqualSlices(ItemsT, res, &expectedASC);
+    }
+    {
+        var arr = items;
+        const res = try sortC(ItemsT, &arr, false, null, testing.allocator);
         defer testing.allocator.free(res);
-        try testing.expect(mem.eql(@TypeOf(items[0]), res, &expectedASC));
-        try testing.expect(mem.eql(@TypeOf(items[0]), &arr, &items));
+        try testing.expectEqualSlices(ItemsT, res, &expectedASC);
+        try testing.expectEqualSlices(ItemsT, &arr, &items);
     }
 }
