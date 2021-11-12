@@ -77,7 +77,7 @@ pub fn insertionSort(comptime T: anytype, arr: []T, desc: bool) void {
     var i: usize = 1;
     while (i < arr.len) : (i += 1) {
         const x = arr[i];
-        var j: usize = i;
+        var j = i;
         while (j > 0 and flow(x, arr[j - 1], desc)) : (j -= 1) {
             arr[j] = arr[j - 1];
         }
@@ -150,13 +150,13 @@ fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, desc: bool) void {
 
 pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) !void {
     if (arr.len == 0) return;
-    {
-        var i = arr.len / 2;
-        while (i > 0) : (i -= 1) {
-            heapify(T, arr, arr.len, i - 1, desc);
-        }
+
+    var i = arr.len / 2;
+    while (i > 0) : (i -= 1) {
+        heapify(T, arr, arr.len, i - 1, desc);
     }
-    var i: usize = arr.len - 1;
+
+    i = arr.len - 1;
     while (i > 0) : (i -= 1) {
         mem.swap(T, &arr[0], &arr[i]);
         heapify(T, arr, i, 0, desc);
@@ -176,20 +176,19 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
         allocator.free(L);
         allocator.free(R);
     }
-    {
-        var i: usize = 0;
-        while (i < n1) : (i += 1) {
-            L[i] = arr[left + i];
-        }
-    }
-    {
-        var i: usize = 0;
-        while (i < n2) : (i += 1) {
-            R[i] = arr[mid + 1 + i];
-        }
-    }
     var i: usize = 0;
     var j: usize = 0;
+
+    while (i < n1) : (i += 1) {
+        L[i] = arr[left + i];
+    }
+
+    i = 0;
+    while (i < n2) : (i += 1) {
+        R[i] = arr[mid + 1 + i];
+    }
+
+    i = 0;
     var k = left;
     while (i < n1 and j < n2) : (k += 1) {
         if (flow(L[i], R[j], desc)) {
@@ -215,23 +214,27 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
 pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) Error!void {
     if (arr.len == 0) return;
     var x: T = 1;
-    while (@divFloor(mem.max(T, arr), x )> 0) : (x *= 10) {
+    const base: u4 = 10;
+
+    while (@divFloor(mem.max(T, arr), x) > 0) : (x *= base) {
         var res = allocator.alloc(T, arr.len) catch return Error.OutOfMemory;
         defer allocator.free(res);
 
-        var count = [_]usize{0} ** 10;
-        for (arr) |item|
-            count[@intCast(usize, @mod(@divFloor(item, x), 10))] += 1;
+        var count = [_]usize{0} ** base;
+        for (arr) |item| {
+            count[@intCast(usize, @mod(@divFloor(item, x), base))] += 1;
+        }
 
-        var j: usize = 1;
-        while (j < 10) : (j += 1) {
-            count[j] += count[j - 1];
+        {
+            var i: u4 = 1;
+            while (i < base) : (i += 1)
+                count[i] += count[i - 1];
         }
 
         for (arr) |_, i| {
             const item = arr[arr.len - i - 1];
-            res[count[@intCast(usize, @mod(@divFloor(item, x), 10))] - 1] = item;
-            count[@intCast(usize, @mod(@divFloor(item, x), 10))] -= 1;
+            res[count[@intCast(usize, @mod(@divFloor(item, x), base))] - 1] = item;
+            count[@intCast(usize, @mod(@divFloor(item, x), base))] -= 1;
         }
 
         for (arr) |*item, i|
