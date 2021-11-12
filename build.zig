@@ -5,19 +5,21 @@ pub fn build(b: *std.build.Builder) !void {
     const target = b.standardTargetOptions(.{});
 
     const lib = b.addStaticLibrary("zort", "zort.zig");
+    const install_lib = b.addInstallArtifact(lib);
+    const lib_step = b.step("lib", "Build Static Library");
+    lib.setTarget(target);
     lib.setBuildMode(mode);
-    lib.install();
+    lib_step.dependOn(&install_lib.step);
 
-    var benchmark = b.addExecutable("benchmark", "benchmark.zig");
+    const benchmark = b.addExecutable("benchmark", "benchmark.zig");
     const benchmarks_step = b.step("bench", "Build Benchmarks");
-    benchmarks_step.dependOn(&benchmark.step);
-    benchmark.addPackagePath("zort", "zort.zig");
+    const install_benchmark = b.addInstallArtifact(benchmark);
     benchmark.setTarget(target);
-    benchmark.setBuildMode(mode);
-    benchmark.install();
+    benchmark.addPackagePath("zort", "zort.zig");
+    benchmarks_step.dependOn(&install_benchmark.step);
 
-    var main_tests = b.addTest("zort.zig");
-    main_tests.setBuildMode(mode);
+    var tests = b.addTest("zort.zig");
     const test_step = b.step("test", "Run library tests");
-    test_step.dependOn(&main_tests.step);
+    tests.setBuildMode(mode);
+    test_step.dependOn(&tests.step);
 }
