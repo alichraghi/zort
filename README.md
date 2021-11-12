@@ -33,8 +33,8 @@ benchmark result:
 ```zig
 const zort = @import("zort");
 
-pub fn main() void {
+pub fn main() !void {
     var arr = [_]u8{ 9, 1, 4, 12, 3, 4 };
-    sort(u8, arr, false, .Quick, null);
+    try zort.sort(u8, &arr, false, .Quick, null);
 }
 ```
