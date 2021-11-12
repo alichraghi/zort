@@ -15,18 +15,18 @@ implemention of 9 sorting algorithm in Zig
 | Radix (positive number) | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
 
 benchmark result:
-```rs
-  './zig-out/bin/benchmark quick' ran
-    1.18 ± 0.20 times faster than './zig-out/bin/benchmark std_quick'
-    1.25 ± 0.21 times faster than './zig-out/bin/benchmark comb'
-    1.34 ± 0.22 times faster than './zig-out/bin/benchmark merge'
-    1.35 ± 0.22 times faster than './zig-out/bin/benchmark heap'
-    1.36 ± 0.25 times faster than './zig-out/bin/benchmark radix'
-    1.39 ± 0.29 times faster than './zig-out/bin/benchmark shell'
-  149.39 ± 19.69 times faster than './zig-out/bin/benchmark std_insertion'
-  157.82 ± 21.27 times faster than './zig-out/bin/benchmark insertion'
-  232.40 ± 30.83 times faster than './zig-out/bin/benchmark selection'
-  454.14 ± 59.74 times faster than './zig-out/bin/benchmark bubble'
+```js
+  'quick' ran
+    1.18 ± 0.20 times faster than 'std_quick'
+    1.25 ± 0.21 times faster than 'comb'
+    1.34 ± 0.22 times faster than 'merge'
+    1.35 ± 0.22 times faster than 'heap'
+    1.36 ± 0.25 times faster than 'radix'
+    1.39 ± 0.29 times faster than 'shell'
+  149.39 ± 19.69 times faster than 'std_insertion'
+  157.82 ± 21.27 times faster than 'insertion'
+  232.40 ± 30.83 times faster than 'selection'
+  454.14 ± 59.74 times faster than 'bubble'
 ```
 
 ## Usage:
