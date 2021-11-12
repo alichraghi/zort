@@ -17,16 +17,16 @@ implemention of 9 sorting algorithm in Zig
 benchmark result:
 ```js
   'quick' ran
-    1.18 ± 0.20 times faster than 'std_quick'
-    1.25 ± 0.21 times faster than 'comb'
-    1.34 ± 0.22 times faster than 'merge'
-    1.35 ± 0.22 times faster than 'heap'
-    1.36 ± 0.25 times faster than 'radix'
-    1.39 ± 0.29 times faster than 'shell'
-  149.39 ± 19.69 times faster than 'std_insertion'
-  157.82 ± 21.27 times faster than 'insertion'
-  232.40 ± 30.83 times faster than 'selection'
-  454.14 ± 59.74 times faster than 'bubble'
+    1.18 ± 0.21 times faster than 'std_block'
+    1.06 ± 0.20 times faster than 'radix'
+    1.24 ± 0.21 times faster than 'comb'
+    1.33 ± 0.22 times faster than 'shell'
+    1.44 ± 0.26 times faster than 'heap'
+  106.11 ± 13.74 times faster than 'merge'
+  153.15 ± 19.84 times faster than 'std_insertion'
+  165.51 ± 22.83 times faster than 'insertion'
+  243.00 ± 31.52 times faster than 'selection'
+  477.22 ± 62.45 times faster than 'bubble'
 ```
 
 ## Usage:
@@ -38,3 +38,5 @@ pub fn main() !void {
     try zort.sort(u8, &arr, false, .Quick, null);
 }
 ```
+
+thx from @der-teufel-programming for answering my questions

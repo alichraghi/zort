@@ -32,7 +32,7 @@ pub fn main() !void {
             alg = .Merge
         else if (e(arg, "radix"))
             alg = .Radix
-        else if (e(arg, "std_quick")) {
+        else if (e(arg, "std_block")) {
             sort.sort(@TypeOf(items[0]), &items, {}, comptime sort.asc(@TypeOf(items[0])));
             return;
         } else if (e(arg, "std_insertion")) {

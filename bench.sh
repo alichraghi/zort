@@ -8,5 +8,5 @@ hyperfine --warmup 7 \
     "./zig-out/bin/benchmark heap" \
     "./zig-out/bin/benchmark merge" \
     "./zig-out/bin/benchmark radix" \
-    "./zig-out/bin/benchmark std_quick" \
+    "./zig-out/bin/benchmark std_block" \
     "./zig-out/bin/benchmark std_insertion" \
