@@ -12,7 +12,7 @@ implemention of 9 sorting algorithm in Zig
 | Comb | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Heap | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | Merge | :heavy_check_mark: | :heavy_check_mark: | :x: |
-| Radix | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
+| Radix (positive number) | :heavy_check_mark: | :white_check_mark: (`mem.reverse`) | :x: |
 
 benchmark result:
 ```rs

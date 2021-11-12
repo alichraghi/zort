@@ -251,12 +251,9 @@ fn flow(a: anytype, b: @TypeOf(a), desc: bool) bool {
         return a < b;
 }
 
-// const items = [_]i32{ 9, 1, 4, 12, 3, 4 };
-// const expectedASC = [_]i32{ 1, 3, 4, 4, 9, 12 };
-// const expectedDESC = [_]i32{ 12, 9, 4, 4, 3, 1 };
-const items = [_]i32{ -1, -2 };
-const expectedASC = [_]i32{ -2, -1 };
-const expectedDESC = [_]i32{ -1, -2 };
+const items = [_]i32{ 9, 1, 4, 12, 3, 4 };
+const expectedASC = [_]i32{ 1, 3, 4, 4, 9, 12 };
+const expectedDESC = [_]i32{ 12, 9, 4, 4, 3, 1 };
 
 test "bubble" {
     {
