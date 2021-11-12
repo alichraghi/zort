@@ -1,4 +1,4 @@
-hyperfine \
+hyperfine --warmup 7 \
     "./zig-out/bin/benchmark bubble" \
     "./zig-out/bin/benchmark quick" \
     "./zig-out/bin/benchmark insertion" \

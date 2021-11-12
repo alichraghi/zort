@@ -16,17 +16,17 @@ implemention of 9 sorting algorithm in Zig
 
 benchmark result:
 ```rs
-'quick' ran
-  1.21 ± 0.57 times faster than 'shell'
-  1.22 ± 0.59 times faster than 'radix'
-  1.22 ± 0.59 times faster than 'heap'
-  1.23 ± 0.81 times faster than 'std_quick'
-  1.23 ± 0.62 times faster than 'merge'
-  1.54 ± 0.71 times faster than 'comb'
- 88.44 ± 33.60 times faster than 'std_insertion'
- 92.76 ± 35.22 times faster than 'insertion'
-136.53 ± 51.69 times faster than 'selection'
-273.05 ± 103.60 times faster than 'bubble'
+  './zig-out/bin/benchmark quick' ran
+    1.18 ± 0.20 times faster than './zig-out/bin/benchmark std_quick'
+    1.25 ± 0.21 times faster than './zig-out/bin/benchmark comb'
+    1.34 ± 0.22 times faster than './zig-out/bin/benchmark merge'
+    1.35 ± 0.22 times faster than './zig-out/bin/benchmark heap'
+    1.36 ± 0.25 times faster than './zig-out/bin/benchmark radix'
+    1.39 ± 0.29 times faster than './zig-out/bin/benchmark shell'
+  149.39 ± 19.69 times faster than './zig-out/bin/benchmark std_insertion'
+  157.82 ± 21.27 times faster than './zig-out/bin/benchmark insertion'
+  232.40 ± 30.83 times faster than './zig-out/bin/benchmark selection'
+  454.14 ± 59.74 times faster than './zig-out/bin/benchmark bubble'
 ```
 
 ## Usage:
