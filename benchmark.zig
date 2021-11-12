@@ -27,11 +27,11 @@ pub fn main() !void {
         else if (e(arg, "shell"))
             alg = .Shell
         else if (e(arg, "heap"))
-            alg = .Shell
+            alg = .Heap
         else if (e(arg, "merge"))
-            alg = .Shell
+            alg = .Merge
         else if (e(arg, "radix"))
-            alg = .Shell
+            alg = .Radix
         else if (e(arg, "std_quick")) {
             sort.sort(@TypeOf(items[0]), &items, {}, comptime sort.asc(@TypeOf(items[0])));
             return;
