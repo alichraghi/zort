@@ -18,18 +18,18 @@ pub const Algorithm = enum {
 };
 
 /// sort and return the result
-pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?*mem.Allocator) Error![]T {
+pub fn sortR(comptime T: anytype, arr: []T, desc: bool, algorithm: ?Algorithm, allocator: ?mem.Allocator) Error![]T {
     try sort(T, arr, desc, algorithm, allocator);
     return arr;
 }
 
 /// sort to an owned slice. don't forgot to free
-pub fn sortC(comptime T: anytype, arr: []const T, desc: bool, algorithm: ?Algorithm, allocator: *mem.Allocator) Error![]T {
+pub fn sortC(comptime T: anytype, arr: []const T, desc: bool, algorithm: ?Algorithm, allocator: mem.Allocator) Error![]T {
     return try sortR(T, try allocator.dupe(T, arr), desc, algorithm, allocator);
 }
 
 /// sort array by given algorithm. default algorithm is Quick Sort
-pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm, allocator_opt: ?*mem.Allocator) Error!void {
+pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm, allocator_opt: ?mem.Allocator) Error!void {
     if (algorithm_opt) |algorithm| {
         switch (algorithm) {
             .Bubble => bubbleSort(T, arr, desc),
@@ -173,7 +173,7 @@ pub fn heapSort(comptime T: anytype, arr: []T, desc: bool) void {
     }
 }
 
-pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool, allocator: *mem.Allocator) Error!void {
+pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc: bool, allocator: mem.Allocator) Error!void {
     if (left >= right) return;
     const mid = left + (right - left) / 2;
     try mergeSort(T, arr, left, mid, desc, allocator);
@@ -221,7 +221,7 @@ pub fn mergeSort(comptime T: anytype, arr: []T, left: usize, right: usize, desc:
     }
 }
 
-pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: *mem.Allocator) Error!void {
+pub fn radixSort(comptime T: anytype, arr: []T, desc: bool, allocator: mem.Allocator) Error!void {
     if (arr.len == 0) return;
     var x: T = 1;
     const base: u4 = 10;
