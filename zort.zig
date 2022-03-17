@@ -6,15 +6,15 @@ const testing = std.testing;
 pub const Error = error{ OutOfMemory, AllocatorRequired };
 
 pub const Algorithm = enum {
-    Bubble,
-    Quick,
-    Insertion,
-    Selection,
-    Comb,
-    Shell,
-    Heap,
-    Merge,
-    Radix,
+    bubble,
+    quick,
+    insertion,
+    selection,
+    comb,
+    shell,
+    heap,
+    merge,
+    radix,
 };
 
 /// sort and return the result
@@ -32,18 +32,18 @@ pub fn sortC(comptime T: anytype, arr: []const T, desc: bool, algorithm: ?Algori
 pub fn sort(comptime T: anytype, arr: []T, desc: bool, algorithm_opt: ?Algorithm, allocator_opt: ?mem.Allocator) Error!void {
     if (algorithm_opt) |algorithm| {
         switch (algorithm) {
-            .Bubble => bubbleSort(T, arr, desc),
-            .Quick => quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc),
-            .Insertion => insertionSort(T, arr, desc),
-            .Selection => selectionSort(T, arr, desc),
-            .Comb => combSort(T, arr, desc),
-            .Shell => shellSort(T, arr, desc),
-            .Heap => heapSort(T, arr, desc),
+            .bubble => bubbleSort(T, arr, desc),
+            .quick => quickSort(T, arr, 0, math.max(arr.len, 1) - 1, desc),
+            .insertion => insertionSort(T, arr, desc),
+            .selection => selectionSort(T, arr, desc),
+            .comb => combSort(T, arr, desc),
+            .shell => shellSort(T, arr, desc),
+            .heap => heapSort(T, arr, desc),
             else => {
                 if (allocator_opt) |allocator|
                     switch (algorithm) {
-                        .Merge => try mergeSort(T, arr, 0, math.max(arr.len, 1) - 1, desc, allocator),
-                        .Radix => try radixSort(T, arr, desc, allocator),
+                        .merge => try mergeSort(T, arr, 0, math.max(arr.len, 1) - 1, desc, allocator),
+                        .radix => try radixSort(T, arr, desc, allocator),
                         else => {},
                     }
                 else {
@@ -390,11 +390,11 @@ test "radix" {
 test "sort" {
     {
         var arr = items;
-        try sort(ItemsT, &arr, false, .Quick, null);
+        try sort(ItemsT, &arr, false, .quick, null);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
     {
-        try testing.expectError(Error.AllocatorRequired, sort(ItemsT, &[_]ItemsT{}, false, .Merge, null));
+        try testing.expectError(Error.AllocatorRequired, sort(ItemsT, &[_]ItemsT{}, false, .merge, null));
     }
     {
         var arr = items;
