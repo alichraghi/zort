@@ -35,5 +35,3 @@ pub fn main() !void {
 ## TODO
 
 - [ ] move algorithms into sepereate files and organize tests
-- [ ] pdq sort
-- [ ] quad sort?
