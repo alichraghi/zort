@@ -11,7 +11,7 @@ pub fn build(b: *std.build.Builder) !void {
     lib.setBuildMode(mode);
     lib_step.dependOn(&install_lib.step);
 
-    const benchmark = b.addExecutable("benchmark", "benchmark.zig");
+    const benchmark = b.addExecutable("run_bench", "benchmark/run_bench.zig");
     const benchmarks_step = b.step("bench", "Build Benchmarks");
     const install_benchmark = b.addInstallArtifact(benchmark);
     benchmark.setTarget(target);
