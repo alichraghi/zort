@@ -22,9 +22,13 @@ benchmark results:
 ```zig
 const zort = @import("zort");
 
+fn asc(a: u8, b: u8) bool {
+    return a < b;
+}
+
 pub fn main() !void {
     var arr = [_]u8{ 9, 1, 4, 12, 3, 4 };
-    try zort.sort(u8, &arr, false, .Quick, null);
+    try zort.quickSort(u8, &arr, asc);
 }
 ```
 

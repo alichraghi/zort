@@ -233,31 +233,31 @@ const items_neg = [_]i32{ -9, 1, -4, 12, 3, 4 };
 const expectedNegASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
 const expectedNegDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
 
-const ItemsT = @TypeOf(items[0]);
+const items_t = i32;
 
 test "bubble" {
     {
         {
             var arr = items;
-            bubbleSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+            bubbleSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedASC);
         }
         {
             var arr = items;
-            bubbleSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+            bubbleSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
         }
     }
     {
         {
             var arr = items_neg;
-            bubbleSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            bubbleSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            bubbleSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            bubbleSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -265,24 +265,24 @@ test "bubble" {
 test "quick" {
     {
         var arr = items;
-        quickSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        quickSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        quickSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        quickSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            quickSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            quickSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            quickSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            quickSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -290,24 +290,24 @@ test "quick" {
 test "insertion" {
     {
         var arr = items;
-        insertionSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        insertionSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        insertionSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        insertionSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            insertionSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            insertionSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            insertionSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            insertionSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -315,24 +315,24 @@ test "insertion" {
 test "selection" {
     {
         var arr = items;
-        selectionSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        selectionSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        selectionSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        selectionSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            selectionSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            selectionSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            selectionSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            selectionSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -340,24 +340,24 @@ test "selection" {
 test "comb" {
     {
         var arr = items;
-        combSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        combSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        combSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        combSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            combSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            combSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            combSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            combSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -365,24 +365,24 @@ test "comb" {
 test "shell" {
     {
         var arr = items;
-        shellSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        shellSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        shellSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        shellSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            shellSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            shellSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            shellSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            shellSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -390,24 +390,24 @@ test "shell" {
 test "heap" {
     {
         var arr = items;
-        heapSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        heapSort(items_t, &arr, asc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        heapSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        heapSort(items_t, &arr, desc);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            heapSort(ItemsT, &arr, asc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            heapSort(items_t, &arr, asc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            heapSort(ItemsT, &arr, desc);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            heapSort(items_t, &arr, desc);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -415,24 +415,24 @@ test "heap" {
 test "merge" {
     {
         var arr = items;
-        try mergeSort(ItemsT, &arr, asc, testing.allocator);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        try mergeSort(items_t, &arr, asc, testing.allocator);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try mergeSort(ItemsT, &arr, desc, testing.allocator);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        try mergeSort(items_t, &arr, desc, testing.allocator);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
     {
         {
             var arr = items_neg;
-            try mergeSort(ItemsT, &arr, asc, testing.allocator);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+            try mergeSort(items_t, &arr, asc, testing.allocator);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
         }
         {
             var arr = items_neg;
-            try mergeSort(ItemsT, &arr, desc, testing.allocator);
-            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+            try mergeSort(items_t, &arr, desc, testing.allocator);
+            try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
         }
     }
 }
@@ -440,19 +440,19 @@ test "merge" {
 test "radix" {
     {
         var arr = items;
-        try radixSort(ItemsT, &arr, testing.allocator);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        try radixSort(items_t, &arr, testing.allocator);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
     }
     // {
     //     {
     //         var arr = items_neg;
-    //         try radixSort(ItemsT, &arr, asc, testing.allocator);
-    //         try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+    //         try radixSort(items_t, &arr, asc, testing.allocator);
+    //         try testing.expectEqualSlices(items_t, &arr, &expectedNegASC);
     //     }
     //     {
     //         var arr = items_neg;
-    //         try radixSort(ItemsT, &arr, desc, testing.allocator);
-    //         try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+    //         try radixSort(items_t, &arr, desc, testing.allocator);
+    //         try testing.expectEqualSlices(items_t, &arr, &expectedNegDESC);
     //     }
     // }
 }
