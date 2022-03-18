@@ -229,18 +229,36 @@ const items = [_]i32{ 9, 1, 4, 12, 3, 4 };
 const expectedASC = [_]i32{ 1, 3, 4, 4, 9, 12 };
 const expectedDESC = [_]i32{ 12, 9, 4, 4, 3, 1 };
 
+const items_neg = [_]i32{ -9, 1, -4, 12, 3, 4 };
+const expectedNegASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
+const expectedNegDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
+
 const ItemsT = @TypeOf(items[0]);
 
 test "bubble" {
     {
-        var arr = items;
-        bubbleSort(ItemsT, &arr, asc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        {
+            var arr = items;
+            bubbleSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
+        }
+        {
+            var arr = items;
+            bubbleSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        }
     }
     {
-        var arr = items;
-        bubbleSort(ItemsT, &arr, desc);
-        try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+        {
+            var arr = items_neg;
+            bubbleSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            bubbleSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
     }
 }
 
@@ -255,6 +273,18 @@ test "quick" {
         quickSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
+    {
+        {
+            var arr = items_neg;
+            quickSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            quickSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
+    }
 }
 
 test "insertion" {
@@ -267,6 +297,18 @@ test "insertion" {
         var arr = items;
         insertionSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+    }
+    {
+        {
+            var arr = items_neg;
+            insertionSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            insertionSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
     }
 }
 
@@ -281,6 +323,18 @@ test "selection" {
         selectionSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
+    {
+        {
+            var arr = items_neg;
+            selectionSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            selectionSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
+    }
 }
 
 test "comb" {
@@ -293,6 +347,18 @@ test "comb" {
         var arr = items;
         combSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+    }
+    {
+        {
+            var arr = items_neg;
+            combSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            combSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
     }
 }
 
@@ -307,6 +373,18 @@ test "shell" {
         shellSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
+    {
+        {
+            var arr = items_neg;
+            shellSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            shellSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
+    }
 }
 
 test "heap" {
@@ -319,6 +397,18 @@ test "heap" {
         var arr = items;
         heapSort(ItemsT, &arr, desc);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
+    }
+    {
+        {
+            var arr = items_neg;
+            heapSort(ItemsT, &arr, asc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            heapSort(ItemsT, &arr, desc);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
     }
 }
 
@@ -333,6 +423,18 @@ test "merge" {
         try mergeSort(ItemsT, &arr, desc, testing.allocator);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedDESC);
     }
+    {
+        {
+            var arr = items_neg;
+            try mergeSort(ItemsT, &arr, asc, testing.allocator);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+        }
+        {
+            var arr = items_neg;
+            try mergeSort(ItemsT, &arr, desc, testing.allocator);
+            try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+        }
+    }
 }
 
 test "radix" {
@@ -341,4 +443,16 @@ test "radix" {
         try radixSort(ItemsT, &arr, testing.allocator);
         try testing.expectEqualSlices(ItemsT, &arr, &expectedASC);
     }
+    // {
+    //     {
+    //         var arr = items_neg;
+    //         try radixSort(ItemsT, &arr, asc, testing.allocator);
+    //         try testing.expectEqualSlices(ItemsT, &arr, &expectedNegASC);
+    //     }
+    //     {
+    //         var arr = items_neg;
+    //         try radixSort(ItemsT, &arr, desc, testing.allocator);
+    //         try testing.expectEqualSlices(ItemsT, &arr, &expectedNegDESC);
+    //     }
+    // }
 }
