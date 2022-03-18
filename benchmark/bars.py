@@ -30,7 +30,7 @@ def gen_exec_time():
 
     ax.autoscale_view()
 
-    plt.title("Sorting $10^{}$ elements".format(6))
+    plt.title("Sorting $10^{}$ elements".format(7))
     plt.xlabel("less is better")
 
     plt.savefig(os.path.join("image", "exec_time.png"),
