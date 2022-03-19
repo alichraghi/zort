@@ -2,7 +2,7 @@
 
 set -e
 
-zig build bench
+zig build bench -Drelease-fast=true
 
 cd benchmark
 
@@ -13,4 +13,4 @@ echo 'Data Generated'
 python3 bars.py
 echo 'Created Benchmark Images in benchmark/image'
 
-popd
+cd -
