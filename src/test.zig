@@ -127,3 +127,16 @@ test "shell" {
         try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
 }
+
+test "tim" {
+    {
+        var arr = items;
+        try zort.timSort(items_t, &arr, asc, testing.allocator);
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+    }
+    {
+        var arr = items;
+        try zort.timSort(items_t, &arr, desc, testing.allocator);
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+    }
+}

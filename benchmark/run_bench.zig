@@ -47,13 +47,13 @@ pub fn main() !void {
             try zort.mergeSort(usize, items, asc, testing.allocator)
         else if (e(arg, "radix"))
             try zort.radixSort(usize, items, testing.allocator)
-        else if (e(arg, "block_merge")) {
-            sort.sort(usize, items, {}, comptime sort.asc(usize));
-            return;
-        } else if (e(arg, "std_insertion")) {
-            sort.insertionSort(usize, items, {}, comptime sort.asc(usize));
-        } else {
+        else if (e(arg, "tim"))
+            try zort.timSort(usize, items, asc, testing.allocator)
+        else if (e(arg, "std_block_merge"))
+            sort.sort(usize, items, {}, comptime sort.asc(usize))
+        else if (e(arg, "std_insertion"))
+            sort.insertionSort(usize, items, {}, comptime sort.asc(usize))
+        else
             std.debug.panic("{s} is not a valid argument", .{arg});
-        }
     }
 }

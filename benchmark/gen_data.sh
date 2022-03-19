@@ -2,7 +2,7 @@
 
 set -e
 
-algs=("merge" "quick" "comb" "shell" "heap" "radix" "block_merge")
+algs=("quick" "tim" "comb" "shell" "heap" "radix" "std_block_merge" "merge")
 
 zig_bench_path="../zig-out/bin/run_bench"
 
