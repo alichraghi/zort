@@ -2,17 +2,27 @@ const std = @import("std");
 const zort = @import("main.zig");
 const mem = std.mem;
 const math = std.math;
+const MIN_MERGE = 8;
+
+pub fn minRun(n: usize) usize {
+    var i = n;
+    var r: usize = 0;
+    while (i >= MIN_MERGE) {
+        r |= i & 1;
+        i >>= 1;
+    }
+    return i + r;
+}
 
 pub fn timSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T), allocator: mem.Allocator) mem.Allocator.Error!void {
-    const RUN = 32;
-
     var i: usize = 0;
+    const min_run = minRun(arr.len);
 
-    while (i < arr.len) : (i += RUN) {
-        zort.insertionSortAdvanced(T, arr, i, math.min(i + RUN - 1, arr.len - 1), cmp);
+    while (i < arr.len) : (i += min_run) {
+        zort.insertionSortAdvanced(T, arr, i, math.min(i + min_run - 1, arr.len - 1), cmp);
     }
 
-    i = RUN;
+    i = min_run;
 
     while (i < arr.len) : (i = 2 * i) {
         var left: usize = 0;
