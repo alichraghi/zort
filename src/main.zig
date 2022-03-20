@@ -1,8 +1,3 @@
-const std = @import("std");
-const mem = std.mem;
-const math = std.math;
-const Allocator = mem.Allocator;
-
 pub usingnamespace @import("bubble.zig");
 pub usingnamespace @import("comb.zig");
 pub usingnamespace @import("heap.zig");
