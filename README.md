@@ -12,6 +12,7 @@ implemention of 9 sorting algorithm in Zig
 | Comb                | ✅                | ✅              |
 | Heap                | ✅                | ✅              |
 | Merge               | ✅                | ❌              |
+| Tim                 | ✅                | ❌              |
 | Radix (no negative) | ❌                | ❌              |
 
 benchmark results:
@@ -31,7 +32,3 @@ pub fn main() !void {
     try zort.quickSort(u8, &arr, asc);
 }
 ```
-
-## TODO
-
-- [ ] move algorithms into sepereate files and organize tests
