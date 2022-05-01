@@ -53,6 +53,8 @@ pub fn main() !void {
             sort.sort(usize, items, {}, comptime sort.asc(usize))
         else if (e(arg, "std_insertion"))
             sort.insertionSort(usize, items, {}, comptime sort.asc(usize))
+        else if (e(arg, "twin"))
+            try zort.twinSort(testing.allocator, usize, items, {}, comptime sort.asc(usize))
         else
             std.debug.panic("{s} is not a valid argument", .{arg});
     }

@@ -140,3 +140,16 @@ test "tim" {
         try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
     }
 }
+
+test "twin" {
+    {
+        var arr = items;
+        try zort.twinSort(testing.allocator, items_t, &arr, {}, comptime std.sort.asc(items_t));
+        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+    }
+    {
+        var arr = items;
+        try zort.twinSort(testing.allocator, items_t, &arr, {}, comptime std.sort.desc(items_t));
+        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+    }
+}
