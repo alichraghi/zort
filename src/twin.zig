@@ -121,7 +121,6 @@ fn twinSwap(comptime T: anytype, items: []T, context: anytype, lessThan: fn (con
 /// Bottom up merge sort. It copies the right block to swap, next merges
 /// starting at the tail ends of the two sorted blocks.
 /// Can be used stand alone. Uses at most nmemb / 2 swap memory.
-
 fn tailMerge(
     allocator: std.mem.Allocator,
     comptime T: anytype,
@@ -146,7 +145,7 @@ fn tailMerge(
         while (offset + block < items.len) : (offset += block * 2) {
             e = offset + block - 1;
 
-            if (!lessThan(context, items[@intCast(usize, e)+1], items[@intCast(usize, e)])) continue;
+            if (!lessThan(context, items[@intCast(usize, e) + 1], items[@intCast(usize, e)])) continue;
 
             if (offset + block * 2 < items.len) {
                 c_max = 0 + block;
