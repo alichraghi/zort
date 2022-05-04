@@ -99,7 +99,7 @@ pub fn main() !void {
         try results.append(result);
     }
 
-    try writeResults(results);
+    try writeMermaid(results);
 }
 
 fn asc(a: usize, b: usize) bool {
@@ -118,37 +118,25 @@ fn errbench(func: anytype, args: anytype) anyerror!u64 {
     return timer.read() / std.time.ns_per_ms;
 }
 
-fn writeResults(results: std.ArrayList(BenchResult)) !void {
+fn writeMermaid(results: std.ArrayList(BenchResult)) !void {
     const stdout = std.io.getStdOut().writer();
 
-    var w = std.json.writeStream(stdout, 10);
+    const header =
+        \\
+        \\You can paste the following code snippet to the README.md file:
+        \\
+        \\```mermaid
+        \\gantt
+        \\    title Sorting 10 million items
+        \\    dateFormat x
+        \\    axisFormat %S.%L
+    ;
 
-    try w.beginObject();
-    try w.objectField("results");
-    try w.beginArray();
+    try stdout.print("\n{s}\n", .{header});
 
     for (results.items) |res| {
-        try w.arrayElem();
-        try w.beginObject();
-
-        try w.objectField("command");
-        try w.emitString(res.command);
-
-        try w.objectField("mean");
-        try w.emitNumber(res.mean);
-
-        try w.objectField("times");
-        try w.beginArray();
-        for (res.times) |time| {
-            try w.arrayElem();
-            try w.emitNumber(time);
-        }
-        try w.endArray();
-
-        try w.endObject();
+        try stdout.print("    {s} : 0,{d}\n", .{ res.command, res.mean });
     }
 
-    try w.endArray();
-
-    try w.endObject();
+    _ = try stdout.write("```\n");
 }
