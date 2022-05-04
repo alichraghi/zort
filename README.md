@@ -1,6 +1,6 @@
 # Zort
 
-implemention of 9 sorting algorithm in Zig
+Implementation of 11 sorting algorithms in Zig
 
 | Algorithm           | Custom Comparison | Zero Allocation |
 | ------------------- | ----------------- | --------------- |
@@ -13,12 +13,10 @@ implemention of 9 sorting algorithm in Zig
 | Heap                | ✅                | ✅              |
 | Merge               | ✅                | ❌              |
 | Tim                 | ✅                | ❌              |
+| Twin                | ✅                | ❌              |
 | Radix (no negative) | ❌                | ❌              |
 
-benchmark results:
-![exec_time.png](/benchmark/image/exec_time.png)
-
-## Usage:
+## Usage
 
 ```zig
 const zort = @import("zort");
@@ -31,4 +29,23 @@ pub fn main() !void {
     var arr = [_]u8{ 9, 1, 4, 12, 3, 4 };
     try zort.quickSort(u8, &arr, asc);
 }
+```
+
+## Benchmarks
+
+Raspberry Pi 4 with 8GB RAM
+
+```mermaid
+gantt
+    title Sorting 10 million items
+    dateFormat x
+    axisFormat %S.%L
+    ./zig-out/bin/run_bench std_block_merge : 0,9242
+    ./zig-out/bin/run_bench quick : 0,6058
+    ./zig-out/bin/run_bench tim : 0,1437
+    ./zig-out/bin/run_bench comb : 0,8943
+    ./zig-out/bin/run_bench shell : 0,14349
+    ./zig-out/bin/run_bench heap : 0,28369
+    ./zig-out/bin/run_bench radix : 0,5607
+    ./zig-out/bin/run_bench twin : 0,6275
 ```
