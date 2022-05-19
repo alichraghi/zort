@@ -1,20 +1,20 @@
 # Zort
 
-Implementation of 11 sorting algorithms in Zig
+Implementation of 13 sorting algorithms in Zig
 
-| Algorithm           | Custom Comparison | Zero Allocation |
-| ------------------- | ----------------- | --------------- |
-| Quick               | ✅                | ✅              |
-| Insertion           | ✅                | ✅              |
-| Selection           | ✅                | ✅              |
-| Bubble              | ✅                | ✅              |
-| Shell               | ✅                | ✅              |
-| Comb                | ✅                | ✅              |
-| Heap                | ✅                | ✅              |
-| Merge               | ✅                | ❌              |
-| Tim                 | ✅                | ❌              |
-| Twin                | ✅                | ❌              |
-| Radix (no negative) | ❌                | ❌              |
+| Algorithm               | Custom Comparison | Zero Allocation |
+| ----------------------- | ----------------- | --------------- |
+| Quick                   | ✅                | ✅              |
+| Insertion               | ✅                | ✅              |
+| Selection               | ✅                | ✅              |
+| Bubble                  | ✅                | ✅              |
+| Shell                   | ✅                | ✅              |
+| Comb                    | ✅                | ✅              |
+| Heap                    | ✅                | ✅              |
+| Merge                   | ✅                | ❌              |
+| Tim                     | ✅                | ❌              |
+| Twin                    | ✅                | ❌              |
+| Radix (no negative yet) | ❌                | ❌              |
 
 ## Usage
 
@@ -40,14 +40,14 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S.%L
-    ./zig-out/bin/run_bench std_block_merge : 0,9242
-    ./zig-out/bin/run_bench quick : 0,6058
-    ./zig-out/bin/run_bench tim : 0,1437
-    ./zig-out/bin/run_bench comb : 0,8943
-    ./zig-out/bin/run_bench shell : 0,14349
-    ./zig-out/bin/run_bench heap : 0,28369
-    ./zig-out/bin/run_bench radix : 0,5607
-    ./zig-out/bin/run_bench twin : 0,6275
+    std_block_merge : 0,9242
+    quick : 0,6058
+    tim : 0,1437
+    comb : 0,8943
+    shell : 0,14349
+    heap : 0,28369
+    radix : 0,5607
+    twin : 0,6275
 ```
 
 ### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
@@ -57,14 +57,14 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S.%L
-    ./zig-out/bin/run_bench std_block_merge : 0,2017
-    ./zig-out/bin/run_bench quick : 0,1312
-    ./zig-out/bin/run_bench tim : 0,208
-    ./zig-out/bin/run_bench comb : 0,2031
-    ./zig-out/bin/run_bench shell : 0,3011
-    ./zig-out/bin/run_bench heap : 0,4394
-    ./zig-out/bin/run_bench radix : 0,1347
-    ./zig-out/bin/run_bench twin : 0,1371
+    std_block_merge : 0,2017
+    quick : 0,1312
+    tim : 0,208
+    comb : 0,2031
+    shell : 0,3011
+    heap : 0,4394
+    radix : 0,1347
+    twin : 0,1371
 ```
 
 ### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
@@ -74,13 +74,12 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S.%L
-    ./zig-out/bin/run_bench comb : 0,1783
-    ./zig-out/bin/run_bench heap : 0,3481
-    ./zig-out/bin/run_bench quick : 0,1058
-    ./zig-out/bin/run_bench radix : 0,1337
-    ./zig-out/bin/run_bench shell : 0,2250
-    ./zig-out/bin/run_bench std_block_merge : 0,1605
-    ./zig-out/bin/run_bench tim : 0,208
-    ./zig-out/bin/run_bench tail : 0,1294
-    ./zig-out/bin/run_bench twin : 0,1289
+    std_block_merge : 0,1699
+    quick : 0,994
+    tim : 0,159
+    comb : 0,1827
+    shell : 0,2368
+    heap : 0,3733
+    radix : 0,1468
+    twin : 0,1273
 ```
