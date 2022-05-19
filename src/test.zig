@@ -2,7 +2,7 @@ const std = @import("std");
 const zort = @import("main.zig");
 const testing = std.testing;
 
-pub const items_t = i32;
+pub const ItemsType = i32;
 pub const items = [_]i32{ -9, 1, -4, 12, 3, 4 };
 pub const expectedASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
 pub const expectedDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
@@ -18,78 +18,78 @@ fn desc(a: i32, b: i32) bool {
 test "bubble" {
     {
         var arr = items;
-        zort.bubbleSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.bubbleSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.bubbleSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.bubbleSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "comb" {
     {
         var arr = items;
-        zort.combSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.combSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.combSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.combSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "heap" {
     {
         var arr = items;
-        zort.heapSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.heapSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.heapSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.heapSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "insertion" {
     {
         var arr = items;
-        zort.insertionSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.insertionSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.insertionSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.insertionSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "merge" {
     {
         var arr = items;
-        try zort.mergeSort(items_t, &arr, asc, testing.allocator);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        try zort.mergeSort(ItemsType, testing.allocator, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.mergeSort(items_t, &arr, desc, testing.allocator);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        try zort.mergeSort(ItemsType, testing.allocator, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "quick" {
     {
         var arr = items;
-        zort.quickSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.quickSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.quickSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.quickSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
@@ -97,59 +97,72 @@ test "radix" {
     return error.SkipZigTest;
     // {
     //     var arr = items;
-    //     try zort.radixSort(items_t, &arr, testing.allocator);
-    //     try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+    //     try zort.radixSort(ItemsType, &arr, testing.allocator);
+    //     try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     // }
 }
 
 test "selection" {
     {
         var arr = items;
-        zort.selectionSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.selectionSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.selectionSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.selectionSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "shell" {
     {
         var arr = items;
-        zort.shellSort(items_t, &arr, asc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        zort.shellSort(ItemsType, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.shellSort(items_t, &arr, desc);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        zort.shellSort(ItemsType, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "tim" {
     {
         var arr = items;
-        try zort.timSort(items_t, &arr, asc, testing.allocator);
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        try zort.timSort(ItemsType, testing.allocator, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.timSort(items_t, &arr, desc, testing.allocator);
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        try zort.timSort(ItemsType, testing.allocator, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
+    }
+}
+
+test "tail" {
+    {
+        var arr = items;
+        try zort.tailSort(ItemsType, testing.allocator, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
+    }
+    {
+        var arr = items;
+        try zort.tailSort(ItemsType, testing.allocator, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
 
 test "twin" {
     {
         var arr = items;
-        try zort.twinSort(testing.allocator, items_t, &arr, {}, comptime std.sort.asc(items_t));
-        try testing.expectEqualSlices(items_t, &arr, &expectedASC);
+        try zort.twinSort(ItemsType, testing.allocator, &arr, asc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.twinSort(testing.allocator, items_t, &arr, {}, comptime std.sort.desc(items_t));
-        try testing.expectEqualSlices(items_t, &arr, &expectedDESC);
+        try zort.twinSort(ItemsType, testing.allocator, &arr, desc);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }

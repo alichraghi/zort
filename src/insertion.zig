@@ -2,7 +2,13 @@ const std = @import("std");
 const zort = @import("main.zig");
 const math = std.math;
 
-pub fn insertionSortAdvanced(comptime T: anytype, arr: []T, left: usize, right: usize, cmp: zort.CompareFn(T)) void {
+pub fn insertionSortAdvanced(
+    comptime T: anytype,
+    arr: []T,
+    left: usize,
+    right: usize,
+    cmp: zort.CompareFn(T),
+) void {
     var i: usize = left + 1;
     while (i <= right) : (i += 1) {
         const x = arr[i];

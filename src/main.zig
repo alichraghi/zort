@@ -8,6 +8,7 @@ pub usingnamespace @import("radix.zig");
 pub usingnamespace @import("selection.zig");
 pub usingnamespace @import("shell.zig");
 pub usingnamespace @import("tim.zig");
+pub usingnamespace @import("tail.zig");
 pub usingnamespace @import("twin.zig");
 
 pub fn CompareFn(comptime T: type) type {

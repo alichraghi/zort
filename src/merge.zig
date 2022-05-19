@@ -3,7 +3,15 @@ const zort = @import("main.zig");
 const math = std.math;
 const mem = std.mem;
 
-pub fn merge(comptime T: anytype, arr: []T, left: usize, mid: usize, right: usize, cmp: zort.CompareFn(T), allocator: mem.Allocator) mem.Allocator.Error!void {
+pub fn merge(
+    comptime T: anytype,
+    allocator: mem.Allocator,
+    arr: []T,
+    left: usize,
+    mid: usize,
+    right: usize,
+    cmp: zort.CompareFn(T),
+) mem.Allocator.Error!void {
     const n1 = mid - left + 1;
     const n2 = right - mid;
 
@@ -51,17 +59,29 @@ pub fn merge(comptime T: anytype, arr: []T, left: usize, mid: usize, right: usiz
     }
 }
 
-pub fn mergeSortAdvanced(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T), left: usize, right: usize, allocator: mem.Allocator) mem.Allocator.Error!void {
+pub fn mergeSortAdvanced(
+    comptime T: anytype,
+    allocator: mem.Allocator,
+    arr: []T,
+    cmp: zort.CompareFn(T),
+    left: usize,
+    right: usize,
+) mem.Allocator.Error!void {
     if (left < right) {
         var mid = left + (right - left) / 2;
 
-        try mergeSortAdvanced(T, arr, cmp, left, mid, allocator);
-        try mergeSortAdvanced(T, arr, cmp, mid + 1, right, allocator);
+        try mergeSortAdvanced(T, allocator, arr, cmp, left, mid);
+        try mergeSortAdvanced(T, allocator, arr, cmp, mid + 1, right);
 
-        try merge(T, arr, left, mid, right, cmp, allocator);
+        try merge(T, allocator, arr, left, mid, right, cmp);
     }
 }
 
-pub fn mergeSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T), allocator: mem.Allocator) mem.Allocator.Error!void {
-    return mergeSortAdvanced(T, arr, cmp, 0, math.max(arr.len, 1) - 1, allocator);
+pub fn mergeSort(
+    comptime T: anytype,
+    allocator: mem.Allocator,
+    arr: []T,
+    cmp: zort.CompareFn(T),
+) mem.Allocator.Error!void {
+    return mergeSortAdvanced(T, allocator, arr, cmp, 0, math.max(arr.len, 1) - 1);
 }

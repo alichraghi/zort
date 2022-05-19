@@ -1,7 +1,7 @@
 const std = @import("std");
 const mem = std.mem;
 
-pub fn radixSort(comptime T: anytype, arr: []T, allocator: mem.Allocator) mem.Allocator.Error!void {
+pub fn radixSort(comptime T: anytype, allocator: mem.Allocator, arr: []T) mem.Allocator.Error!void {
     if (arr.len == 0) return;
     var x: T = 1;
     const base: u4 = 10;

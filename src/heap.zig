@@ -2,7 +2,13 @@ const std = @import("std");
 const zort = @import("main.zig");
 const mem = std.mem;
 
-fn heapify(comptime T: anytype, arr: []T, n: usize, i: usize, cmp: zort.CompareFn(T)) void {
+fn heapify(
+    comptime T: anytype,
+    arr: []T,
+    n: usize,
+    i: usize,
+    cmp: zort.CompareFn(T),
+) void {
     // in ASC this should be largest, in desc smallest. so i just named this los = largest or samallest
     var los = i;
     const left = 2 * i + 1;

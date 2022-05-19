@@ -7,7 +7,13 @@ pub fn quickSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
     return quickSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, cmp);
 }
 
-pub fn quickSortAdvanced(comptime T: anytype, arr: []T, left: usize, right: usize, cmp: zort.CompareFn(T)) void {
+pub fn quickSortAdvanced(
+    comptime T: anytype,
+    arr: []T,
+    left: usize,
+    right: usize,
+    cmp: zort.CompareFn(T),
+) void {
     if (left >= right) return;
     const pivot = arr[right];
     var i = left;
