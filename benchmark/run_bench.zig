@@ -56,27 +56,27 @@ pub fn main() !void {
             else if (std.mem.eql(u8, arg, "merge"))
                 result.times[i] = try errbench(
                     zort.mergeSort,
-                    .{ usize, items, asc, testing.allocator },
+                    .{ usize, testing.allocator, items, asc },
                 )
             else if (std.mem.eql(u8, arg, "radix"))
                 result.times[i] = try errbench(
                     zort.radixSort,
-                    .{ usize, items, testing.allocator },
+                    .{ usize, testing.allocator, items },
                 )
             else if (std.mem.eql(u8, arg, "tim"))
                 result.times[i] = try errbench(
                     zort.timSort,
-                    .{ usize, items, asc, testing.allocator },
+                    .{ usize, testing.allocator, items, asc },
                 )
             else if (std.mem.eql(u8, arg, "tail"))
                 result.times[i] = try errbench(
                     zort.tailSort,
-                    .{ usize, std, testing.allocator, items, asc, testing.allocator },
+                    .{ usize, testing.allocator, items, asc },
                 )
             else if (std.mem.eql(u8, arg, "twin"))
                 result.times[i] = try errbench(
                     zort.twinSort,
-                    .{ std.testing.allocator, usize, items, {}, comptime std.sort.asc(usize) },
+                    .{ usize, std.testing.allocator, items, asc },
                 )
             else if (std.mem.eql(u8, arg, "std_block_merge"))
                 result.times[i] = try bench(

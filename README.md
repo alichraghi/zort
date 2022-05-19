@@ -66,3 +66,21 @@ gantt
     ./zig-out/bin/run_bench radix : 0,1347
     ./zig-out/bin/run_bench twin : 0,1371
 ```
+
+### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
+
+```mermaid
+gantt
+    title Sorting 10 million items
+    dateFormat x
+    axisFormat %S.%L
+    ./zig-out/bin/run_bench comb : 0,1783
+    ./zig-out/bin/run_bench heap : 0,3481
+    ./zig-out/bin/run_bench quick : 0,1058
+    ./zig-out/bin/run_bench radix : 0,1337
+    ./zig-out/bin/run_bench shell : 0,2250
+    ./zig-out/bin/run_bench std_block_merge : 0,1605
+    ./zig-out/bin/run_bench tim : 0,208
+    ./zig-out/bin/run_bench tail : 0,1294
+    ./zig-out/bin/run_bench twin : 0,1289
+```
