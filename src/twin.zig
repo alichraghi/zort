@@ -4,7 +4,7 @@ const std = @import("std");
 const zort = @import("main.zig");
 
 pub fn twinSort(
-    comptime T: anytype,
+    comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),
@@ -17,7 +17,7 @@ pub fn twinSort(
 /// Turn the array into sorted blocks of 2 elements.
 /// Detect and sort reverse order runs. So `6 5 4 3 2 1` becomes `1 2 3 4 5 6`
 /// rather than `5 6 3 4 1 2`.
-fn twinSwap(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) usize {
+fn twinSwap(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) usize {
     var index: usize = 0;
     var start: usize = undefined;
     var end: usize = arr.len - 2;

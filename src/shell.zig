@@ -1,6 +1,6 @@
 const zort = @import("main.zig");
 
-pub fn shellSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn shellSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
     var gap = arr.len / 2;
     while (gap > 0) : (gap /= 2) {
         var i = gap;

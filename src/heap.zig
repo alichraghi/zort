@@ -3,7 +3,7 @@ const zort = @import("main.zig");
 const mem = std.mem;
 
 fn heapify(
-    comptime T: anytype,
+    comptime T: type,
     arr: []T,
     n: usize,
     i: usize,
@@ -26,7 +26,7 @@ fn heapify(
     }
 }
 
-pub fn heapSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn heapSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
     if (arr.len == 0) return;
 
     var i = arr.len / 2;

@@ -3,7 +3,7 @@ const zort = @import("main.zig");
 const math = std.math;
 
 pub fn insertionSortAdvanced(
-    comptime T: anytype,
+    comptime T: type,
     arr: []T,
     left: usize,
     right: usize,
@@ -20,6 +20,6 @@ pub fn insertionSortAdvanced(
     }
 }
 
-pub fn insertionSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn insertionSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
     return insertionSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, cmp);
 }

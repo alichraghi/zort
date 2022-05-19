@@ -2,7 +2,7 @@ const std = @import("std");
 const zort = @import("main.zig");
 const mem = std.mem;
 
-pub fn combSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn combSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
     if (arr.len == 0) return;
     var gap = arr.len;
     var swapped = true;

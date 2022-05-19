@@ -3,12 +3,12 @@ const zort = @import("main.zig");
 const math = std.math;
 const mem = std.mem;
 
-pub fn quickSort(comptime T: anytype, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn quickSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
     return quickSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, cmp);
 }
 
 pub fn quickSortAdvanced(
-    comptime T: anytype,
+    comptime T: type,
     arr: []T,
     left: usize,
     right: usize,

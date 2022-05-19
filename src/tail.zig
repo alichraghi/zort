@@ -4,7 +4,7 @@ const std = @import("std");
 const zort = @import("main.zig");
 
 pub fn tailSort(
-    comptime T: anytype,
+    comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),
@@ -18,7 +18,7 @@ pub fn tailSort(
 /// starting at the tail ends of the two sorted blocks.
 /// Can be used stand alone. Uses at most nmemb / 2 swap memory.
 pub fn tailMerge(
-    comptime T: anytype,
+    comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),

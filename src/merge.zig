@@ -4,7 +4,7 @@ const math = std.math;
 const mem = std.mem;
 
 pub fn merge(
-    comptime T: anytype,
+    comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
     left: usize,
@@ -60,7 +60,7 @@ pub fn merge(
 }
 
 pub fn mergeSortAdvanced(
-    comptime T: anytype,
+    comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),
@@ -78,7 +78,7 @@ pub fn mergeSortAdvanced(
 }
 
 pub fn mergeSort(
-    comptime T: anytype,
+    comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),

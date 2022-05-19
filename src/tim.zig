@@ -5,7 +5,7 @@ const math = std.math;
 const MIN_MERGE = 256;
 
 pub fn timSort(
-    comptime T: anytype,
+    comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
     cmp: zort.CompareFn(T),
