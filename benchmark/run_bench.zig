@@ -68,6 +68,11 @@ pub fn main() !void {
                     zort.timSort,
                     .{ usize, items, asc, testing.allocator },
                 )
+            else if (std.mem.eql(u8, arg, "tail"))
+                result.times[i] = try errbench(
+                    zort.tailSort,
+                    .{ usize, std, testing.allocator, items, asc, testing.allocator },
+                )
             else if (std.mem.eql(u8, arg, "twin"))
                 result.times[i] = try errbench(
                     zort.twinSort,
