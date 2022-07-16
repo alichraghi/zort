@@ -11,6 +11,6 @@ pub usingnamespace @import("tim.zig");
 pub usingnamespace @import("tail.zig");
 pub usingnamespace @import("twin.zig");
 
-pub fn CompareFn(comptime T: type) type {
-    return fn (a: T, b: T) bool;
-}
+// pub fn CompareFn(comptime T: type) type {
+//     return fn (a: T, b: T) bool;
+// }

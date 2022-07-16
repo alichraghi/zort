@@ -10,7 +10,8 @@ pub fn merge(
     left: usize,
     mid: usize,
     right: usize,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) mem.Allocator.Error!void {
     const n1 = mid - left + 1;
     const n2 = right - mid;
@@ -37,7 +38,7 @@ pub fn merge(
     i = 0;
     var k = left;
     while (i < n1 and j < n2) : (k += 1) {
-        if (cmp(L[i], R[j])) {
+        if (cmp(context, L[i], R[j])) {
             arr[k] = L[i];
             i += 1;
         } else {
@@ -63,17 +64,18 @@ pub fn mergeSortAdvanced(
     comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
-    cmp: zort.CompareFn(T),
     left: usize,
     right: usize,
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) mem.Allocator.Error!void {
     if (left < right) {
         var mid = left + (right - left) / 2;
 
-        try mergeSortAdvanced(T, allocator, arr, cmp, left, mid);
-        try mergeSortAdvanced(T, allocator, arr, cmp, mid + 1, right);
+        try mergeSortAdvanced(T, allocator, arr, left, mid, context, cmp);
+        try mergeSortAdvanced(T, allocator, arr, mid + 1, right, context, cmp);
 
-        try merge(T, allocator, arr, left, mid, right, cmp);
+        try merge(T, allocator, arr, left, mid, right, context, cmp);
     }
 }
 
@@ -81,7 +83,8 @@ pub fn mergeSort(
     comptime T: type,
     allocator: mem.Allocator,
     arr: []T,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) mem.Allocator.Error!void {
-    return mergeSortAdvanced(T, allocator, arr, cmp, 0, math.max(arr.len, 1) - 1);
+    return mergeSortAdvanced(T, allocator, arr, 0, math.max(arr.len, 1) - 1, context, cmp);
 }

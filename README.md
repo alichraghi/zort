@@ -40,6 +40,21 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S.%L
+    std_block_merge : 0,4295
+    quick : 0,2559
+    tim : 0,638
+    comb : 0,4793
+    shell : 0,7710
+    heap : 0,16498
+    radix : 0,2642
+    twin : 0,3279
+```
+
+```mermaid
+gantt
+    title Sorting 10 million items
+    dateFormat x
+    axisFormat %S.%L
     std_block_merge : 0,9242
     quick : 0,6058
     tim : 0,1437
