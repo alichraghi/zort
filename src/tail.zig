@@ -7,11 +7,12 @@ pub fn tailSort(
     comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) !void {
     if (arr.len < 2) return;
 
-    try tailMerge(T, allocator, arr, cmp, 1);
+    try tailMerge(T, allocator, arr, context, cmp, 1);
 }
 
 /// Bottom up merge sort. It copies the right block to swap, next merges
@@ -21,7 +22,8 @@ pub fn tailMerge(
     comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
     b: u2,
 ) !void {
     var c: isize = undefined;
@@ -40,7 +42,7 @@ pub fn tailMerge(
         while (offset + block < arr.len) : (offset += block * 2) {
             e = offset + block - 1;
 
-            if (!cmp(arr[@intCast(usize, e) + 1], arr[@intCast(usize, e)])) continue;
+            if (!cmp(context, arr[@intCast(usize, e) + 1], arr[@intCast(usize, e)])) continue;
 
             if (offset + block * 2 < arr.len) {
                 c_max = 0 + block;
@@ -52,7 +54,7 @@ pub fn tailMerge(
 
             d = d_max - 1;
 
-            while (!cmp(arr[@intCast(usize, d)], arr[@intCast(usize, e)])) {
+            while (!cmp(context, arr[@intCast(usize, d)], arr[@intCast(usize, e)])) {
                 d_max -= 1;
                 d -= 1;
                 c_max -= 1;
@@ -72,12 +74,12 @@ pub fn tailMerge(
             d = offset + block - 1;
             e = d_max - 1;
 
-            if (!cmp(arr[@intCast(usize, offset + block)], arr[@intCast(usize, offset)])) {
+            if (!cmp(context, arr[@intCast(usize, offset + block)], arr[@intCast(usize, offset)])) {
                 arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
                 e -= 1;
                 d -= 1;
                 while (c >= 0) {
-                    while (cmp(swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
+                    while (cmp(context, swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
                         arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
                         e -= 1;
                         d -= 1;
@@ -91,7 +93,7 @@ pub fn tailMerge(
                 e -= 1;
                 d -= 1;
                 while (d >= offset) {
-                    while (!cmp(swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
+                    while (!cmp(context, swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
                         arr[@intCast(usize, e)] = swap[@intCast(usize, c)];
                         e -= 1;
                         c -= 1;

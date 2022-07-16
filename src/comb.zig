@@ -2,7 +2,12 @@ const std = @import("std");
 const zort = @import("main.zig");
 const mem = std.mem;
 
-pub fn combSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
+pub fn combSort(
+    comptime T: type,
+    arr: []T,
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) void {
     if (arr.len == 0) return;
     var gap = arr.len;
     var swapped = true;
@@ -11,7 +16,7 @@ pub fn combSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
         swapped = false;
         var i: usize = 0;
         while (i < arr.len - gap) : (i += 1) {
-            if (cmp(arr[i + gap], arr[i])) {
+            if (cmp({}, arr[i + gap], arr[i])) {
                 mem.swap(T, &arr[i], &arr[i + gap]);
                 swapped = true;
             }

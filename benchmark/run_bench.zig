@@ -40,23 +40,23 @@ pub fn main() !void {
             var items = try testing.allocator.dupe(usize, arr.items);
 
             if (std.mem.eql(u8, arg, "bubble"))
-                result.times[i] = try bench(zort.bubbleSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.bubbleSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "quick"))
-                result.times[i] = try bench(zort.quickSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.quickSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "insertion"))
-                result.times[i] = try bench(zort.insertionSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.insertionSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "selection"))
-                result.times[i] = try bench(zort.selectionSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.selectionSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "comb"))
-                result.times[i] = try bench(zort.combSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.combSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "shell"))
-                result.times[i] = try bench(zort.shellSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.shellSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "heap"))
-                result.times[i] = try bench(zort.heapSort, .{ usize, items, asc })
+                result.times[i] = try bench(zort.heapSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
             else if (std.mem.eql(u8, arg, "merge"))
                 result.times[i] = try errbench(
                     zort.mergeSort,
-                    .{ usize, testing.allocator, items, asc },
+                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "radix"))
                 result.times[i] = try errbench(
@@ -66,17 +66,17 @@ pub fn main() !void {
             else if (std.mem.eql(u8, arg, "tim"))
                 result.times[i] = try errbench(
                     zort.timSort,
-                    .{ usize, testing.allocator, items, asc },
+                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "tail"))
                 result.times[i] = try errbench(
                     zort.tailSort,
-                    .{ usize, testing.allocator, items, asc },
+                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "twin"))
                 result.times[i] = try errbench(
                     zort.twinSort,
-                    .{ usize, std.testing.allocator, items, asc },
+                    .{ usize, std.testing.allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "std_block_merge"))
                 result.times[i] = try bench(
@@ -105,10 +105,6 @@ pub fn main() !void {
     }
 
     try writeMermaid(results);
-}
-
-fn asc(a: usize, b: usize) bool {
-    return a < b;
 }
 
 fn bench(func: anytype, args: anytype) anyerror!u64 {

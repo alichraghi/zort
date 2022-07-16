@@ -7,19 +7,25 @@ pub fn insertionSortAdvanced(
     arr: []T,
     left: usize,
     right: usize,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
     var i: usize = left + 1;
     while (i <= right) : (i += 1) {
         const x = arr[i];
         var j = i;
-        while (j > left and cmp(x, arr[j - 1])) : (j -= 1) {
+        while (j > left and cmp(context, x, arr[j - 1])) : (j -= 1) {
             arr[j] = arr[j - 1];
         }
         arr[j] = x;
     }
 }
 
-pub fn insertionSort(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) void {
-    return insertionSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, cmp);
+pub fn insertionSort(
+    comptime T: type,
+    arr: []T,
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) void {
+    return insertionSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, context, cmp);
 }

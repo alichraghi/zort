@@ -7,23 +7,15 @@ pub const items = [_]i32{ -9, 1, -4, 12, 3, 4 };
 pub const expectedASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
 pub const expectedDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
 
-fn asc(a: i32, b: i32) bool {
-    return a < b;
-}
-
-fn desc(a: i32, b: i32) bool {
-    return a > b;
-}
-
 test "bubble" {
     {
         var arr = items;
-        zort.bubbleSort(ItemsType, &arr, asc);
+        zort.bubbleSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.bubbleSort(ItemsType, &arr, desc);
+        zort.bubbleSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -31,12 +23,12 @@ test "bubble" {
 test "comb" {
     {
         var arr = items;
-        zort.combSort(ItemsType, &arr, asc);
+        zort.combSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.combSort(ItemsType, &arr, desc);
+        zort.combSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -44,12 +36,12 @@ test "comb" {
 test "heap" {
     {
         var arr = items;
-        zort.heapSort(ItemsType, &arr, asc);
+        zort.heapSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.heapSort(ItemsType, &arr, desc);
+        zort.heapSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -57,12 +49,12 @@ test "heap" {
 test "insertion" {
     {
         var arr = items;
-        zort.insertionSort(ItemsType, &arr, asc);
+        zort.insertionSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.insertionSort(ItemsType, &arr, desc);
+        zort.insertionSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -70,12 +62,12 @@ test "insertion" {
 test "merge" {
     {
         var arr = items;
-        try zort.mergeSort(ItemsType, testing.allocator, &arr, asc);
+        try zort.mergeSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.mergeSort(ItemsType, testing.allocator, &arr, desc);
+        try zort.mergeSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -83,12 +75,12 @@ test "merge" {
 test "quick" {
     {
         var arr = items;
-        zort.quickSort(ItemsType, &arr, asc);
+        zort.quickSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.quickSort(ItemsType, &arr, desc);
+        zort.quickSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -105,12 +97,12 @@ test "radix" {
 test "selection" {
     {
         var arr = items;
-        zort.selectionSort(ItemsType, &arr, asc);
+        zort.selectionSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.selectionSort(ItemsType, &arr, desc);
+        zort.selectionSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -118,12 +110,12 @@ test "selection" {
 test "shell" {
     {
         var arr = items;
-        zort.shellSort(ItemsType, &arr, asc);
+        zort.shellSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        zort.shellSort(ItemsType, &arr, desc);
+        zort.shellSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -131,12 +123,12 @@ test "shell" {
 test "tim" {
     {
         var arr = items;
-        try zort.timSort(ItemsType, testing.allocator, &arr, asc);
+        try zort.timSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.timSort(ItemsType, testing.allocator, &arr, desc);
+        try zort.timSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -144,12 +136,12 @@ test "tim" {
 test "tail" {
     {
         var arr = items;
-        try zort.tailSort(ItemsType, testing.allocator, &arr, asc);
+        try zort.tailSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.tailSort(ItemsType, testing.allocator, &arr, desc);
+        try zort.tailSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
@@ -157,12 +149,12 @@ test "tail" {
 test "twin" {
     {
         var arr = items;
-        try zort.twinSort(ItemsType, testing.allocator, &arr, asc);
+        try zort.twinSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.asc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
     {
         var arr = items;
-        try zort.twinSort(ItemsType, testing.allocator, &arr, desc);
+        try zort.twinSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }

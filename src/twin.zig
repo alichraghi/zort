@@ -7,22 +7,28 @@ pub fn twinSort(
     comptime T: type,
     allocator: std.mem.Allocator,
     arr: []T,
-    cmp: zort.CompareFn(T),
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) !void {
-    if (twinSwap(T, arr, cmp) == 0) {
-        try zort.tailMerge(T, allocator, arr, cmp, 2);
+    if (twinSwap(T, arr, context, cmp) == 0) {
+        try zort.tailMerge(T, allocator, arr, context, cmp, 2);
     }
 }
 
 /// Turn the array into sorted blocks of 2 elements.
 /// Detect and sort reverse order runs. So `6 5 4 3 2 1` becomes `1 2 3 4 5 6`
 /// rather than `5 6 3 4 1 2`.
-fn twinSwap(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) usize {
+fn twinSwap(
+    comptime T: type,
+    arr: []T,
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) usize {
     var index: usize = 0;
     var start: usize = undefined;
     var end: usize = arr.len - 2;
     while (index <= end) {
-        if (cmp(arr[index], arr[index + 1])) {
+        if (cmp(context, arr[index], arr[index + 1])) {
             index += 2;
             continue;
         }
@@ -46,8 +52,8 @@ fn twinSwap(comptime T: type, arr: []T, cmp: zort.CompareFn(T)) usize {
                 break;
             }
 
-            if (cmp(arr[index + 1], arr[index])) {
-                if (cmp(arr[index], arr[index - 1])) {
+            if (cmp(context, arr[index + 1], arr[index])) {
+                if (cmp(context, arr[index], arr[index - 1])) {
                     index += 2;
                     continue;
                 }
