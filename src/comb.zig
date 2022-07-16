@@ -16,7 +16,7 @@ pub fn combSort(
         swapped = false;
         var i: usize = 0;
         while (i < arr.len - gap) : (i += 1) {
-            if (cmp({}, arr[i + gap], arr[i])) {
+            if (cmp(context, arr[i + gap], arr[i])) {
                 mem.swap(T, &arr[i], &arr[i + gap]);
                 swapped = true;
             }
