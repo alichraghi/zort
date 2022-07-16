@@ -17,7 +17,7 @@ pub fn tailSort(
 
 /// Bottom up merge sort. It copies the right block to swap, next merges
 /// starting at the tail ends of the two sorted blocks.
-/// Can be used stand alone. Uses at most nmemb / 2 swap memory.
+/// Can be used stand alone. Uses at most arr.len / 2 swap memory.
 pub fn tailMerge(
     comptime T: type,
     allocator: std.mem.Allocator,
