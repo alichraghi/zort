@@ -12,6 +12,7 @@ Implementation of 13 sorting algorithms in Zig
 | Comb                    | ✅                | ✅              |
 | Heap                    | ✅                | ✅              |
 | Merge                   | ✅                | ❌              |
+| Tail                    | ✅                | ❌              |
 | Tim                     | ✅                | ❌              |
 | Twin                    | ✅                | ❌              |
 | Radix (no negative yet) | ❌                | ❌              |
@@ -39,30 +40,15 @@ pub fn main() !void {
 gantt
     title Sorting 10 million items
     dateFormat x
-    axisFormat %S.%L
-    std_block_merge : 0,4295
-    quick : 0,2559
-    tim : 0,638
-    comb : 0,4793
-    shell : 0,7710
-    heap : 0,16498
-    radix : 0,2642
-    twin : 0,3279
-```
-
-```mermaid
-gantt
-    title Sorting 10 million items
-    dateFormat x
-    axisFormat %S.%L
-    std_block_merge : 0,9242
-    quick : 0,6058
-    tim : 0,1437
-    comb : 0,8943
-    shell : 0,14349
-    heap : 0,28369
-    radix : 0,5607
-    twin : 0,6275
+    axisFormat %S s
+    tim 0.617: 0,617
+    quick 2.596: 0,2595
+    radix 2.297: 0,2297
+    tail 3.199: 0,3199
+    twin 3.148: 0,3149
+    std_block_merge 4.281: 0,4281
+    comb 4.730: 0,4731
+    shell 7.633: 0,7634
 ```
 
 ### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
