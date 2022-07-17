@@ -57,15 +57,15 @@ gantt
 gantt
     title Sorting 10 million items
     dateFormat x
-    axisFormat %S.%L
-    std_block_merge : 0,2017
-    quick : 0,1312
-    tim : 0,208
-    comb : 0,2031
-    shell : 0,3011
-    heap : 0,4394
-    radix : 0,1347
-    twin : 0,1371
+    axisFormat %S s
+    tim 0.241: 0,241
+    quick 1.352: 0,1352
+    radix 1.273: 0,1273
+    tail 1.633: 0,1633
+    twin 1.607: 0,1607
+    std_block_merge 2.117: 0,2118
+    comb 1.985: 0,1985
+    shell 2.916: 0,2917
 ```
 
 ### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
