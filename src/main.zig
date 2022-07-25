@@ -10,3 +10,4 @@ pub usingnamespace @import("shell.zig");
 pub usingnamespace @import("tim.zig");
 pub usingnamespace @import("tail.zig");
 pub usingnamespace @import("twin.zig");
+pub usingnamespace @import("pdqsort.zig");
