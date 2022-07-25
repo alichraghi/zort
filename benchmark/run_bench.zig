@@ -88,6 +88,11 @@ pub fn main() !void {
                     std.sort.insertionSort,
                     .{ usize, items, {}, comptime std.sort.asc(usize) },
                 )
+            else if (std.mem.eql(u8, arg, "pdq"))
+                result.times[i] = try bench(
+                    zort.pdqSort,
+                    .{ usize, items, {}, comptime std.sort.asc(usize) },
+                )
             else
                 std.debug.panic("{s} is not a valid argument", .{arg});
 
