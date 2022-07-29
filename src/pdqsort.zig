@@ -58,7 +58,7 @@ fn recurse(
         // If too many bad pivot choices were made, simply fall back to heapsort in order to
         // guarantee `O(n log n)` worst-case.
         if (limit == 0) {
-            zort.heapSort(T, items, context, cmp);
+            heapify(T, items, context, cmp);
             return;
         }
 
@@ -113,6 +113,16 @@ fn recurse(
     }
 }
 
+fn heapify(
+    comptime T: anytype,
+    items: []T,
+    context: anytype,
+    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) void {
+    @setCold(true);
+    zort.heapSort(T, items, context, cmp);
+}
+
 /// partition partitions `items` into elements smaller than `items[pivot_idx]`,
 /// followed by elements greater than or equal to `items[pivot_idx]`.
 ///
@@ -127,6 +137,8 @@ fn partition(
     cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) usize {
     const pivot = items[pivot_idx];
+
+    // move pivot to the first place
     std.mem.swap(T, &items[0], &items[pivot_idx]);
 
     var i: usize = 1;
@@ -135,7 +147,9 @@ fn partition(
     while (i <= j and cmp(context, items[i], pivot)) i += 1;
     while (i <= j and !cmp(context, items[j], pivot)) j -= 1;
 
+    // Check if items are already partitioned (no item to swap)
     if (i > j) {
+        // put pivot back to the middle
         std.mem.swap(T, &items[j], &items[0]);
         was_partitioned.* = true;
         return j;
@@ -153,6 +167,7 @@ fn partition(
         std.mem.swap(T, &items[i], &items[j]);
     }
 
+    // put pivot back to the middle
     std.mem.swap(T, &items[j], &items[0]);
     was_partitioned.* = false;
     return j;
@@ -167,6 +182,7 @@ fn next(r: *XorShift) usize {
 }
 
 fn breakPatterns(comptime T: anytype, items: []T) void {
+    @setCold(true);
     if (items.len < 8) return;
 
     var r: XorShift = @intCast(XorShift, items.len);
@@ -219,6 +235,7 @@ fn partitionEqual(
 // partialInsertionSort partially sorts a slice by shifting several out-of-order elements around.
 // Returns `true` if the slice is sorted at the end. This function is `O(n)` worst-case.
 fn partialInsertionSort(comptime T: anytype, items: []T) bool {
+    @setCold(true);
     // maximum number of adjacent out-of-order pairs that will get shifted
     const max_steps = 5;
 
