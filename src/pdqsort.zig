@@ -11,11 +11,10 @@ pub fn pdqSort(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    var tmp: T = undefined;
+    // limit the number of imbalanced partitions
+    const limit = std.math.floorPowerOfTwo(usize, items.len) + 1;
 
-    const limit: usize = @bitSizeOf(usize) - @clz(usize, items.len);
-
-    recurse(T, items, tmp, false, limit, context, cmp);
+    recurse(T, items, null, limit, context, cmp);
 }
 
 /// recurse sorts `items` recursively.
@@ -28,8 +27,7 @@ pub fn pdqSort(
 fn recurse(
     comptime T: anytype,
     orig_items: []T,
-    orig_pred: T,
-    orig_pred_exist: bool,
+    orig_pred: ?T,
     orig_limit: usize,
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -37,7 +35,6 @@ fn recurse(
     var limit = orig_limit;
     var items: []T = orig_items;
     var pred = orig_pred;
-    var pred_exist = orig_pred_exist;
 
     // slices of up to this length get sorted using insertion sort.
     const max_insertion = 24;
@@ -84,7 +81,7 @@ fn recurse(
         // If the chosen pivot is equal to the predecessor, then it's the smallest element in the
         // slice. Partition the slice into elements equal to and elements greater than the pivot.
         // This case is usually hit when the slice contains many duplicate elements.
-        if (pred_exist and pred == items[pivot_idx]) {
+        if (pred != null and pred.? == items[pivot_idx]) {
             const mid = partitionEqual(T, items, pivot_idx, context, cmp);
             items = items[mid..];
             continue;
@@ -94,20 +91,17 @@ fn recurse(
         const mid = partition(T, items, pivot_idx, &was_partitioned, context, cmp);
 
         const left = items[0..mid];
-        const right = items[mid + 1 ..];
-
         const pivot = items[mid];
-        const pivot_exists = true;
+        const right = items[mid + 1 ..];
 
         if (left.len < right.len) {
             was_balanced = left.len >= items.len / 8;
-            recurse(T, left, pred, pred_exist, limit, context, cmp);
+            recurse(T, left, pred, limit, context, cmp);
             items = right;
             pred = pivot;
-            pred_exist = pivot_exists;
         } else {
             was_balanced = right.len >= items.len / 8;
-            recurse(T, right, pivot, pivot_exists, limit, context, cmp);
+            recurse(T, right, pivot, limit, context, cmp);
             items = left;
         }
     }
@@ -311,9 +305,9 @@ fn breakPatterns(comptime T: anytype, items: []T) void {
 
     for (idxs) |idx| {
         var other = next(&r) & (modulus - 1);
-        if (other >= items.len) {
-            other -= items.len;
-        }
+
+        if (other >= items.len) other -= items.len;
+
         std.mem.swap(T, &items[idx], &items[other]);
     }
 }
