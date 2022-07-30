@@ -378,31 +378,39 @@ fn partialInsertionSort(
         std.mem.swap(T, &items[i], &items[i - 1]);
 
         // Shift the smaller element to the left.
-        shiftTail(T, items, 0, i);
+        shiftTail(T, items[0..i], context, cmp);
         // Shift the greater element to the right.
-        shiftHead(T, items, i, items.len);
+        shiftHead(T, items[i..], context, cmp);
     }
 
     return false;
 }
 
-fn shiftTail(comptime T: anytype, items: []T, a: usize, b: usize) void {
-    const l = b - a;
-    if (l >= 2) {
-        var i: usize = l - 1;
+fn shiftTail(
+    comptime T: anytype,
+    items: []T,
+    context: anytype,
+    cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) void {
+    if (items.len >= 2) {
+        var i: usize = items.len - 1;
         while (i >= 1) : (i -= 1) {
-            if (items[i] >= items[i - 1]) break;
+            if (!cmp(context, items[i], items[i - 1])) break;
             std.mem.swap(T, &items[i], &items[i - 1]);
         }
     }
 }
 
-fn shiftHead(comptime T: anytype, items: []T, a: usize, b: usize) void {
-    const l = b - a;
-    if (l >= 2) {
-        var i: usize = a + 1;
-        while (i < l) : (i += 1) {
-            if (items[i] >= items[i - 1]) break;
+fn shiftHead(
+    comptime T: anytype,
+    items: []T,
+    context: anytype,
+    cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) void {
+    if (items.len >= 2) {
+        var i: usize = 1;
+        while (i < items.len) : (i += 1) {
+            if (!cmp(context, items[i], items[i - 1])) break;
             std.mem.swap(T, &items[i], &items[i - 1]);
         }
     }
