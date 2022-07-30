@@ -155,22 +155,137 @@ fn partition(
         return j;
     }
 
-    while (true) : ({
-        i += 1;
-        j -= 1;
-    }) {
-        while (i <= j and cmp(context, items[i], pivot)) i += 1;
-        while (i <= j and !cmp(context, items[j], pivot)) j -= 1;
-
-        if (i > j) break;
-
-        std.mem.swap(T, &items[i], &items[j]);
-    }
+    j = i - 1 + partitionBlock(T, items[i .. j + 1], pivot, context, cmp);
 
     // put pivot back to the middle
     std.mem.swap(T, &items[j], &items[0]);
     was_partitioned.* = false;
+
     return j;
+}
+
+fn partitionBlock(
+    comptime T: anytype,
+    items: []T,
+    pivot: T,
+    context: anytype,
+    cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) usize {
+    const BLOCK = 128;
+
+    var left: usize = 0;
+    var block_left: usize = BLOCK;
+    var start_left: usize = 0;
+    var end_left: usize = 0;
+    var offsets_left: [BLOCK]usize = undefined;
+
+    var right: usize = items.len;
+    var block_right: usize = BLOCK;
+    var start_right: usize = 0;
+    var end_right: usize = 0;
+    var offsets_right: [BLOCK]usize = undefined;
+
+    while (true) {
+        const is_done = (right - left) <= 2 * BLOCK;
+
+        if (is_done) {
+            var rem = right - left;
+
+            if (start_left < end_left or start_right < end_right) {
+                rem -= BLOCK;
+            }
+
+            if (start_left < end_left) {
+                block_right = rem;
+            } else if (start_right < end_right) {
+                block_left = rem;
+            } else {
+                block_left = rem / 2;
+                block_right = rem - block_left;
+            }
+            std.debug.assert(block_left <= BLOCK and block_right <= BLOCK);
+        }
+
+        if (start_left == end_left) {
+            start_left = 0;
+            end_left = 0;
+
+            var elem: usize = left;
+            var i: usize = 0;
+            while (i < block_left) : (i += 1) {
+                offsets_left[end_left] = left + i;
+
+                if (!cmp(context, items[elem], pivot)) end_left += 1;
+
+                elem += 1;
+            }
+        }
+
+        if (start_right == end_right) {
+            start_right = 0;
+            end_right = 0;
+
+            var elem: usize = right;
+            var i: usize = 0;
+            while (i < block_right) : (i += 1) {
+                elem -= 1; // avoid owerflow
+
+                offsets_right[end_right] = right - i - 1;
+
+                if (cmp(context, items[elem], pivot)) end_right += 1;
+            }
+        }
+
+        const count = std.math.min(end_left - start_left, end_right - start_right);
+        if (count > 0) {
+            cyclicSwap(
+                T,
+                items,
+                offsets_left[start_left .. start_left + count],
+                offsets_right[start_right .. start_right + count],
+            );
+            start_left += count;
+            start_right += count;
+        }
+
+        if (start_left == end_left) left += block_left;
+
+        if (start_right == end_right) right -= block_right;
+
+        if (is_done) break;
+    }
+
+    if (start_left < end_left) {
+        while (start_left < end_left) {
+            end_left -= 1;
+            std.mem.swap(T, &items[offsets_left[end_left]], &items[right - 1]);
+            right -= 1;
+        }
+        return right;
+    } else if (start_right < end_right) {
+        while (start_right < end_right) {
+            end_right -= 1;
+            std.mem.swap(T, &items[left], &items[offsets_right[end_right]]);
+            left += 1;
+        }
+        return left;
+    } else {
+        return left;
+    }
+}
+
+fn cyclicSwap(comptime T: anytype, items: []T, is: []usize, js: []usize) void {
+    const count = is.len;
+    const tmp = items[is[0]];
+    items[is[0]] = items[js[0]];
+
+    var i: usize = 1;
+    while (i < count) : (i += 1) {
+        items[js[i - 1]] = items[is[i]];
+        items[is[i]] = items[js[i]];
+    }
+
+    items[js[count - 1]] = tmp;
 }
 
 const XorShift = u64;
@@ -458,6 +573,15 @@ test "pdqSort" {
         const exp = [_]usize{ 9, 8, 7, 6, 6, 4, 4, 3, 2, 1 };
 
         pdqSort(usize, &array, {}, comptime std.sort.desc(usize));
+
+        try std.testing.expectEqualSlices(usize, &exp, &array);
+    }
+
+    {
+        var array = [_]usize{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 11, 22, 33, 44, 55, 66, 77, 88, 99, 1000, 0, 500 };
+        const exp = [_]usize{ 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 10, 10, 11, 20, 20, 22, 30, 30, 33, 40, 40, 44, 50, 50, 55, 60, 60, 66, 70, 70, 77, 80, 80, 88, 90, 90, 99, 100, 100, 500, 1000 };
+
+        pdqSort(usize, &array, {}, comptime std.sort.asc(usize));
 
         try std.testing.expectEqualSlices(usize, &exp, &array);
     }
