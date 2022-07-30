@@ -4,18 +4,19 @@ Implementation of 13 sorting algorithms in Zig
 
 | Algorithm               | Custom Comparison | Zero Allocation |
 | ----------------------- | ----------------- | --------------- |
-| Quick                   | ✅                | ✅              |
-| Insertion               | ✅                | ✅              |
-| Selection               | ✅                | ✅              |
 | Bubble                  | ✅                | ✅              |
-| Shell                   | ✅                | ✅              |
 | Comb                    | ✅                | ✅              |
 | Heap                    | ✅                | ✅              |
+| Insertion               | ✅                | ✅              |
 | Merge                   | ✅                | ❌              |
+| PDQ                     | ✅                | ✅              |
+| Quick                   | ✅                | ✅              |
+| Radix (no negative yet) | ❌                | ❌              |
+| Selection               | ✅                | ✅              |
+| Shell                   | ✅                | ✅              |
 | Tail                    | ✅                | ❌              |
 | Tim                     | ✅                | ❌              |
 | Twin                    | ✅                | ❌              |
-| Radix (no negative yet) | ❌                | ❌              |
 
 ## Usage
 
@@ -42,15 +43,15 @@ gantt
     dateFormat x
     axisFormat %S s
     tim 0.617: 0,617
-    quick 2.596: 0,2595
-    radix 2.297: 0,2297
-    tail 3.199: 0,3199
-    twin 3.148: 0,3149
-    std_block_merge 4.281: 0,4281
-    comb 4.730: 0,4731
-    shell 7.633: 0,7634
+    pdq 1.306: 0,1306
+    quick 2.553: 0,2552
+    radix 2.439: 0,2441
+    tail 3.232: 0,3232
+    twin 3.248: 0,3248
+    std_block_merge 4.285: 0,4283
+    comb 4.746: 0,4747
+    shell 7.645: 0,7643
 ```
-
 ### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
 
 ```mermaid
@@ -58,14 +59,15 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S s
-    tim 0.241: 0,241
-    quick 1.352: 0,1352
-    radix 1.273: 0,1273
-    tail 1.633: 0,1633
-    twin 1.607: 0,1607
-    std_block_merge 2.117: 0,2118
-    comb 1.985: 0,1985
-    shell 2.916: 0,2917
+    tim 0.215: 0,215
+    pdq 0.503: 0,503
+    quick 1.152: 0,1152
+    radix 1.101: 0,1101
+    tail 1.396: 0,1396
+    twin 1.401: 0,1401
+    std_block_merge 1.594: 0,1594
+    comb 1.741: 0,1741
+    shell 2.500: 0,2501
 ```
 
 ### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
