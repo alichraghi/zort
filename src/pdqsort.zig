@@ -78,7 +78,7 @@ fn recurse(
         if (was_balanced and was_partitioned and likely_sorted) {
             // Try identifying several out-of-order elements and shifting them to correct
             // positions. If the slice ends up being completely sorted, we're done.
-            if (partialInsertionSort(T, items)) return;
+            if (partialInsertionSort(T, items, context, cmp)) return;
         }
 
         // If the chosen pivot is equal to the predecessor, then it's the smallest element in the
@@ -234,7 +234,12 @@ fn partitionEqual(
 
 // partialInsertionSort partially sorts a slice by shifting several out-of-order elements around.
 // Returns `true` if the slice is sorted at the end. This function is `O(n)` worst-case.
-fn partialInsertionSort(comptime T: anytype, items: []T) bool {
+fn partialInsertionSort(
+    comptime T: anytype,
+    items: []T,
+    context: anytype,
+    cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+) bool {
     @setCold(true);
     // maximum number of adjacent out-of-order pairs that will get shifted
     const max_steps = 5;
@@ -246,7 +251,7 @@ fn partialInsertionSort(comptime T: anytype, items: []T) bool {
     var k: usize = 0;
     while (k < max_steps) : (k += 1) {
         // Find the next pair of adjacent out-of-order elements.
-        while (i < items.len and items[i] >= items[i - 1]) i += 1;
+        while (i < items.len and !cmp(context, items[i], items[i - 1])) i += 1;
 
         // Are we done?
         if (i == items.len) return true;
