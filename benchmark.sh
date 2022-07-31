@@ -6,4 +6,4 @@ zig build bench -Drelease-fast=true
 
 zig_bench_path="./zig-out/bin/run_bench"
 
-${zig_bench_path} tim pdq quick radix tail twin std_block_merge comb shell
+${zig_bench_path} tim pdq twin std_block_merge comb shell
