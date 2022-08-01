@@ -9,7 +9,7 @@ pub fn random(comptime T: anytype, allocator: std.mem.Allocator, limit: usize) !
         .Int => {
             var i: usize = 0;
             while (i < limit) : (i += 1) {
-                const item: T = rnd.intRangeAtMostBiased(T, std.math.minInt(T), std.math.maxInt(T));
+                const item: T = rnd.intRangeAtMostBiased(T, std.math.minInt(T), @intCast(T, limit));
                 array.appendAssumeCapacity(item);
             }
         },
