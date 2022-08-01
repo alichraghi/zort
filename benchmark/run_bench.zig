@@ -5,7 +5,7 @@ const gen = @import("generator.zig");
 const Str = []const u8;
 
 const INPUT_ITEMS = 10_000_000;
-const RUNS = 10;
+const RUNS = 5;
 const TYPES = [_]type{ usize, isize };
 const FLAVORS = .{ gen.random, gen.sorted, gen.reverse, gen.ascSaw, gen.descSaw };
 
