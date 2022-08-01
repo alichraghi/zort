@@ -78,15 +78,15 @@ gantt
     title Sorting 10 million items
     dateFormat x
     axisFormat %S s
-    ./zig-out/bin/run_bench tim 0.170: 0,170
-    ./zig-out/bin/run_bench pdq 0.402: 0,402
-    ./zig-out/bin/run_bench quick 0.958: 0,958
-    ./zig-out/bin/run_bench radix 1.095: 0,1095
-    ./zig-out/bin/run_bench tail 1.198: 0,1198
-    ./zig-out/bin/run_bench twin 1.193: 0,1193
-    ./zig-out/bin/run_bench std_block_merge 1.420: 0,1420
-    ./zig-out/bin/run_bench comb 1.684: 0,1684
-    ./zig-out/bin/run_bench shell 2.359: 0,2359
+    tim 0.170: 0,170
+    pdq 0.402: 0,402
+    quick 0.958: 0,958
+    radix 1.095: 0,1095
+    tail 1.198: 0,1198
+    twin 1.193: 0,1193
+    std_block_merge 1.420: 0,1420
+    comb 1.684: 0,1684
+    shell 2.359: 0,2359
 ```
 
 
