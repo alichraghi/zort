@@ -14,12 +14,16 @@ const BenchResult = struct {
 };
 
 pub fn main() !void {
-    const args = try std.process.argsAlloc(testing.allocator);
-    defer std.process.argsFree(testing.allocator, args);
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    const args = try std.process.argsAlloc(allocator);
+    defer std.process.argsFree(allocator, args);
 
     // generate random data
     const rand_engine = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
-    var arr = try std.ArrayList(usize).initCapacity(testing.allocator, INPUT_ITEMS);
+    var arr = try std.ArrayList(usize).initCapacity(allocator, INPUT_ITEMS);
     defer arr.deinit();
     std.debug.print("Generating random data ({d} items)... ", .{INPUT_ITEMS});
     var i: usize = 0;
@@ -28,7 +32,7 @@ pub fn main() !void {
     }
     std.debug.print("Done. ", .{});
 
-    var results = std.ArrayList(BenchResult).init(std.testing.allocator);
+    var results = std.ArrayList(BenchResult).init(allocator);
     defer results.deinit();
 
     for (args[1..]) |arg| {
@@ -37,7 +41,8 @@ pub fn main() !void {
 
         i = 0;
         while (i < RUNS) : (i += 1) {
-            var items = try testing.allocator.dupe(usize, arr.items);
+            var items = try allocator.dupe(usize, arr.items);
+            defer allocator.free(items);
 
             if (std.mem.eql(u8, arg, "bubble"))
                 result.times[i] = try bench(zort.bubbleSort, .{ usize, items, {}, comptime std.sort.asc(usize) })
@@ -56,27 +61,27 @@ pub fn main() !void {
             else if (std.mem.eql(u8, arg, "merge"))
                 result.times[i] = try errbench(
                     zort.mergeSort,
-                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
+                    .{ usize, allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "radix"))
                 result.times[i] = try errbench(
                     zort.radixSort,
-                    .{ usize, testing.allocator, items },
+                    .{ usize, allocator, items },
                 )
             else if (std.mem.eql(u8, arg, "tim"))
                 result.times[i] = try errbench(
                     zort.timSort,
-                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
+                    .{ usize, allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "tail"))
                 result.times[i] = try errbench(
                     zort.tailSort,
-                    .{ usize, testing.allocator, items, {}, comptime std.sort.asc(usize) },
+                    .{ usize, allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "twin"))
                 result.times[i] = try errbench(
                     zort.twinSort,
-                    .{ usize, std.testing.allocator, items, {}, comptime std.sort.asc(usize) },
+                    .{ usize, allocator, items, {}, comptime std.sort.asc(usize) },
                 )
             else if (std.mem.eql(u8, arg, "std_block_merge"))
                 result.times[i] = try bench(
@@ -103,7 +108,7 @@ pub fn main() !void {
         for (result.times) |time| {
             sum += time;
         }
-        result.command = try std.fmt.allocPrint(testing.allocator, "{s} {s}", .{ args[0], arg });
+        result.command = try std.fmt.allocPrint(allocator, "{s} {s}", .{ args[0], arg });
         result.mean = sum / RUNS;
 
         try results.append(result);
