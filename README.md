@@ -35,7 +35,7 @@ pub fn main() !void {
 
 ## Benchmarks
 
-### Raspberry Pi 4 with 8GB RAM
+### Raspberry Pi 4 with 8GB RAM (old)
 
 ```mermaid
 gantt
@@ -52,7 +52,8 @@ gantt
     comb 4.746: 0,4747
     shell 7.645: 0,7643
 ```
-### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
+
+### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz (old)
 
 ```mermaid
 gantt
@@ -76,13 +77,19 @@ gantt
 gantt
     title Sorting 10 million items
     dateFormat x
-    axisFormat %S.%L
-    std_block_merge : 0,1699
-    quick : 0,994
-    tim : 0,159
-    comb : 0,1827
-    shell : 0,2368
-    heap : 0,3733
-    radix : 0,1468
-    twin : 0,1273
+    axisFormat %S s
+    ./zig-out/bin/run_bench tim 0.170: 0,170
+    ./zig-out/bin/run_bench pdq 0.402: 0,402
+    ./zig-out/bin/run_bench quick 0.958: 0,958
+    ./zig-out/bin/run_bench radix 1.095: 0,1095
+    ./zig-out/bin/run_bench tail 1.198: 0,1198
+    ./zig-out/bin/run_bench twin 1.193: 0,1193
+    ./zig-out/bin/run_bench std_block_merge 1.420: 0,1420
+    ./zig-out/bin/run_bench comb 1.684: 0,1684
+    ./zig-out/bin/run_bench shell 2.359: 0,2359
 ```
+
+
+### Thanks
+
+[Voroskoi](https://github.com/voroskio) and other contributors
