@@ -39,18 +39,106 @@ pub fn main() !void {
 
 ```mermaid
 gantt
-    title Sorting 10 million items
+    title Sorting (ascending) 10000000 usize
     dateFormat x
     axisFormat %S s
+    section random
+    tim 0.622: 0,622
+    pdq 1.280: 0,1280
+    quick 2.557: 0,2555
+    radix 2.645: 0,2643
+    twin 3.156: 0,3156
+    std_block_merge 4.340: 0,4339
+    comb 5.004: 0,5004
+    shell 8.000: 0,8001
+    section sorted
+    tim 0.623: 0,623
+    pdq 0.021: 0,21
+    quick 0.928: 0,928
+    radix 2.680: 0,2681
+    twin 0.139: 0,139
+    std_block_merge 0.167: 0,167
+    comb 1.498: 0,1498
+    shell 1.607: 0,1607
+    section reverse
+    tim 0.611: 0,611
+    pdq 0.367: 0,367
+    quick 1.787: 0,1787
+    radix 2.313: 0,2311
+    twin 1.639: 0,1639
+    std_block_merge 2.428: 0,2429
+    comb 1.934: 0,1934
+    shell 1.834: 0,1834
+    section ascending saw
     tim 0.617: 0,617
-    pdq 1.306: 0,1306
-    quick 2.553: 0,2552
-    radix 2.439: 0,2441
-    tail 3.232: 0,3232
-    twin 3.248: 0,3248
-    std_block_merge 4.285: 0,4283
-    comb 4.746: 0,4747
-    shell 7.645: 0,7643
+    pdq 1.147: 0,1147
+    quick 16.875: 0,16887
+    radix 2.684: 0,2684
+    twin 0.672: 0,672
+    std_block_merge 1.472: 0,1472
+    comb 3.018: 0,3018
+    shell 2.107: 0,2107
+    section descending saw
+    tim 0.618: 0,618
+    pdq 1.153: 0,1153
+    quick inf: 0,102074
+    radix 2.658: 0,2658
+    twin 1.757: 0,1757
+    std_block_merge 2.545: 0,2543
+    comb 3.057: 0,3056
+    shell 2.139: 0,2138
+```
+
+```mermaid
+gantt
+    title Sorting (ascending) 10000000 isize
+    dateFormat x
+    axisFormat %S s
+    section random
+    tim 0.619: 0,619
+    pdq 1.289: 0,1289
+    quick 2.568: 0,2568
+    radix 0.019: 0,19
+    twin 3.215: 0,3214
+    std_block_merge 4.336: 0,4335
+    comb 4.926: 0,4924
+    shell 7.957: 0,7956
+    section sorted
+    tim 0.624: 0,624
+    pdq 0.021: 0,21
+    quick 0.814: 0,814
+    radix 0.019: 0,19
+    twin 0.100: 0,100
+    std_block_merge 0.167: 0,167
+    comb 1.498: 0,1498
+    shell 1.600: 0,1600
+    section reverse
+    tim 0.622: 0,622
+    pdq 0.184: 0,184
+    quick 1.831: 0,1831
+    radix 0.019: 0,19
+    twin 0.082: 0,82
+    std_block_merge 1.979: 0,1979
+    comb 1.950: 0,1950
+    shell 1.840: 0,1840
+    section ascending saw
+    tim 0.622: 0,622
+    pdq 1.147: 0,1147
+    quick 11.813: 0,11813
+    radix 0.019: 0,19
+    twin 0.654: 0,654
+    std_block_merge 1.471: 0,1471
+    comb 3.020: 0,3019
+    shell 2.111: 0,2113
+    section descending saw
+    tim 0.620: 0,620
+    pdq 1.145: 0,1145
+    quick inf: 0,182371
+    radix 0.019: 0,19
+    twin 0.714: 0,714
+    std_block_merge 2.496: 0,2496
+    comb 3.072: 0,3072
+    shell 2.145: 0,2143
 ```
 
 ### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
