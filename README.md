@@ -1,5 +1,7 @@
 # Zort
 
+![logo](/media/logo.png)
+
 Implementation of 13 sorting algorithms in Zig
 
 | Algorithm               | Custom Comparison | Zero Allocation |
@@ -247,25 +249,6 @@ gantt
     shell 0.648: 0,648
 ```
 
-### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
-
-```mermaid
-gantt
-    title Sorting 10 million items
-    dateFormat x
-    axisFormat %S s
-    tim 0.170: 0,170
-    pdq 0.402: 0,402
-    quick 0.958: 0,958
-    radix 1.095: 0,1095
-    tail 1.198: 0,1198
-    twin 1.193: 0,1193
-    std_block_merge 1.420: 0,1420
-    comb 1.684: 0,1684
-    shell 2.359: 0,2359
-```
-
-
-### Thanks
+### Thanks to
 
 [voroskoi](https://github.com/voroskoi) and other contributors
