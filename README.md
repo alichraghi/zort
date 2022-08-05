@@ -81,7 +81,7 @@ gantt
     section descending saw
     tim 0.618: 0,618
     pdq 1.153: 0,1153
-    quick inf: 0,102074
+    quick SKIPPED: 0
     radix 2.658: 0,2658
     twin 1.757: 0,1757
     std_block_merge 2.545: 0,2543
@@ -133,7 +133,7 @@ gantt
     section descending saw
     tim 0.620: 0,620
     pdq 1.145: 0,1145
-    quick inf: 0,182371
+    quick SKIPPED: 0
     radix 0.019: 0,19
     twin 0.714: 0,714
     std_block_merge 2.496: 0,2496
