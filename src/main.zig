@@ -3,6 +3,7 @@ pub usingnamespace @import("comb.zig");
 pub usingnamespace @import("heap.zig");
 pub usingnamespace @import("insertion.zig");
 pub usingnamespace @import("merge.zig");
+pub usingnamespace @import("msb_radix.zig");
 pub usingnamespace @import("quick.zig");
 pub usingnamespace @import("radix.zig");
 pub usingnamespace @import("selection.zig");
