@@ -66,6 +66,19 @@ pub fn main() !void {
     try writeMermaid(results);
 }
 
+fn checkSorted(
+    comptime T: anytype,
+    arr: []T,
+) bool {
+    var i: usize = 1;
+    while (i < arr.len) : (i += 1) {
+        if (arr[i - 1] > arr[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 fn runIterations(
     comptime T: anytype,
     allocator: std.mem.Allocator,
@@ -75,6 +88,7 @@ fn runIterations(
     var result: BenchResult = undefined;
 
     var i: usize = 0;
+    var failed_runs: usize = 0;
     while (i < RUNS) : (i += 1) {
         var items = try allocator.dupe(T, arr);
         defer allocator.free(items);
@@ -101,6 +115,11 @@ fn runIterations(
         else if (std.mem.eql(u8, arg, "radix")) {
             result.times[i] = try errbench(
                 zort.radixSort,
+                .{ T, allocator, items },
+            );
+        } else if (std.mem.eql(u8, arg, "msb_radix")) {
+            result.times[i] = try errbench(
+                zort.msbRadixSort,
                 .{ T, allocator, items },
             );
         } else if (std.mem.eql(u8, arg, "tim"))
@@ -136,7 +155,15 @@ fn runIterations(
         else
             std.debug.panic("{s} is not a valid argument", .{arg});
 
-        std.debug.print("\r{s:<20} round: {d:>2}/{d:<10} time: {d} ms", .{ arg, i + 1, RUNS, result.times[i] });
+        if (!checkSorted(T, items)) {
+            failed_runs += 1;
+        }
+
+        if (failed_runs == 0) {
+            std.debug.print("\r{s:<20} round: {d:>2}/{d:<10} time: {d} ms", .{ arg, i + 1, RUNS, result.times[i] });
+        } else {
+            std.debug.print("\r{s:<20} round: {d:>2}/{d:<10} time: {d} ms failed: {d}   ", .{ arg, i + 1, RUNS, result.times[i], failed_runs });
+        }
     }
 
     var sum: usize = 0;
