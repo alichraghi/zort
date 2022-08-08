@@ -123,7 +123,7 @@ fn binarySort(
     while (start < items.len) : (start += 1) {
         const pivot = items[start];
 
-        // Set left and right to the index where a[start] (pivot) belongs.
+        // Set left and right to the index where items[start] (pivot) belongs.
         var left: usize = 0;
         var right: usize = start;
 
@@ -131,7 +131,8 @@ fn binarySort(
         //   pivot >= all in [0, left)
         //   pivot < all in [right, start)
         while (left < right) {
-            const mid = (left + right) >> 1; // TODO: double check this!
+            // https://ai.googleblog.com/2006/06/extra-extra-read-all-about-it-nearly.html
+            const mid = (left +| right) >> 1;
 
             if (cmp(context, pivot, items[mid])) right = mid else left = mid + 1;
         }
