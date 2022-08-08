@@ -7,27 +7,23 @@
 const std = @import("std");
 
 /// This is the minimum sized sequence that will be merged. Shorter
-/// sequences will be lengthened by calling binarySort.  If the entire
+/// sequences will be lengthened by calling `binarySort()`.  If the entire
 /// array is less than this length, no merges will be performed.
 ///
-/// This constant should be a power of two.  It was `64` in Tim Peter's C
-/// implementation, but java and go versions use `32`.
-const MIN_MERGE = 64; // TODO: fine tuning... (c 64, go 32)
+/// This variable is also used by `minRunLength()` function to determine
+/// minimal run length used in `binarySort()`.
+///
+/// This constant should be a power of two!
+const MIN_MERGE = 32;
 
 /// Runs-to-be-merged stack size (which cannot be expanded).
-// TODO: try array size 100-1000-10000
-// The C version always uses the same stack length (85), but this was
-// measured to be too expensive when sorting "mid-sized" arrays (e.g.,
-// 100 elements) in Java.  Therefore, we use smaller (but sufficiently
-// large) stack lengths for smaller arrays.
 const STACK_LENGTH = 85;
 
 /// Maximum initial size of tmp array, which is used for merging.  The array
 /// can grow to accommodate demand.
 
-// TODO: we also shrink it in init(), but maybe there are better solutions
 // Unlike Tim's original C version, we do not allocate this much storage
-// when sorting smaller arrays. This change was required for performance.
+// when sorting smaller arrays.
 const TMP_SIZE = 256;
 
 /// When we get into galloping mode, we stay there until both runs win less
@@ -567,14 +563,7 @@ fn TimSort(
         fn ensureCapacity(self: *@This(), min_cap: usize) ![]T {
             if (self.tmp.len < min_cap) {
                 const new_size = try std.math.ceilPowerOfTwo(usize, min_cap);
-                // TODO: this is slower with 10^7 items, small arrays?
-                // const ns = self.items.len / 2;
-
-                // if (ns < new_size) {
-                //     self.tmp = try self.allocator.realloc(self.tmp, ns);
-                // } else {
                 self.tmp = try self.allocator.realloc(self.tmp, new_size);
-                // }
             }
 
             return self.tmp;
