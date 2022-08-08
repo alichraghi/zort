@@ -599,9 +599,11 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
-                    offset = (offset << 1) + 1;
-                    if (offset <= 0) { // TODO: overflow
+                    var res: usize = undefined;
+                    if (@shlWithOverflow(usize, offset, 1, &res)) {
                         offset = max_offset;
+                    } else {
+                        offset = res +| 1;
                     }
                 }
 
@@ -615,9 +617,11 @@ fn TimSort(
                 const max_offset = hint + 1;
                 while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
                     last_offset = offset;
-                    offset = (offset << 1) + 1;
-                    if (offset <= 0) { // TODO: overflow
+                    var res: usize = undefined;
+                    if (@shlWithOverflow(usize, offset, 1, &res)) {
                         offset = max_offset;
+                    } else {
+                        offset = res +| 1;
                     }
                 }
 
@@ -664,9 +668,11 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
                     last_offset = offset;
-                    offset = (offset << 1) + 1;
-                    if (offset <= 0) { // TODO: overflow
+                    var res: usize = undefined;
+                    if (@shlWithOverflow(usize, offset, 1, &res)) {
                         offset = max_offset;
+                    } else {
+                        offset = res +| 1;
                     }
                 }
 
@@ -681,9 +687,11 @@ fn TimSort(
                 const max_offset = len - hint;
                 while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
                     last_offset = offset;
-                    offset = (offset << 1) + 1;
-                    if (offset <= 0) { // TODO: overflow
+                    var res: usize = undefined;
+                    if (@shlWithOverflow(usize, offset, 1, &res)) {
                         offset = max_offset;
+                    } else {
+                        offset = res +| 1;
                     }
                 }
 
