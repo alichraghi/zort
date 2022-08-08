@@ -53,7 +53,7 @@ pub fn timSort(
     }
 
     // Real TimSort starts here
-    var ts = TimSort(T, context, cmp).init(allocator, items);
+    var ts = try TimSort(T, context, cmp).init(allocator, items);
     defer ts.deinit();
 
     const min_run = ts.minRunLength();
@@ -158,27 +158,28 @@ fn TimSort(
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) type {
     return struct {
+        allocator: std.mem.Allocator,
+        items: []T,
+        min_gallop: usize = MIN_GALLOP,
+
+        // Timsort temporary stacks
         tmp: []T,
         run_base: []usize,
         run_len: []usize,
-        allocator: std.mem.Allocator,
         pending: usize = 0,
-        context: @TypeOf(context) = context, // XXX: remove this?
-        cmp: fn (@TypeOf(context), T, T) bool = cmp,
-        min_gallop: usize = MIN_GALLOP,
-        items: []T,
 
-        fn init(
-            allocator: std.mem.Allocator,
-            items: []T,
-        ) @This() {
+        // Comparing information
+        context: @TypeOf(context) = context,
+        cmp: fn (@TypeOf(context), T, T) bool = cmp,
+
+        fn init(allocator: std.mem.Allocator, items: []T) !@This() {
             // Adjust tmp_size
             var tmp_size: usize = TMP_SIZE;
             if (items.len < 2 * tmp_size) tmp_size = items.len / 2;
             return @This(){
-                .tmp = allocator.alloc(T, tmp_size) catch unreachable,
-                .run_base = allocator.alloc(usize, STACK_LENGTH) catch unreachable,
-                .run_len = allocator.alloc(usize, STACK_LENGTH) catch unreachable,
+                .tmp = try allocator.alloc(T, tmp_size),
+                .run_base = try allocator.alloc(usize, STACK_LENGTH),
+                .run_len = try allocator.alloc(usize, STACK_LENGTH),
                 .allocator = allocator,
                 .items = items,
             };
