@@ -522,11 +522,11 @@ test "chosePivot" {
 test "partitionEqual" {
     const MAX_TESTS = 1000;
 
-    const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+    var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
     var tc: usize = 0;
     while (tc < MAX_TESTS) : (tc += 1) {
-        const random_length = rnd.uintLessThan(usize, 100);
+        const random_length = rnd.random().uintLessThan(usize, 100);
         if (random_length == 0) return;
 
         var v1 = try std.ArrayList(usize).initCapacity(std.testing.allocator, random_length);
@@ -534,7 +534,7 @@ test "partitionEqual" {
 
         var j: usize = 0;
         while (j < random_length) : (j += 1) {
-            const value = rnd.uintLessThan(usize, random_length / 2 + 1);
+            const value = rnd.random().uintLessThan(usize, random_length / 2 + 1);
             v1.appendAssumeCapacity(value);
         }
 
@@ -594,7 +594,7 @@ test "pdqSort" {
         const TESTS = 10;
         const ITEMS = 10_000;
 
-        const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {
@@ -603,7 +603,7 @@ test "pdqSort" {
 
             var item: usize = 0;
             while (item < ITEMS) : (item += 1) {
-                const value = rnd.int(TEST_TYPE);
+                const value = rnd.random().int(TEST_TYPE);
                 array.appendAssumeCapacity(value);
             }
             var reference = try array.clone();
@@ -623,7 +623,7 @@ test "pdqSort" {
         const TESTS = 100;
         const ITEMS = 10_000;
 
-        const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {
@@ -632,7 +632,7 @@ test "pdqSort" {
 
             var item: usize = 0;
             while (item < ITEMS) : (item += 1) {
-                const value = rnd.int(TEST_TYPE);
+                const value = rnd.random().int(TEST_TYPE);
                 array.appendAssumeCapacity(value);
             }
             var reference = try array.clone();
