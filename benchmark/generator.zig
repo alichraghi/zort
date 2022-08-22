@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub fn random(comptime T: anytype, allocator: std.mem.Allocator, limit: usize) ![]T {
-    const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+    var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
     var array = try std.ArrayList(T).initCapacity(allocator, limit);
 
@@ -9,7 +9,7 @@ pub fn random(comptime T: anytype, allocator: std.mem.Allocator, limit: usize) !
         .Int => {
             var i: usize = 0;
             while (i < limit) : (i += 1) {
-                const item: T = rnd.intRangeAtMostBiased(T, std.math.minInt(T), @intCast(T, limit));
+                const item: T = rnd.random().intRangeAtMostBiased(T, std.math.minInt(T), @intCast(T, limit));
                 array.appendAssumeCapacity(item);
             }
         },

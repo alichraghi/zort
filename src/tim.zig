@@ -166,7 +166,7 @@ fn TimSort(
 
         // Comparing information
         context: @TypeOf(context) = context,
-        cmp: fn (@TypeOf(context), T, T) bool = cmp,
+        cmp: *const fn (@TypeOf(context), T, T) bool = cmp,
 
         fn init(allocator: std.mem.Allocator, items: []T) !@This() {
             // Adjust tmp_size
@@ -753,7 +753,7 @@ test "timSort" {
         const TESTS = 10;
         const ITEMS = 10_000;
 
-        const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {
@@ -762,7 +762,7 @@ test "timSort" {
 
             var item: usize = 0;
             while (item < ITEMS) : (item += 1) {
-                const value = rnd.int(TEST_TYPE);
+                const value = rnd.random().int(TEST_TYPE);
                 array.appendAssumeCapacity(value);
             }
             var reference = try array.clone();
@@ -782,7 +782,7 @@ test "timSort" {
         const TESTS = 10;
         const ITEMS = 10_000;
 
-        const rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp())).random();
+        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {
@@ -791,7 +791,7 @@ test "timSort" {
 
             var item: usize = 0;
             while (item < ITEMS) : (item += 1) {
-                const value = rnd.int(TEST_TYPE);
+                const value = rnd.random().int(TEST_TYPE);
                 array.appendAssumeCapacity(value);
             }
             var reference = try array.clone();
