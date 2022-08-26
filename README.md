@@ -37,7 +37,7 @@ pub fn main() !void {
 
 ## Benchmarks
 
-### Raspberry Pi 4 with 8GB RAM (old)
+### Raspberry Pi 4 with 8GB RAM
 
 ```mermaid
 gantt
@@ -45,50 +45,55 @@ gantt
     dateFormat x
     axisFormat %S s
     section random
-    tim 0.622: 0,622
-    pdq 1.280: 0,1280
-    quick 2.557: 0,2555
-    radix 2.645: 0,2643
-    twin 3.156: 0,3156
-    std_block_merge 4.340: 0,4339
-    comb 5.004: 0,5004
-    shell 8.000: 0,8001
+    tim 3.646: 0,3646
+    pdq 1.323: 0,1323
+    quick 2.264: 0,2263
+    radix 2.590: 0,2590
+    msb_radix 1.271: 0,1271
+    twin 2.928: 0,2929
+    std_block_merge 3.982: 0,3982
+    comb 4.680: 0,4679
+    shell 7.617: 0,7616
     section sorted
-    tim 0.623: 0,623
+    tim 0.021: 0,21
     pdq 0.021: 0,21
-    quick 0.928: 0,928
-    radix 2.680: 0,2681
-    twin 0.139: 0,139
-    std_block_merge 0.167: 0,167
-    comb 1.498: 0,1498
-    shell 1.607: 0,1607
+    quick 0.818: 0,818
+    radix 3.184: 0,3184
+    msb_radix 0.867: 0,867
+    twin 0.235: 0,235
+    std_block_merge 0.151: 0,151
+    comb 1.428: 0,1428
+    shell 1.562: 0,1562
     section reverse
-    tim 0.611: 0,611
-    pdq 0.367: 0,367
-    quick 1.787: 0,1787
-    radix 2.313: 0,2311
-    twin 1.639: 0,1639
-    std_block_merge 2.428: 0,2429
-    comb 1.934: 0,1934
-    shell 1.834: 0,1834
+    tim 1.461: 0,1461
+    pdq 0.353: 0,353
+    quick 1.623: 0,1623
+    radix 3.123: 0,3125
+    msb_radix 0.871: 0,871
+    twin 1.848: 0,1848
+    std_block_merge 2.365: 0,2366
+    comb 1.946: 0,1946
+    shell 1.766: 0,1766
     section ascending saw
-    tim 0.617: 0,617
-    pdq 1.147: 0,1147
-    quick 16.875: 0,16887
-    radix 2.684: 0,2684
-    twin 0.672: 0,672
-    std_block_merge 1.472: 0,1472
-    comb 3.018: 0,3018
-    shell 2.107: 0,2107
+    tim 0.645: 0,645
+    pdq 1.197: 0,1197
+    quick 4.809: 0,4809
+    radix 2.629: 0,2629
+    msb_radix 0.960: 0,960
+    twin 0.712: 0,712
+    std_block_merge 1.325: 0,1325
+    comb 2.896: 0,2895
+    shell 2.039: 0,2039
     section descending saw
-    tim 0.618: 0,618
-    pdq 1.153: 0,1153
+    tim 1.580: 0,1580
+    pdq 1.182: 0,1182
     quick SKIPPED: 0
-    radix 2.658: 0,2658
-    twin 1.757: 0,1757
-    std_block_merge 2.545: 0,2543
-    comb 3.057: 0,3056
-    shell 2.139: 0,2138
+    radix 2.943: 0,2944
+    msb_radix 0.955: 0,955
+    twin 1.868: 0,1868
+    std_block_merge 2.396: 0,2395
+    comb 3.064: 0,3064
+    shell 2.090: 0,2090
 ```
 
 ```mermaid
@@ -97,50 +102,55 @@ gantt
     dateFormat x
     axisFormat %S s
     section random
-    tim 0.619: 0,619
-    pdq 1.289: 0,1289
-    quick 2.568: 0,2568
+    tim 3.695: 0,3697
+    pdq 1.314: 0,1314
+    quick 2.262: 0,2262
     radix 0.019: 0,19
-    twin 3.215: 0,3214
-    std_block_merge 4.336: 0,4335
-    comb 4.926: 0,4924
-    shell 7.957: 0,7956
+    msb_radix 1.176: 0,1176
+    twin 2.936: 0,2936
+    std_block_merge 3.973: 0,3973
+    comb 4.879: 0,4880
+    shell 7.574: 0,7576
     section sorted
-    tim 0.624: 0,624
+    tim 0.021: 0,21
     pdq 0.021: 0,21
-    quick 0.814: 0,814
+    quick 0.707: 0,707
     radix 0.019: 0,19
-    twin 0.100: 0,100
-    std_block_merge 0.167: 0,167
-    comb 1.498: 0,1498
-    shell 1.600: 0,1600
+    msb_radix 0.584: 0,584
+    twin 0.174: 0,174
+    std_block_merge 0.151: 0,151
+    comb 1.415: 0,1415
+    shell 1.439: 0,1439
     section reverse
-    tim 0.622: 0,622
-    pdq 0.184: 0,184
-    quick 1.831: 0,1831
+    tim 0.097: 0,97
+    pdq 0.183: 0,183
+    quick 1.610: 0,1610
     radix 0.019: 0,19
+    msb_radix 0.606: 0,606
     twin 0.082: 0,82
-    std_block_merge 1.979: 0,1979
-    comb 1.950: 0,1950
-    shell 1.840: 0,1840
+    std_block_merge 1.952: 0,1952
+    comb 1.955: 0,1955
+    shell 2.217: 0,2216
     section ascending saw
-    tim 0.622: 0,622
-    pdq 1.147: 0,1147
-    quick 11.813: 0,11813
+    tim 0.652: 0,652
+    pdq 1.204: 0,1204
+    quick 5.137: 0,5135
     radix 0.019: 0,19
-    twin 0.654: 0,654
-    std_block_merge 1.471: 0,1471
-    comb 3.020: 0,3019
-    shell 2.111: 0,2113
+    msb_radix 0.688: 0,688
+    twin 0.697: 0,697
+    std_block_merge 1.327: 0,1327
+    comb 3.039: 0,3039
+    shell 2.258: 0,2258
     section descending saw
-    tim 0.620: 0,620
-    pdq 1.145: 0,1145
+    tim 0.708: 0,708
+    pdq 1.207: 0,1207
     quick SKIPPED: 0
     radix 0.019: 0,19
-    twin 0.714: 0,714
-    std_block_merge 2.496: 0,2496
-    comb 3.072: 0,3072
-    shell 2.145: 0,2143
+    msb_radix 0.700: 0,700
+    twin 0.755: 0,755
+    std_block_merge 2.363: 0,2363
+    comb 3.014: 0,3014
+    shell 2.297: 0,2297
 ```
 
 ### Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
@@ -151,50 +161,55 @@ gantt
     dateFormat x
     axisFormat %S s
     section random
-    tim 0.179: 0,179
-    pdq 0.450: 0,450
-    quick 1.243: 0,1243
-    radix 0.945: 0,945
-    twin 1.412: 0,1412
-    std_block_merge 1.784: 0,1784
-    comb 1.797: 0,1797
-    shell 2.357: 0,2358
+    tim 2.072: 0,2073
+    pdq 0.447: 0,447
+    quick 1.114: 0,1114
+    radix 1.251: 0,1251
+    msb_radix 0.355: 0,355
+    twin 1.187: 0,1187
+    std_block_merge 1.556: 0,1556
+    comb 1.592: 0,1592
+    shell 2.240: 0,2240
     section sorted
-    tim 0.193: 0,193
-    pdq 0.007: 0,7
-    quick 0.294: 0,294
-    radix 0.956: 0,956
-    twin 0.043: 0,43
-    std_block_merge 0.059: 0,59
-    comb 0.471: 0,471
-    shell 0.253: 0,253
+    tim 0.008: 0,8
+    pdq 0.006: 0,6
+    quick 0.261: 0,261
+    radix 1.249: 0,1249
+    msb_radix 0.375: 0,375
+    twin 0.073: 0,73
+    std_block_merge 0.058: 0,58
+    comb 0.397: 0,397
+    shell 0.250: 0,250
     section reverse
-    tim 0.179: 0,179
-    pdq 0.097: 0,97
-    quick 0.542: 0,542
-    radix 1.097: 0,1097
-    twin 0.422: 0,422
-    std_block_merge 0.474: 0,474
-    comb 0.583: 0,583
-    shell 0.324: 0,324
+    tim 0.396: 0,396
+    pdq 0.091: 0,91
+    quick 0.476: 0,476
+    radix 1.086: 0,1086
+    msb_radix 0.377: 0,377
+    twin 0.414: 0,414
+    std_block_merge 0.484: 0,484
+    comb 0.488: 0,488
+    shell 0.308: 0,308
     section ascending saw
-    tim 0.180: 0,180
-    pdq 0.441: 0,441
-    quick 0.801: 0,801
-    radix 1.098: 0,1098
-    twin 0.272: 0,272
-    std_block_merge 0.469: 0,469
-    comb 0.897: 0,897
-    shell 0.576: 0,576
+    tim 0.349: 0,349
+    pdq 0.443: 0,443
+    quick 0.910: 0,910
+    radix 1.256: 0,1256
+    msb_radix 0.376: 0,376
+    twin 0.246: 0,246
+    std_block_merge 0.369: 0,369
+    comb 0.754: 0,754
+    shell 0.553: 0,553
     section descending saw
-    tim 0.180: 0,180
+    tim 0.543: 0,543
     pdq 0.441: 0,441
     quick SKIPPED: 0
-    radix 0.947: 0,947
-    twin 0.517: 0,517
-    std_block_merge 0.654: 0,654
-    comb 0.915: 0,915
-    shell 0.567: 0,567
+    radix 1.247: 0,1247
+    msb_radix 0.376: 0,376
+    twin 0.478: 0,478
+    std_block_merge 0.573: 0,573
+    comb 0.788: 0,788
+    shell 0.551: 0,551
 ```
 
 ```mermaid
@@ -203,50 +218,55 @@ gantt
     dateFormat x
     axisFormat %S s
     section random
-    tim 0.181: 0,181
-    pdq 0.470: 0,470
-    quick 1.201: 0,1201
-    radix 0.004: 0,4
-    twin 1.402: 0,1402
-    std_block_merge 1.775: 0,1775
-    comb 1.727: 0,1727
-    shell 2.469: 0,2467
-    section sorted
-    tim 0.179: 0,179
-    pdq 0.008: 0,8
-    quick 0.205: 0,205
-    radix 0.004: 0,4
-    twin 0.029: 0,29
-    std_block_merge 0.059: 0,59
-    comb 0.499: 0,499
-    shell 0.252: 0,252
-    section reverse
-    tim 0.177: 0,177
-    pdq 0.039: 0,39
-    quick 0.441: 0,441
-    radix 0.004: 0,4
-    twin 0.014: 0,14
-    std_block_merge 0.313: 0,313
-    comb 0.596: 0,596
-    shell 0.318: 0,318
-    section ascending saw
-    tim 0.180: 0,180
-    pdq 0.461: 0,461
-    quick 2.180: 0,2181
-    radix 0.004: 0,4
-    twin 0.271: 0,271
-    std_block_merge 0.467: 0,467
-    comb 0.946: 0,946
-    shell 0.628: 0,628
-    section descending saw
-    tim 0.180: 0,180
+    tim 2.145: 0,2145
     pdq 0.475: 0,475
+    quick 1.116: 0,1116
+    radix 0.004: 0,4
+    msb_radix 0.384: 0,384
+    twin 1.216: 0,1216
+    std_block_merge 1.572: 0,1572
+    comb 1.753: 0,1753
+    shell 2.443: 0,2444
+    section sorted
+    tim 0.008: 0,8
+    pdq 0.008: 0,8
+    quick 0.186: 0,186
+    radix 0.004: 0,4
+    msb_radix 0.252: 0,252
+    twin 0.059: 0,59
+    std_block_merge 0.056: 0,56
+    comb 0.398: 0,398
+    shell 0.274: 0,274
+    section reverse
+    tim 0.013: 0,13
+    pdq 0.039: 0,39
+    quick 0.399: 0,399
+    radix 0.004: 0,4
+    msb_radix 0.255: 0,255
+    twin 0.015: 0,15
+    std_block_merge 0.329: 0,329
+    comb 0.476: 0,476
+    shell 0.343: 0,343
+    section ascending saw
+    tim 0.362: 0,362
+    pdq 0.470: 0,470
+    quick 1.206: 0,1206
+    radix 0.004: 0,4
+    msb_radix 0.260: 0,260
+    twin 0.248: 0,248
+    std_block_merge 0.371: 0,371
+    comb 0.792: 0,792
+    shell 0.629: 0,629
+    section descending saw
+    tim 0.364: 0,364
+    pdq 0.468: 0,468
     quick SKIPPED: 0
     radix 0.004: 0,4
-    twin 0.278: 0,278
-    std_block_merge 0.637: 0,637
-    comb 0.968: 0,968
-    shell 0.648: 0,648
+    msb_radix 0.272: 0,272
+    twin 0.270: 0,270
+    std_block_merge 0.566: 0,566
+    comb 0.830: 0,830
+    shell 0.643: 0,643
 ```
 
 ### Thanks to
