@@ -149,8 +149,8 @@ fn binarySort(
 }
 
 fn TimSort(
-    comptime T: anytype,
-    context: anytype,
+    comptime T: type,
+    comptime context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) type {
     return struct {

@@ -86,12 +86,11 @@ test "quick" {
 }
 
 test "radix" {
-    return error.SkipZigTest;
-    // {
-    //     var arr = items;
-    //     try zort.radixSort(ItemsType, &arr, testing.allocator);
-    //     try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
-    // }
+    {
+        var arr = items;
+        try zort.radixSort(ItemsType, testing.allocator, &arr);
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
+    }
 }
 
 test "selection" {
