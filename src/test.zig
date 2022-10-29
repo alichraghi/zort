@@ -88,7 +88,7 @@ test "quick" {
 test "radix" {
     {
         var arr = items;
-        try zort.radixSort(ItemsType, testing.allocator, &arr);
+        try zort.radixSort(ItemsType, .{}, testing.allocator, &arr);
         try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
     }
 }
