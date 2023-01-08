@@ -45,8 +45,7 @@ pub fn main() !void {
                 "Generating {s} data ({d} items of {s})... ",
                 .{ flavor_name, INPUT_ITEMS, @typeName(tp) },
             );
-            const opts = std.builtin.CallOptions{};
-            const arr = try @call(opts, flavor, .{ tp, allocator, INPUT_ITEMS });
+            const arr = try @call(.auto, flavor, .{ tp, allocator, INPUT_ITEMS });
             defer allocator.free(arr);
             std.debug.print("Done. ", .{});
 
@@ -172,13 +171,13 @@ fn runIterations(
 
 fn bench(func: anytype, args: anytype) anyerror!u64 {
     var timer = try std.time.Timer.start();
-    @call(.{}, func, args);
+    @call(.auto, func, args);
     return timer.read() / std.time.ns_per_ms;
 }
 
 fn errbench(func: anytype, args: anytype) anyerror!u64 {
     var timer = try std.time.Timer.start();
-    try @call(.{}, func, args);
+    try @call(.auto, func, args);
     return timer.read() / std.time.ns_per_ms;
 }
 

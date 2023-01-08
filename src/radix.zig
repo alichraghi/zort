@@ -79,7 +79,7 @@ inline fn insSortIntoOtherArray(comptime T: type, comptime options: SortOptions,
 
 inline fn truncate(comptime U: type, x: anytype) U {
     const T = @TypeOf(x);
-    if (std.meta.bitCount(T) >= std.meta.bitCount(U)) {
+    if (@bitSizeOf(T) >= @bitSizeOf(U)) {
         return @truncate(U, x);
     }
     return x;
@@ -96,7 +96,7 @@ inline fn readOneByte(comptime T: type, comptime options: SortOptions, comptime 
     if (T == f64) {
         return readOneByte(u64, .{}, idx, @bitCast(u64, x));
     }
-    const U = comptime std.meta.Int(.unsigned, std.meta.bitCount(T));
+    const U = comptime std.meta.Int(.unsigned, @bitSizeOf(T));
     const shift = comptime (@sizeOf(T) - 1 - idx) * 8;
     if (idx == 0) {
         return truncate(u8, (@bitCast(U, @as(T, std.math.minInt(T))) ^ @bitCast(U, x)) >> shift);
@@ -115,7 +115,7 @@ inline fn readTwoBytes(comptime T: type, comptime options: SortOptions, comptime
     if (T == f64) {
         return readTwoBytes(u64, .{}, idx, @bitCast(u64, x));
     }
-    const U = comptime std.meta.Int(.unsigned, std.meta.bitCount(T));
+    const U = comptime std.meta.Int(.unsigned, @bitSizeOf(T));
     const shift = comptime (@sizeOf(T) - 2 - idx) * 8;
     if (idx == 0) {
         return truncate(u16, (@bitCast(U, @as(T, std.math.minInt(T))) ^ @bitCast(U, x)) >> shift);
@@ -362,14 +362,14 @@ pub fn radixSort(
     // the max number of buckets needed is for the case where we consume
     // 2 bytes at a time the whole way through.
     // In that case, we'll need 0x10000 * (n_levels+1) buckets.
-    const max_buckets = (((std.meta.bitCount(Key) + 15) / 16) + 1) * 0x10000;
+    const max_buckets = (((@bitSizeOf(Key) + 15) / 16) + 1) * 0x10000;
 
     // using usize for buckets is pretty wasteful - most arrays have <2^32 elements.
     // this has a quite real performance cost because fewer buckets fit in cache.
     // so let's have a u32 version?
     const scratch = try allocator.alloc(T, arr.len);
     defer allocator.free(scratch);
-    if (arr.len <= std.math.maxInt(u32) and std.meta.bitCount(usize) > 32) {
+    if (arr.len <= std.math.maxInt(u32) and @bitSizeOf(usize) > 32) {
         const buckets = try allocator.alloc(u32, max_buckets);
         defer allocator.free(buckets);
         if (@sizeOf(T) > 1 and arr.len >= 0x10000) {

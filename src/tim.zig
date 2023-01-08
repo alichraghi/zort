@@ -589,8 +589,9 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
-                    var res: usize = undefined;
-                    if (@shlWithOverflow(usize, offset, 1, &res)) {
+                    var res: usize = undefined; 
+                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
                         offset = res +| 1;
@@ -608,7 +609,8 @@ fn TimSort(
                 while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    if (@shlWithOverflow(usize, offset, 1, &res)) {
+                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
                         offset = res +| 1;
@@ -659,7 +661,8 @@ fn TimSort(
                 while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    if (@shlWithOverflow(usize, offset, 1, &res)) {
+                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
                         offset = res +| 1;
@@ -678,7 +681,8 @@ fn TimSort(
                 while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    if (@shlWithOverflow(usize, offset, 1, &res)) {
+                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
                         offset = res +| 1;
