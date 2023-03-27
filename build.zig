@@ -1,26 +1,26 @@
 const std = @import("std");
 
 pub fn build(b: *std.build.Builder) !void {
-    const mode = b.standardReleaseOptions();
+    const optimize = b.standardOptimizeOption(.{});
     const target = b.standardTargetOptions(.{});
 
-    const lib = b.addStaticLibrary("zort", "src/main.zig");
-    const install_lib = b.addInstallArtifact(lib);
-    const lib_step = b.step("lib", "Build Static Library");
-    lib.setTarget(target);
-    lib.setBuildMode(mode);
-    lib_step.dependOn(&install_lib.step);
+    const benchmark = b.addExecutable(.{
+        .name = "bench",
+        .root_source_file = .{ .path = "benchmark/run_bench.zig" },
+        .optimize = optimize,
+        .target = target,
+    });
+    benchmark.addAnonymousModule("zort", .{ .source_file = .{ .path = "src/main.zig" } });
 
-    const benchmark = b.addExecutable("run_bench", "benchmark/run_bench.zig");
-    const benchmarks_step = b.step("bench", "Build Benchmarks");
-    const install_benchmark = b.addInstallArtifact(benchmark);
-    benchmark.setTarget(target);
-    benchmark.setBuildMode(mode);
-    benchmark.addPackagePath("zort", "src/main.zig");
-    benchmarks_step.dependOn(&install_benchmark.step);
+    const benchmarks_step = b.step("bench", "Run benchmarks");
+    benchmark.step.dependOn(benchmarks_step);
 
-    var tests = b.addTest("src/test.zig");
+    var tests = b.addTest(.{
+        .name = "zort-tests",
+        .root_source_file = .{ .path = "src/test.zig" },
+        .optimize = optimize,
+        .target = target,
+    });
     const test_step = b.step("test", "Run library tests");
-    tests.setBuildMode(mode);
     test_step.dependOn(&tests.step);
 }

@@ -1,6 +1,4 @@
-const std = @import("std");
-const zort = @import("main.zig");
-const mem = std.mem;
+const mem = @import("std").mem;
 
 pub fn bubbleSort(
     comptime T: type,
@@ -8,9 +6,8 @@ pub fn bubbleSort(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    for (arr) |_, i| {
-        var j: usize = 0;
-        while (j < arr.len - i - 1) : (j += 1) {
+    for (0..arr.len) |i| {
+        for (0..arr.len - i - 1) |j| {
             if (cmp(context, arr[j + 1], arr[j])) {
                 mem.swap(T, &arr[j], &arr[j + 1]);
             }

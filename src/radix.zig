@@ -47,8 +47,7 @@ inline fn lt(comptime T: type, comptime options: SortOptions, a: T, b: T) bool {
 }
 
 inline fn insSort(comptime T: type, comptime options: SortOptions, noalias array: [*]T, len: usize) void {
-    var i: usize = 1;
-    while (i < len) : (i += 1) {
+    for (1..len) |i| {
         const tmp = array[i];
         var j: usize = i;
         while (j > 0) : (j -= 1) {
@@ -62,9 +61,8 @@ inline fn insSort(comptime T: type, comptime options: SortOptions, noalias array
 }
 
 inline fn insSortIntoOtherArray(comptime T: type, comptime options: SortOptions, noalias src: [*]T, noalias dst: [*]T, len: usize) void {
-    var i: usize = 1;
     dst[0] = src[0];
-    while (i < len) : (i += 1) {
+    for (1..len) |i| {
         const tmp = src[i];
         var j: usize = i;
         while (j > 0) : (j -= 1) {

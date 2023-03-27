@@ -7,6 +7,10 @@ pub const items = [_]i32{ -9, 1, -4, 12, 3, 4 };
 pub const expectedASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
 pub const expectedDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
 
+test "temp" {
+    return error.SkipZigTest;
+}
+
 test "bubble" {
     {
         var arr = items;

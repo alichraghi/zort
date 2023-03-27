@@ -1,4 +1,4 @@
-//! TimSort implementation in zig by VÖRÖSKŐI András
+//! TimSort implementation in zig by VÖRÖSKŐI András <voroskoi@gmail.com>
 //! This implementation is based on the go version found here:
 //! https://github.com/psilva261/timsort
 //! I have also read the java version found here:
@@ -589,7 +589,7 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
-                    var res: usize = undefined; 
+                    var res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @intCast(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;

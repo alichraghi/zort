@@ -37,6 +37,11 @@ pub fn main() !void {
 
 ## Benchmarks
 
+run this to see resulst on your machine:
+```
+zig build bench -Drelease-fast=true -- tim pdq quick radix twin std_block_merge comb shell
+```
+
 ### Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz
 
 ```mermaid

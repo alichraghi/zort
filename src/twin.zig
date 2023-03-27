@@ -1,4 +1,4 @@
-// Zig port of twinsort by VÖRÖSKŐI András <voroskoi@gmail.com>=
+// Zig port of twinsort by VÖRÖSKŐI András <voroskoi@gmail.com>
 
 const std = @import("std");
 const zort = @import("main.zig");

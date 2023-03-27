@@ -10,8 +10,7 @@ pub fn insertionSortAdvanced(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    var i: usize = left + 1;
-    while (i <= right) : (i += 1) {
+    for (left + 1..right + 1) |i| {
         const x = arr[i];
         var j = i;
         while (j > left and cmp(context, x, arr[j - 1])) : (j -= 1) {

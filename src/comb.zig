@@ -14,8 +14,7 @@ pub fn combSort(
     while (gap != 1 or swapped) {
         gap = (gap * 10 / 13) ^ 1;
         swapped = false;
-        var i: usize = 0;
-        while (i < arr.len - gap) : (i += 1) {
+        for (0..arr.len - gap) |i| {
             if (cmp(context, arr[i + gap], arr[i])) {
                 mem.swap(T, &arr[i], &arr[i + gap]);
                 swapped = true;

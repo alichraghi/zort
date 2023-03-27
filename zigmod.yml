@@ -1,6 +1,0 @@
-id: p887lunwqybqvvbtxzbaiagn5rrt5izhu82ir2iyjgwv2g21
-name: zort
-main: zort.zig
-license: MIT
-description: a lot of sorting algorithms written in zig
-dependencies:

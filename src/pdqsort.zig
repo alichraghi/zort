@@ -542,7 +542,7 @@ test "partitionEqual" {
         var min_idx: usize = 0;
         var min_count: usize = 0;
 
-        for (v1.items) |v, i| {
+        for (v1.items, 0..) |v, i| {
             if (v < min_value) {
                 min_value = v;
                 min_idx = i;
