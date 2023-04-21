@@ -1,4 +1,4 @@
-//! TimSort implementation in zig by VÖRÖSKŐI András <voroskoi@gmail.com>
+//! By VÖRÖSKŐI András <voroskoi@gmail.com>
 //! This implementation is based on the go version found here:
 //! https://github.com/psilva261/timsort
 //! I have also read the java version found here:

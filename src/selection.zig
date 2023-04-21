@@ -1,6 +1,5 @@
 const std = @import("std");
 const zort = @import("main.zig");
-const mem = std.mem;
 
 pub fn selectionSort(
     comptime T: type,
@@ -16,6 +15,6 @@ pub fn selectionSort(
                 pos = j;
             }
         }
-        mem.swap(T, &arr[pos], item);
+        std.mem.swap(T, &arr[pos], item);
     }
 }

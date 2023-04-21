@@ -1,6 +1,5 @@
 const std = @import("std");
 const zort = @import("main.zig");
-const mem = std.mem;
 
 fn heapify(
     comptime T: type,
@@ -22,7 +21,7 @@ fn heapify(
         los = right;
 
     if (los != i) {
-        mem.swap(T, &arr[i], &arr[los]);
+        std.mem.swap(T, &arr[i], &arr[los]);
         heapify(T, arr, n, los, context, cmp);
     }
 }
@@ -42,7 +41,7 @@ pub fn heapSort(
 
     i = arr.len - 1;
     while (i > 0) : (i -= 1) {
-        mem.swap(T, &arr[0], &arr[i]);
+        std.mem.swap(T, &arr[0], &arr[i]);
         heapify(T, arr, i, 0, context, cmp);
     }
 }

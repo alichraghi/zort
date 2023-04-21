@@ -1,4 +1,4 @@
-// Zig port of tail sort by VÖRÖSKŐI András <voroskoi@gmail.com>
+//! By VÖRÖSKŐI András <voroskoi@gmail.com>
 
 const std = @import("std");
 const zort = @import("main.zig");

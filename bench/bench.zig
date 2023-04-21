@@ -2,19 +2,17 @@ const std = @import("std");
 const zort = @import("zort");
 const gen = @import("generator.zig");
 
-const Str = []const u8;
-
 const INPUT_ITEMS = 10_000_000;
 const RUNS = 5;
 const TYPES = [_]type{ usize, isize };
 const FLAVORS = .{ gen.random, gen.sorted, gen.reverse, gen.ascSaw, gen.descSaw };
 
 const BenchResult = struct {
-    command: Str,
+    command: []const u8,
     mean: u64,
     times: [RUNS]u64,
-    tp: Str,
-    flavor: Str,
+    tp: []const u8,
+    flavor: []const u8,
 };
 
 pub fn main() !void {
@@ -27,13 +25,18 @@ pub fn main() !void {
     const args = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, args);
 
+    if (args.len < 2) {
+        std.debug.print("no algorithm(s) specified\nexiting...\n", .{});
+        return;
+    }
+
     // prepare array for storing benchmark results
     var results = std.ArrayList(BenchResult).init(allocator);
     defer results.deinit();
 
     inline for (TYPES) |tp| {
         inline for (FLAVORS) |flavor| {
-            const flavor_name: Str = switch (flavor) {
+            const flavor_name: []const u8 = switch (flavor) {
                 gen.random => "random",
                 gen.sorted => "sorted",
                 gen.reverse => "reverse",
@@ -66,7 +69,7 @@ pub fn main() !void {
 }
 
 fn checkSorted(
-    comptime T: anytype,
+    comptime T: type,
     arr: []T,
 ) bool {
     var i: usize = 1;
@@ -79,7 +82,7 @@ fn checkSorted(
 }
 
 fn runIterations(
-    comptime T: anytype,
+    comptime T: type,
     allocator: std.mem.Allocator,
     arg: [:0]u8,
     arr: []T,
@@ -184,8 +187,8 @@ fn errbench(func: anytype, args: anytype) anyerror!u64 {
 fn writeMermaid(results: std.ArrayList(BenchResult)) !void {
     const stdout = std.io.getStdOut().writer();
 
-    var curr_type: Str = "";
-    var curr_flavor: Str = "";
+    var curr_type: []const u8 = "";
+    var curr_flavor: []const u8 = "";
 
     const header_top =
         \\

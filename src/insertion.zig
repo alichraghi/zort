@@ -1,6 +1,5 @@
 const std = @import("std");
 const zort = @import("main.zig");
-const math = std.math;
 
 pub fn insertionSortAdvanced(
     comptime T: type,
@@ -10,9 +9,9 @@ pub fn insertionSortAdvanced(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    for (left + 1..right + 1) |i| {
-        const x = arr[i];
-        var j = i;
+    for (left..right) |i| {
+        const x = arr[i + 1];
+        var j = i + 1;
         while (j > left and cmp(context, x, arr[j - 1])) : (j -= 1) {
             arr[j] = arr[j - 1];
         }
@@ -26,5 +25,5 @@ pub fn insertionSort(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    return insertionSortAdvanced(T, arr, 0, math.max(arr.len, 1) - 1, context, cmp);
+    return insertionSortAdvanced(T, arr, 0, std.math.max(arr.len, 1) - 1, context, cmp);
 }

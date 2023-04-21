@@ -4,27 +4,26 @@ pub fn build(b: *std.build.Builder) !void {
     const optimize = b.standardOptimizeOption(.{});
     const target = b.standardTargetOptions(.{});
 
-    const benchmark = b.addExecutable(.{
+    const bench = b.addExecutable(.{
         .name = "bench",
-        .root_source_file = .{ .path = "benchmark/bench.zig" },
+        .root_source_file = .{ .path = "bench/bench.zig" },
         .optimize = optimize,
         .target = target,
     });
-    benchmark.addAnonymousModule("zort", .{ .source_file = .{ .path = "src/main.zig" } });
+    bench.addAnonymousModule("zort", .{ .source_file = .{ .path = "src/main.zig" } });
 
-    const benchmark_cmd = benchmark.run();
+    const bench_cmd = b.addRunArtifact(bench);
     if (b.args) |args| {
-        benchmark_cmd.addArgs(args);
+        bench_cmd.addArgs(args);
     }
-    const benchmark_step = b.step("bench", "Run benchmarks");
-    benchmark_step.dependOn(&benchmark_cmd.step);
+    const bench_step = b.step("bench", "Run benchmarks");
+    bench_step.dependOn(&bench_cmd.step);
 
     var tests = b.addTest(.{
-        .name = "zort-tests",
         .root_source_file = .{ .path = "src/test.zig" },
         .optimize = optimize,
         .target = target,
     });
     const test_step = b.step("test", "Run library tests");
-    test_step.dependOn(&tests.run().step);
+    test_step.dependOn(&b.addRunArtifact(tests).step);
 }

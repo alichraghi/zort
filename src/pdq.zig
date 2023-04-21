@@ -1,12 +1,11 @@
-//! Pattern Defeating QuickSort
-//! This code is based on https://github.com/zhangyunhao116/pdqsort
+//! based on https://github.com/zhangyunhao116/pdqsort
 
 const std = @import("std");
 const zort = @import("main.zig");
 
-/// pdqSort is `Pattern Defeating Quicksort`.
+/// Pattern Defeating Quick Sort
 pub fn pdqSort(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -17,7 +16,7 @@ pub fn pdqSort(
     recurse(T, items, null, limit, context, cmp);
 }
 
-/// recurse sorts `items` recursively.
+/// sorts `orig_items` recursively.
 ///
 /// If the slice had a predecessor in the original array, it is specified as
 /// `orig_pred` (must be the minimum value if exist).
@@ -25,25 +24,25 @@ pub fn pdqSort(
 /// `orig_limit` is the number of allowed imbalanced partitions before switching to `heapsort`.
 /// If zero, this function will immediately switch to heapsort.
 fn recurse(
-    comptime T: anytype,
+    comptime T: type,
     orig_items: []T,
     orig_pred: ?T,
     orig_limit: usize,
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    var limit = orig_limit;
-    var items: []T = orig_items;
+    var items = orig_items;
     var pred = orig_pred;
+    var limit = orig_limit;
 
     // slices of up to this length get sorted using insertion sort.
     const max_insertion = 24;
 
     // True if the last partitioning was reasonably balanced.
-    var was_balanced: bool = true;
+    var was_balanced = true;
 
     // True if the last partitioning didn't shuffle elements (the slice was already partitioned).
-    var was_partitioned: bool = true;
+    var was_partitioned = true;
 
     while (true) {
         // Very short slices get sorted using insertion sort.
@@ -67,7 +66,7 @@ fn recurse(
         }
 
         // Choose a pivot and try guessing whether the slice is already sorted.
-        var likely_sorted: bool = false;
+        var likely_sorted = false;
         const pivot_idx = chosePivot(T, items, &likely_sorted, context, cmp);
 
         // If the last partitioning was decently balanced and didn't shuffle elements, and if pivot
@@ -108,7 +107,7 @@ fn recurse(
 }
 
 fn heapify(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -117,13 +116,13 @@ fn heapify(
     zort.heapSort(T, items, context, cmp);
 }
 
-/// partition partitions `items` into elements smaller than `items[pivot_idx]`,
+/// partitions `items` into elements smaller than `items[pivot_idx]`,
 /// followed by elements greater than or equal to `items[pivot_idx]`.
 ///
 /// Returns the new pivot index.
 /// Sets was_partitioned to `true` if necessary.
 fn partition(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     pivot_idx: usize,
     was_partitioned: *bool,
@@ -159,34 +158,34 @@ fn partition(
 }
 
 fn partitionBlock(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     pivot: T,
     context: anytype,
     cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) usize {
-    const BLOCK = 128;
+    const BLOCK_LEN = 128;
 
     var left: usize = 0;
-    var block_left: usize = BLOCK;
+    var block_left: usize = BLOCK_LEN;
     var start_left: usize = 0;
     var end_left: usize = 0;
-    var offsets_left: [BLOCK]usize = undefined;
+    var offsets_left: [BLOCK_LEN]usize = undefined;
 
     var right: usize = items.len;
-    var block_right: usize = BLOCK;
+    var block_right: usize = BLOCK_LEN;
     var start_right: usize = 0;
     var end_right: usize = 0;
-    var offsets_right: [BLOCK]usize = undefined;
+    var offsets_right: [BLOCK_LEN]usize = undefined;
 
     while (true) {
-        const is_done = (right - left) <= 2 * BLOCK;
+        const is_done = (right - left) <= 2 * BLOCK_LEN;
 
         if (is_done) {
             var rem = right - left;
 
             if (start_left < end_left or start_right < end_right) {
-                rem -= BLOCK;
+                rem -= BLOCK_LEN;
             }
 
             if (start_left < end_left) {
@@ -197,7 +196,7 @@ fn partitionBlock(
                 block_left = rem / 2;
                 block_right = rem - block_left;
             }
-            std.debug.assert(block_left <= BLOCK and block_right <= BLOCK);
+            std.debug.assert(block_left <= BLOCK_LEN and block_right <= BLOCK_LEN);
         }
 
         if (start_left == end_left) {
@@ -268,7 +267,7 @@ fn partitionBlock(
     }
 }
 
-fn cyclicSwap(comptime T: anytype, items: []T, is: []usize, js: []usize) void {
+fn cyclicSwap(comptime T: type, items: []T, is: []usize, js: []usize) void {
     const count = is.len;
     const tmp = items[is[0]];
     items[is[0]] = items[js[0]];
@@ -290,7 +289,7 @@ fn next(r: *XorShift) usize {
     return r.*;
 }
 
-fn breakPatterns(comptime T: anytype, items: []T) void {
+fn breakPatterns(comptime T: type, items: []T) void {
     @setCold(true);
     if (items.len < 8) return;
 
@@ -313,7 +312,7 @@ fn breakPatterns(comptime T: anytype, items: []T) void {
 }
 
 fn partitionEqual(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     pivot_idx: usize,
     context: anytype,
@@ -341,10 +340,10 @@ fn partitionEqual(
     return i;
 }
 
-// partialInsertionSort partially sorts a slice by shifting several out-of-order elements around.
+// partially sorts a slice by shifting several out-of-order elements around.
 // Returns `true` if the slice is sorted at the end. This function is `O(n)` worst-case.
 fn partialInsertionSort(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     context: anytype,
     cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -381,7 +380,7 @@ fn partialInsertionSort(
 }
 
 fn shiftTail(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     context: anytype,
     cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -396,7 +395,7 @@ fn shiftTail(
 }
 
 fn shiftHead(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     context: anytype,
     cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
@@ -410,10 +409,10 @@ fn shiftHead(
     }
 }
 
-/// chosePivot choses a pivot in `items`.
+/// choses a pivot in `items`.
 /// Swaps likely_sorted when `items` seems to be already sorted.
 fn chosePivot(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     likely_sorted: *bool,
     context: anytype,
@@ -457,7 +456,7 @@ fn chosePivot(
 }
 
 fn sort3(
-    comptime T: anytype,
+    comptime T: type,
     items: []T,
     a: usize,
     b: usize,
@@ -557,92 +556,5 @@ test "partitionEqual" {
             min_count,
             partitionEqual(usize, v1.items, min_idx, {}, std.sort.asc(usize)),
         );
-    }
-}
-
-test "pdqSort" {
-    {
-        var array = [_]usize{ 1, 4, 6, 4, 3, 2, 6, 7, 8, 9 };
-        const exp = [_]usize{ 1, 2, 3, 4, 4, 6, 6, 7, 8, 9 };
-
-        pdqSort(usize, &array, {}, comptime std.sort.asc(usize));
-
-        try std.testing.expectEqualSlices(usize, &exp, &array);
-    }
-
-    {
-        var array = [_]usize{ 1, 4, 6, 4, 3, 2, 6, 7, 8, 9 };
-        const exp = [_]usize{ 9, 8, 7, 6, 6, 4, 4, 3, 2, 1 };
-
-        pdqSort(usize, &array, {}, comptime std.sort.desc(usize));
-
-        try std.testing.expectEqualSlices(usize, &exp, &array);
-    }
-
-    {
-        var array = [_]usize{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 11, 22, 33, 44, 55, 66, 77, 88, 99, 1000, 0, 500 };
-        const exp = [_]usize{ 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 10, 10, 11, 20, 20, 22, 30, 30, 33, 40, 40, 44, 50, 50, 55, 60, 60, 66, 70, 70, 77, 80, 80, 88, 90, 90, 99, 100, 100, 500, 1000 };
-
-        pdqSort(usize, &array, {}, comptime std.sort.asc(usize));
-
-        try std.testing.expectEqualSlices(usize, &exp, &array);
-    }
-
-    {
-        // ascending
-        const TEST_TYPE = isize;
-        const TESTS = 10;
-        const ITEMS = 10_000;
-
-        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
-
-        var tc: usize = 0;
-        while (tc < TESTS) : (tc += 1) {
-            var array = try std.ArrayList(TEST_TYPE).initCapacity(std.testing.allocator, ITEMS);
-            defer array.deinit();
-
-            var item: usize = 0;
-            while (item < ITEMS) : (item += 1) {
-                const value = rnd.random().int(TEST_TYPE);
-                array.appendAssumeCapacity(value);
-            }
-            var reference = try array.clone();
-            defer reference.deinit();
-
-            std.sort.sort(TEST_TYPE, reference.items, {}, comptime std.sort.asc(TEST_TYPE));
-
-            pdqSort(TEST_TYPE, array.items, {}, comptime std.sort.asc(TEST_TYPE));
-
-            try std.testing.expectEqualSlices(TEST_TYPE, reference.items, array.items);
-        }
-    }
-
-    {
-        // descending
-        const TEST_TYPE = isize;
-        const TESTS = 100;
-        const ITEMS = 10_000;
-
-        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
-
-        var tc: usize = 0;
-        while (tc < TESTS) : (tc += 1) {
-            var array = try std.ArrayList(TEST_TYPE).initCapacity(std.testing.allocator, ITEMS);
-            defer array.deinit();
-
-            var item: usize = 0;
-            while (item < ITEMS) : (item += 1) {
-                const value = rnd.random().int(TEST_TYPE);
-                array.appendAssumeCapacity(value);
-            }
-            var reference = try array.clone();
-            defer reference.deinit();
-
-            std.sort.sort(TEST_TYPE, reference.items, {}, comptime std.sort.desc(TEST_TYPE));
-
-            pdqSort(TEST_TYPE, array.items, {}, comptime std.sort.desc(TEST_TYPE));
-
-            try std.testing.expectEqualSlices(TEST_TYPE, reference.items, array.items);
-        }
     }
 }

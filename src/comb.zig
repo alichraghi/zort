@@ -1,6 +1,5 @@
 const std = @import("std");
 const zort = @import("main.zig");
-const mem = std.mem;
 
 pub fn combSort(
     comptime T: type,
@@ -16,7 +15,7 @@ pub fn combSort(
         swapped = false;
         for (0..arr.len - gap) |i| {
             if (cmp(context, arr[i + gap], arr[i])) {
-                mem.swap(T, &arr[i], &arr[i + gap]);
+                std.mem.swap(T, &arr[i], &arr[i + gap]);
                 swapped = true;
             }
         }

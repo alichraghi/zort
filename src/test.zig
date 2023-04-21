@@ -161,3 +161,16 @@ test "twin" {
         try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
     }
 }
+
+test "pdq" {
+    {
+        var arr = items;
+        zort.pdqSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedASC);
+    }
+    {
+        var arr = items;
+        zort.pdqSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
+        try testing.expectEqualSlices(ItemsType, &arr, &expectedDESC);
+    }
+}

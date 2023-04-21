@@ -1,5 +1,4 @@
 const std = @import("std");
-const mem = std.mem;
 
 const SortOrder = enum {
     ascending,
@@ -352,9 +351,9 @@ inline fn recurse(
 pub fn radixSort(
     comptime T: type,
     comptime _options: SortOptions,
-    allocator: mem.Allocator,
+    allocator: std.mem.Allocator,
     arr: []T,
-) mem.Allocator.Error!void {
+) std.mem.Allocator.Error!void {
     const options = comptime _options.canonicalize();
     const Key = SortKeyType(T, options);
     // the max number of buckets needed is for the case where we consume
