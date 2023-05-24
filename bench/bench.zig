@@ -99,16 +99,12 @@ fn runIterations(
             result.times[i] = try bench(zort.bubbleSort, .{ T, items, {}, comptime std.sort.asc(T) })
         else if (std.mem.eql(u8, arg, "quick"))
             result.times[i] = try bench(zort.quickSort, .{ T, items, {}, comptime std.sort.asc(T) })
-        else if (std.mem.eql(u8, arg, "insertion"))
-            result.times[i] = try bench(zort.insertionSort, .{ T, items, {}, comptime std.sort.asc(T) })
         else if (std.mem.eql(u8, arg, "selection"))
             result.times[i] = try bench(zort.selectionSort, .{ T, items, {}, comptime std.sort.asc(T) })
         else if (std.mem.eql(u8, arg, "comb"))
             result.times[i] = try bench(zort.combSort, .{ T, items, {}, comptime std.sort.asc(T) })
         else if (std.mem.eql(u8, arg, "shell"))
             result.times[i] = try bench(zort.shellSort, .{ T, items, {}, comptime std.sort.asc(T) })
-        else if (std.mem.eql(u8, arg, "heap"))
-            result.times[i] = try bench(zort.heapSort, .{ T, items, {}, comptime std.sort.asc(T) })
         else if (std.mem.eql(u8, arg, "merge"))
             result.times[i] = try errbench(
                 zort.mergeSort,
@@ -134,19 +130,24 @@ fn runIterations(
                 zort.twinSort,
                 .{ T, allocator, items, {}, comptime std.sort.asc(T) },
             )
-        else if (std.mem.eql(u8, arg, "std_block_merge"))
+        else if (std.mem.eql(u8, arg, "std_block"))
             result.times[i] = try bench(
-                std.sort.sort,
+                std.sort.block,
+                .{ T, items, {}, comptime std.sort.asc(T) },
+            )
+        else if (std.mem.eql(u8, arg, "std_pdq"))
+            result.times[i] = try bench(
+                std.sort.pdq,
+                .{ T, items, {}, comptime std.sort.asc(T) },
+            )
+        else if (std.mem.eql(u8, arg, "std_heap"))
+            result.times[i] = try bench(
+                std.sort.heap,
                 .{ T, items, {}, comptime std.sort.asc(T) },
             )
         else if (std.mem.eql(u8, arg, "std_insertion"))
             result.times[i] = try bench(
-                std.sort.insertionSort,
-                .{ T, items, {}, comptime std.sort.asc(T) },
-            )
-        else if (std.mem.eql(u8, arg, "pdq"))
-            result.times[i] = try bench(
-                zort.pdqSort,
+                std.sort.insertion,
                 .{ T, items, {}, comptime std.sort.asc(T) },
             )
         else

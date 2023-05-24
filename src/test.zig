@@ -7,10 +7,6 @@ pub const items = [_]i32{ -9, 1, -4, 12, 3, 4 };
 pub const expectedASC = [_]i32{ -9, -4, 1, 3, 4, 12 };
 pub const expectedDESC = [_]i32{ 12, 4, 3, 1, -4, -9 };
 
-test "temp" {
-    return error.SkipZigTest;
-}
-
 test "bubble" {
     {
         var arr = items;
@@ -33,32 +29,6 @@ test "comb" {
     {
         var arr = items;
         zort.combSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedDESC, &arr);
-    }
-}
-
-test "heap" {
-    {
-        var arr = items;
-        zort.heapSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedASC, &arr);
-    }
-    {
-        var arr = items;
-        zort.heapSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedDESC, &arr);
-    }
-}
-
-test "insertion" {
-    {
-        var arr = items;
-        zort.insertionSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedASC, &arr);
-    }
-    {
-        var arr = items;
-        zort.insertionSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &expectedDESC, &arr);
     }
 }
@@ -158,19 +128,6 @@ test "twin" {
     {
         var arr = items;
         try zort.twinSort(ItemsType, testing.allocator, &arr, {}, comptime std.sort.desc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedDESC, &arr);
-    }
-}
-
-test "pdq" {
-    {
-        var arr = items;
-        zort.pdqSort(ItemsType, &arr, {}, comptime std.sort.asc(i32));
-        try testing.expectEqualSlices(ItemsType, &expectedASC, &arr);
-    }
-    {
-        var arr = items;
-        zort.pdqSort(ItemsType, &arr, {}, comptime std.sort.desc(i32));
         try testing.expectEqualSlices(ItemsType, &expectedDESC, &arr);
     }
 }

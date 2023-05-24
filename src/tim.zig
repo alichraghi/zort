@@ -772,7 +772,7 @@ test "timSort" {
             var reference = try array.clone();
             defer reference.deinit();
 
-            std.sort.sort(TEST_TYPE, reference.items, {}, comptime std.sort.asc(TEST_TYPE));
+            std.mem.sort(TEST_TYPE, reference.items, {}, comptime std.sort.asc(TEST_TYPE));
 
             try timSort(TEST_TYPE, std.testing.allocator, array.items, {}, comptime std.sort.asc(TEST_TYPE));
 
@@ -801,7 +801,7 @@ test "timSort" {
             var reference = try array.clone();
             defer reference.deinit();
 
-            std.sort.sort(TEST_TYPE, reference.items, {}, comptime std.sort.desc(TEST_TYPE));
+            std.mem.sort(TEST_TYPE, reference.items, {}, comptime std.sort.desc(TEST_TYPE));
 
             try timSort(TEST_TYPE, std.testing.allocator, array.items, {}, comptime std.sort.desc(TEST_TYPE));
 

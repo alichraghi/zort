@@ -22,7 +22,7 @@ pub fn random(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T
 pub fn sorted(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
     var ret = try random(T, allocator, limit);
 
-    std.sort.sort(T, ret, {}, comptime std.sort.asc(T));
+    std.mem.sort(T, ret, {}, comptime std.sort.asc(T));
 
     return ret;
 }
@@ -30,7 +30,7 @@ pub fn sorted(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T
 pub fn reverse(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
     var ret = try random(T, allocator, limit);
 
-    std.sort.sort(T, ret, {}, comptime std.sort.desc(T));
+    std.mem.sort(T, ret, {}, comptime std.sort.desc(T));
 
     return ret;
 }
@@ -42,7 +42,7 @@ pub fn ascSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T
     var offset: usize = 0;
     while (offset < TEETH) : (offset += 1) {
         const start = ret.len / TEETH * offset;
-        std.sort.sort(T, ret[start .. start + ret.len / TEETH], {}, comptime std.sort.asc(T));
+        std.mem.sort(T, ret[start .. start + ret.len / TEETH], {}, comptime std.sort.asc(T));
     }
 
     return ret;
@@ -55,7 +55,7 @@ pub fn descSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]
     var offset: usize = 0;
     while (offset < TEETH) : (offset += 1) {
         const start = ret.len / TEETH * offset;
-        std.sort.sort(T, ret[start .. start + ret.len / TEETH], {}, comptime std.sort.desc(T));
+        std.mem.sort(T, ret[start .. start + ret.len / TEETH], {}, comptime std.sort.desc(T));
     }
 
     return ret;
