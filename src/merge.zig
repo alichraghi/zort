@@ -84,5 +84,5 @@ pub fn mergeSort(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) std.mem.Allocator.Error!void {
-    return mergeSortAdvanced(T, allocator, arr, 0, std.math.max(arr.len, 1) - 1, context, cmp);
+    return mergeSortAdvanced(T, allocator, arr, 0, @max(arr.len, 1) - 1, context, cmp);
 }

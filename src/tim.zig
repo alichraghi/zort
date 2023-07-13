@@ -259,7 +259,7 @@ fn TimSort(
             // run now, also slide over the last run (which isn't involved
             // in this merge).  The current run (`i+1`) goes away in any case.
             self.run_len[i] = len1 + len2;
-            if (i == @intCast(isize, self.pending) - 3) {
+            if (i == @as(isize, @intCast(self.pending)) - 3) {
                 self.run_base[i + 1] = self.run_base[i + 2];
                 self.run_len[i + 1] = self.run_len[i + 2];
             }
@@ -590,7 +590,7 @@ fn TimSort(
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
@@ -609,7 +609,7 @@ fn TimSort(
                 while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
@@ -661,7 +661,7 @@ fn TimSort(
                 while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
@@ -681,7 +681,7 @@ fn TimSort(
                 while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
                     last_offset = offset;
                     var res: usize = undefined;
-                    const ov = @shlWithOverflow(offset, @intCast(u6, 1));
+                    const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
                     } else {
@@ -757,7 +757,7 @@ test "timSort" {
         const TESTS = 10;
         const ITEMS = 10_000;
 
-        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
+        var rnd = std.rand.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {
@@ -786,7 +786,7 @@ test "timSort" {
         const TESTS = 10;
         const ITEMS = 10_000;
 
-        var rnd = std.rand.DefaultPrng.init(@intCast(u64, std.time.milliTimestamp()));
+        var rnd = std.rand.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
 
         var tc: usize = 0;
         while (tc < TESTS) : (tc += 1) {

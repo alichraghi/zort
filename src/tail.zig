@@ -42,19 +42,21 @@ pub fn tailMerge(
         while (offset + block < arr.len) : (offset += block * 2) {
             e = offset + block - 1;
 
-            if (!cmp(context, arr[@intCast(usize, e) + 1], arr[@intCast(usize, e)])) continue;
+            if (!cmp(context, arr[@as(usize, @intCast(e)) + 1], arr[@as(usize, @intCast(e))])) {
+                continue;
+            }
 
             if (offset + block * 2 < arr.len) {
                 c_max = 0 + block;
                 d_max = offset + block * 2;
             } else {
-                c_max = 0 + @intCast(isize, arr.len) - (offset + block);
-                d_max = 0 + @intCast(isize, arr.len);
+                c_max = 0 + @as(isize, @intCast(arr.len)) - (offset + block);
+                d_max = 0 + @as(isize, @intCast(arr.len));
             }
 
             d = d_max - 1;
 
-            while (!cmp(context, arr[@intCast(usize, d)], arr[@intCast(usize, e)])) {
+            while (!cmp(context, arr[@as(usize, @intCast(d))], arr[@as(usize, @intCast(e))])) {
                 d_max -= 1;
                 d -= 1;
                 c_max -= 1;
@@ -64,7 +66,7 @@ pub fn tailMerge(
             d = offset + block;
 
             while (c < c_max) {
-                swap[@intCast(usize, c)] = arr[@intCast(usize, d)];
+                swap[@as(usize, @intCast(c))] = arr[@as(usize, @intCast(d))];
                 c += 1;
                 d += 1;
             }
@@ -74,36 +76,50 @@ pub fn tailMerge(
             d = offset + block - 1;
             e = d_max - 1;
 
-            if (!cmp(context, arr[@intCast(usize, offset + block)], arr[@intCast(usize, offset)])) {
-                arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
+            if (!cmp(
+                context,
+                arr[@as(usize, @intCast(offset + block))],
+                arr[@as(usize, @intCast(offset))],
+            )) {
+                arr[@as(usize, @intCast(e))] = arr[@as(usize, @intCast(d))];
                 e -= 1;
                 d -= 1;
                 while (c >= 0) {
-                    while (cmp(context, swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
-                        arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
+                    while (cmp(
+                        context,
+                        swap[@as(usize, @intCast(c))],
+                        arr[@as(usize, @intCast(d))],
+                    )) {
+                        arr[@as(usize, @intCast(e))] = arr[@as(usize, @intCast(d))];
                         e -= 1;
                         d -= 1;
                     }
-                    arr[@intCast(usize, e)] = swap[@intCast(usize, c)];
+
+                    arr[@as(usize, @intCast(e))] = swap[@as(usize, @intCast(c))];
                     e -= 1;
                     c -= 1;
                 }
             } else {
-                arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
+                arr[@as(usize, @intCast(e))] = arr[@as(usize, @intCast(d))];
                 e -= 1;
                 d -= 1;
                 while (d >= offset) {
-                    while (!cmp(context, swap[@intCast(usize, c)], arr[@intCast(usize, d)])) {
-                        arr[@intCast(usize, e)] = swap[@intCast(usize, c)];
+                    while (!cmp(
+                        context,
+                        swap[@as(usize, @intCast(c))],
+                        arr[@as(usize, @intCast(d))],
+                    )) {
+                        arr[@as(usize, @intCast(e))] = swap[@as(usize, @intCast(c))];
                         e -= 1;
                         c -= 1;
                     }
-                    arr[@intCast(usize, e)] = arr[@intCast(usize, d)];
+
+                    arr[@as(usize, @intCast(e))] = arr[@as(usize, @intCast(d))];
                     e -= 1;
                     d -= 1;
                 }
                 while (c >= 0) {
-                    arr[@intCast(usize, e)] = swap[@intCast(usize, c)];
+                    arr[@as(usize, @intCast(e))] = swap[@as(usize, @intCast(c))];
                     e -= 1;
                     c -= 1;
                 }

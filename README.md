@@ -37,9 +37,9 @@ pub fn main() !void {
 
 ## Benchmarks
 
-run this to see resulst on your machine:
+run this to see results on your machine:
 ```
-zig build bench -Doptimize=ReleaseFast -- tim pdq quick radix twin std_block_merge comb shell
+zig build bench -Doptimize=ReleaseFast -- comb quick radix shell std_block std_heap std_pdq tail tim twin
 ```
 
 ### 12th Gen Intel(R) Core(TM) i5-12400F

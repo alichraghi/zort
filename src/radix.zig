@@ -77,7 +77,7 @@ inline fn insSortIntoOtherArray(comptime T: type, comptime options: SortOptions,
 inline fn truncate(comptime U: type, x: anytype) U {
     const T = @TypeOf(x);
     if (@bitSizeOf(T) >= @bitSizeOf(U)) {
-        return @truncate(U, x);
+        return @truncate(x);
     }
     return x;
 }
@@ -88,17 +88,20 @@ inline fn readOneByte(comptime T: type, comptime options: SortOptions, comptime 
         return readOneByte(FieldType(T, key_field), .{}, idx, key);
     }
     if (T == f32) {
-        return readOneByte(u32, .{}, idx, @bitCast(u32, x));
+        return readOneByte(u32, .{}, idx, @bitCast(x));
     }
     if (T == f64) {
-        return readOneByte(u64, .{}, idx, @bitCast(u64, x));
+        return readOneByte(u64, .{}, idx, @bitCast(x));
     }
     const U = comptime std.meta.Int(.unsigned, @bitSizeOf(T));
     const shift = comptime (@sizeOf(T) - 1 - idx) * 8;
     if (idx == 0) {
-        return truncate(u8, (@bitCast(U, @as(T, std.math.minInt(T))) ^ @bitCast(U, x)) >> shift);
+        return truncate(
+            u8,
+            (@as(U, @bitCast(@as(T, std.math.minInt(T)))) ^ @as(U, @bitCast(x))) >> shift,
+        );
     }
-    return truncate(u8, @bitCast(U, x) >> shift);
+    return truncate(u8, @as(U, @bitCast(x)) >> shift);
 }
 
 inline fn readTwoBytes(comptime T: type, comptime options: SortOptions, comptime idx: usize, x: T) u16 {
@@ -107,17 +110,20 @@ inline fn readTwoBytes(comptime T: type, comptime options: SortOptions, comptime
         return readTwoBytes(FieldType(T, key_field), .{}, idx, key);
     }
     if (T == f32) {
-        return readTwoBytes(u32, .{}, idx, @bitCast(u32, x));
+        return readTwoBytes(u32, .{}, idx, @bitCast(x));
     }
     if (T == f64) {
-        return readTwoBytes(u64, .{}, idx, @bitCast(u64, x));
+        return readTwoBytes(u64, .{}, idx, @bitCast(x));
     }
     const U = comptime std.meta.Int(.unsigned, @bitSizeOf(T));
     const shift = comptime (@sizeOf(T) - 2 - idx) * 8;
     if (idx == 0) {
-        return truncate(u16, (@bitCast(U, @as(T, std.math.minInt(T))) ^ @bitCast(U, x)) >> shift);
+        return truncate(
+            u16,
+            (@as(U, @bitCast(@as(T, std.math.minInt(T)))) ^ @as(U, @bitCast(x))) >> shift,
+        );
     }
-    return truncate(u16, @bitCast(U, x) >> shift);
+    return truncate(u16, @as(U, @bitCast(x)) >> shift);
 }
 
 fn FieldType(comptime T: type, comptime field: @Type(.EnumLiteral)) type {

@@ -7,7 +7,7 @@ pub fn quickSort(
     context: anytype,
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) void {
-    return quickSortAdvanced(T, arr, 0, std.math.max(arr.len, 1) - 1, context, cmp);
+    return quickSortAdvanced(T, arr, 0, @max(arr.len, 1) - 1, context, cmp);
 }
 
 pub fn quickSortAdvanced(
@@ -29,7 +29,7 @@ pub fn quickSortAdvanced(
         }
     }
     std.mem.swap(T, &arr[i], &arr[right]);
-    quickSortAdvanced(T, arr, left, std.math.max(i, 1) - 1, context, cmp);
+    quickSortAdvanced(T, arr, left, @max(i, 1) - 1, context, cmp);
     quickSortAdvanced(T, arr, i + 1, right, context, cmp);
 }
 

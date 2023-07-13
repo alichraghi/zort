@@ -219,10 +219,11 @@ fn writeMermaid(results: std.ArrayList(BenchResult)) !void {
             try stdout.print("    section {s}\n", .{res.flavor});
             curr_flavor = res.flavor;
         }
-        try stdout.print(
-            "    {s} {d:.3}: 0,{d}\n",
-            .{ res.command, @intToFloat(f16, res.mean) / std.time.ms_per_s, res.mean },
-        );
+        try stdout.print("    {s} {d:.3}: 0,{d}\n", .{
+            res.command,
+            @as(f16, @floatFromInt(res.mean)) / std.time.ms_per_s,
+            res.mean,
+        });
     }
 
     _ = try stdout.write("```\n");
