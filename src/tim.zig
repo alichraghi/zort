@@ -252,7 +252,7 @@ fn TimSort(
         fn mergeAt(self: *@This(), i: usize) !void {
             var base1: usize = self.run_base[i];
             var len1: usize = self.run_len[i];
-            var base2: usize = self.run_base[i + 1];
+            const base2: usize = self.run_base[i + 1];
             var len2: usize = self.run_len[i + 1];
 
             // Record the length of the combined runs; if `i` is the 3rd-last
@@ -304,7 +304,7 @@ fn TimSort(
 
             const tmp = try self.ensureCapacity(len1);
 
-            std.mem.copy(T, tmp, self.items[base1 .. base1 + len1]);
+            std.mem.copyForwards(T, tmp[0..len1], self.items[base1 .. base1 + len1]);
 
             var cursor1: usize = 0;
             var cursor2: usize = base2;
@@ -317,13 +317,13 @@ fn TimSort(
             len2 -= 1;
 
             if (len2 == 0) {
-                std.mem.copy(T, self.items[dest .. dest + len1], tmp[0..len1]);
+                std.mem.copyForwards(T, self.items[dest .. dest + len1], tmp[0..len1]);
                 return;
             }
 
             if (len1 == 1) {
                 std.debug.assert(dest <= cursor2);
-                std.mem.copy(T, self.items[dest .. dest + len2], self.items[cursor2 .. cursor2 + len2]);
+                std.mem.copyForwards(T, self.items[dest .. dest + len2], self.items[cursor2 .. cursor2 + len2]);
                 self.items[dest + len2] = tmp[cursor1];
                 return;
             }
@@ -366,7 +366,11 @@ fn TimSort(
                     count1 = self.gallopRight(self.items[cursor2], tmp, cursor1, len1, 0);
 
                     if (count1 != 0) {
-                        std.mem.copy(T, self.items[dest .. dest + count1], tmp[cursor1 .. cursor1 + count1]);
+                        std.mem.copyForwards(
+                            T,
+                            self.items[dest .. dest + count1],
+                            tmp[cursor1 .. cursor1 + count1],
+                        );
                         dest += count1;
                         cursor1 += count1;
                         len1 -= count1;
@@ -384,7 +388,11 @@ fn TimSort(
 
                     if (count2 != 0) {
                         std.debug.assert(dest <= cursor2);
-                        std.mem.copy(T, self.items[dest .. dest + count2], self.items[cursor2 .. cursor2 + count2]);
+                        std.mem.copyForwards(
+                            T,
+                            self.items[dest .. dest + count2],
+                            self.items[cursor2 .. cursor2 + count2],
+                        );
                         dest += count2;
                         cursor2 += count2;
                         len2 -= count2;
@@ -412,10 +420,10 @@ fn TimSort(
 
             if (len1 == 1) {
                 std.debug.assert(dest <= cursor2);
-                std.mem.copy(T, self.items[dest .. dest + len2], self.items[cursor2 .. cursor2 + len2]);
+                std.mem.copyForwards(T, self.items[dest .. dest + len2], self.items[cursor2 .. cursor2 + len2]);
                 self.items[dest + len2] = tmp[cursor1];
             } else {
-                std.mem.copy(T, self.items[dest .. dest + len1], tmp[cursor1 .. cursor1 + len1]);
+                std.mem.copyForwards(T, self.items[dest .. dest + len1], tmp[cursor1 .. cursor1 + len1]);
             }
         }
 
@@ -434,7 +442,7 @@ fn TimSort(
 
             const tmp = try self.ensureCapacity(len2);
 
-            std.mem.copy(T, tmp, self.items[base2 .. base2 + len2]);
+            std.mem.copyForwards(T, tmp[0..len2], self.items[base2 .. base2 + len2]);
 
             var cursor1: usize = base1 + len1;
             var cursor2: usize = len2 - 1;
@@ -448,7 +456,7 @@ fn TimSort(
 
             if (len1 == 0) {
                 dest -= len2 - 1;
-                std.mem.copy(T, self.items[dest .. dest + len2], tmp);
+                std.mem.copyForwards(T, self.items[dest .. dest + len2], tmp[0..len2]);
                 return;
             }
 
@@ -456,7 +464,11 @@ fn TimSort(
                 dest -= len1 - 1;
                 cursor1 -= len1 - 1;
                 std.debug.assert(dest > cursor1 - 1);
-                std.mem.copyBackwards(T, self.items[dest .. dest + len1], self.items[cursor1 - 1 .. cursor1 - 1 + len1]);
+                std.mem.copyBackwards(
+                    T,
+                    self.items[dest .. dest + len1],
+                    self.items[cursor1 - 1 .. cursor1 - 1 + len1],
+                );
                 self.items[dest - 1] = tmp[cursor2];
                 return;
             }
@@ -522,7 +534,11 @@ fn TimSort(
                         dest -= count2;
                         cursor2 -= count2;
                         len2 -= count2;
-                        std.mem.copy(T, self.items[dest + 1 .. dest + 1 + count2], tmp[cursor2 + 1 .. cursor2 + 1 + count2]);
+                        std.mem.copyForwards(
+                            T,
+                            self.items[dest + 1 .. dest + 1 + count2],
+                            tmp[cursor2 + 1 .. cursor2 + 1 + count2],
+                        );
                         if (len2 <= 1) break :outer;
                     }
 
@@ -553,7 +569,7 @@ fn TimSort(
                 std.mem.copyBackwards(T, self.items[dest + 1 .. dest + 1 + len1], self.items[cursor1 .. cursor1 + len1]);
                 self.items[dest] = tmp[cursor2];
             } else {
-                std.mem.copy(T, self.items[dest + 1 - len2 .. dest + 1], tmp[0..len2]);
+                std.mem.copyForwards(T, self.items[dest + 1 - len2 .. dest + 1], tmp[0..len2]);
             }
         }
 
@@ -589,7 +605,7 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
-                    var res: usize = undefined;
+                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
@@ -608,7 +624,7 @@ fn TimSort(
                 const max_offset = hint + 1;
                 while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
                     last_offset = offset;
-                    var res: usize = undefined;
+                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
@@ -660,7 +676,7 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
                     last_offset = offset;
-                    var res: usize = undefined;
+                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;
@@ -680,7 +696,7 @@ fn TimSort(
                 const max_offset = len - hint;
                 while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
                     last_offset = offset;
-                    var res: usize = undefined;
+                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
                         offset = max_offset;

@@ -68,7 +68,7 @@ pub fn mergeSortAdvanced(
     comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
 ) std.mem.Allocator.Error!void {
     if (left < right) {
-        var mid = left + (right - left) / 2;
+        const mid = left + (right - left) / 2;
 
         try mergeSortAdvanced(T, allocator, arr, left, mid, context, cmp);
         try mergeSortAdvanced(T, allocator, arr, mid + 1, right, context, cmp);

@@ -92,7 +92,7 @@ fn runIterations(
     var i: usize = 0;
     var failed_runs: usize = 0;
     while (i < RUNS) : (i += 1) {
-        var items = try allocator.dupe(T, arr);
+        const items = try allocator.dupe(T, arr);
         defer allocator.free(items);
 
         if (std.mem.eql(u8, arg, "bubble"))

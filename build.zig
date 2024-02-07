@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn build(b: *std.build.Builder) !void {
+pub fn build(b: *std.Build) !void {
     const optimize = b.standardOptimizeOption(.{});
     const target = b.standardTargetOptions(.{});
 
@@ -10,7 +10,7 @@ pub fn build(b: *std.build.Builder) !void {
         .optimize = optimize,
         .target = target,
     });
-    bench.addAnonymousModule("zort", .{ .source_file = .{ .path = "src/main.zig" } });
+    bench.root_module.addAnonymousImport("zort", .{ .root_source_file = .{ .path = "src/main.zig" } });
 
     const bench_cmd = b.addRunArtifact(bench);
     if (b.args) |args| {
@@ -19,7 +19,7 @@ pub fn build(b: *std.build.Builder) !void {
     const bench_step = b.step("bench", "Run benchmarks");
     bench_step.dependOn(&bench_cmd.step);
 
-    var tests = b.addTest(.{
+    const tests = b.addTest(.{
         .root_source_file = .{ .path = "src/test.zig" },
         .optimize = optimize,
         .target = target,

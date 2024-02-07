@@ -1,6 +1,7 @@
 const std = @import("std");
 
-pub fn random(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
+/// Generate `limit` number or random items
+pub fn random(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
     var rnd = std.rand.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
 
     var array = try std.ArrayList(T).initCapacity(allocator, limit);
@@ -20,23 +21,23 @@ pub fn random(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T
     return array.toOwnedSlice();
 }
 
-pub fn sorted(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
-    var ret = try random(T, allocator, limit);
+pub fn sorted(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
+    const ret = try random(T, allocator, limit);
 
     std.mem.sort(T, ret, {}, comptime std.sort.asc(T));
 
     return ret;
 }
 
-pub fn reverse(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
-    var ret = try random(T, allocator, limit);
+pub fn reverse(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
+    const ret = try random(T, allocator, limit);
 
     std.mem.sort(T, ret, {}, comptime std.sort.desc(T));
 
     return ret;
 }
 
-pub fn ascSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
+pub fn ascSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
     const TEETH = 10;
     var ret = try random(T, allocator, limit);
 
@@ -49,7 +50,7 @@ pub fn ascSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T
     return ret;
 }
 
-pub fn descSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) ![]T {
+pub fn descSaw(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
     const TEETH = 10;
     var ret = try random(T, allocator, limit);
 
