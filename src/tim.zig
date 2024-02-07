@@ -605,13 +605,11 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
                     last_offset = offset;
-                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
-                        offset = max_offset;
-                    } else {
-                        offset = res +| 1;
+                        break;
                     }
+                    offset = ov[0] + 1;
                 }
 
                 if (offset > max_offset) offset = max_offset;
@@ -624,13 +622,11 @@ fn TimSort(
                 const max_offset = hint + 1;
                 while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
                     last_offset = offset;
-                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
-                        offset = max_offset;
-                    } else {
-                        offset = res +| 1;
+                        break;
                     }
+                    offset = ov[0] + 1;
                 }
 
                 if (offset > max_offset) offset = max_offset;
@@ -676,13 +672,11 @@ fn TimSort(
 
                 while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
                     last_offset = offset;
-                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
-                        offset = max_offset;
-                    } else {
-                        offset = res +| 1;
+                        break;
                     }
+                    offset = ov[0] + 1;
                 }
 
                 if (offset > max_offset) offset = max_offset;
@@ -696,13 +690,11 @@ fn TimSort(
                 const max_offset = len - hint;
                 while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
                     last_offset = offset;
-                    const res: usize = undefined;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
-                        offset = max_offset;
-                    } else {
-                        offset = res +| 1;
+                        break;
                     }
+                    offset = ov[0] + 1;
                 }
 
                 if (offset > max_offset) offset = max_offset;
