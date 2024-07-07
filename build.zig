@@ -6,11 +6,11 @@ pub fn build(b: *std.Build) !void {
 
     const bench = b.addExecutable(.{
         .name = "bench",
-        .root_source_file = .{ .path = "bench/bench.zig" },
+        .root_source_file = b.path("bench/bench.zig"),
         .optimize = optimize,
         .target = target,
     });
-    bench.root_module.addAnonymousImport("zort", .{ .root_source_file = .{ .path = "src/main.zig" } });
+    bench.root_module.addAnonymousImport("zort", .{ .root_source_file = b.path("src/main.zig") });
 
     const bench_cmd = b.addRunArtifact(bench);
     if (b.args) |args| {
@@ -20,7 +20,7 @@ pub fn build(b: *std.Build) !void {
     bench_step.dependOn(&bench_cmd.step);
 
     const tests = b.addTest(.{
-        .root_source_file = .{ .path = "src/test.zig" },
+        .root_source_file = b.path("src/test.zig"),
         .optimize = optimize,
         .target = target,
     });
