@@ -2,12 +2,12 @@ const std = @import("std");
 
 /// Generate `limit` number or random items
 pub fn random(comptime T: type, allocator: std.mem.Allocator, limit: usize) std.mem.Allocator.Error![]T {
-    var rnd = std.rand.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
+    var rnd = std.Random.DefaultPrng.init(@intCast(std.time.milliTimestamp()));
 
     var array = try std.ArrayList(T).initCapacity(allocator, limit);
 
     switch (@typeInfo(T)) {
-        .Int => {
+        .int => {
             var i: usize = 0;
             while (i < limit) : (i += 1) {
                 const item: T = rnd.random()

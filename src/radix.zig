@@ -5,10 +5,10 @@ const SortOrder = enum {
     descending,
 };
 
-const SortOptions = struct {
+pub const SortOptions = struct {
     order: SortOrder = .ascending,
     _byte_order: SortOrder = .ascending,
-    key_field: ?@Type(.EnumLiteral) = null,
+    key_field: ?@Type(.enum_literal) = null,
     fn canonicalize(comptime self: SortOptions) SortOptions {
         return .{
             .order = self.order,
@@ -126,7 +126,7 @@ inline fn readTwoBytes(comptime T: type, comptime options: SortOptions, comptime
     return truncate(u16, @as(U, @bitCast(x)) >> shift);
 }
 
-fn FieldType(comptime T: type, comptime field: @Type(.EnumLiteral)) type {
+fn FieldType(comptime T: type, comptime field: @Type(.enum_literal)) type {
     return std.meta.fieldInfo(T, field).field_type;
 }
 
