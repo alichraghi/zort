@@ -127,7 +127,7 @@ inline fn readTwoBytes(comptime T: type, comptime options: SortOptions, comptime
 }
 
 fn FieldType(comptime T: type, comptime field: @Type(.enum_literal)) type {
-    return std.meta.fieldInfo(T, field).field_type;
+    return std.meta.fieldInfo(T, field).type;
 }
 
 fn SortKeyType(comptime T: type, comptime options: SortOptions) type {
