@@ -113,7 +113,7 @@ fn runIterations(
         else if (std.mem.eql(u8, arg, "radix")) {
             result.times[i] = try errbench(
                 zort.radixSort,
-                .{ T, .{}, allocator, items },
+                .{ T, zort.SortOptions{}, allocator, items },
             );
         } else if (std.mem.eql(u8, arg, "tim"))
             result.times[i] = try errbench(

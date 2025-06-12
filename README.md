@@ -20,6 +20,22 @@ Implementation of 13 sorting algorithms in Zig
 | Tim                     | ✅                | ❌              |
 | Twin                    | ✅                | ❌              |
 
+## Import
+
+1. specific version: `zig fetch --save https://github.com/alichraghi/zort/archive/refs/tags/<REPLACE ME>.tar.gz`
+2. main branch version: `zig fetch --save git+https://github.com/alichraghi/zort.git`
+
+Example `build.zig`
+
+```zig
+pub fn build(b: *std.Build) void {
+    const exe = b.addExecutable(.{ ... });
+
+    const zort = b.dependency("zort", .{});
+    exe.root_module.addImport("zort", zort.module("zort"));
+}
+```
+
 ## Usage
 
 ```zig
