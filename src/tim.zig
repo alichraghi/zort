@@ -49,7 +49,7 @@ pub fn timSort(
     }
 
     // Real TimSort starts here
-    var ts = try TimSort(T, context, cmp).init(allocator, items);
+    var ts = try TimSort(T, @TypeOf(context), cmp).init(allocator, context, items);
     defer ts.deinit();
 
     const min_run = ts.minRunLength();
@@ -150,8 +150,8 @@ fn binarySort(
 
 fn TimSort(
     comptime T: type,
-    comptime context: anytype,
-    comptime cmp: fn (context: @TypeOf(context), lhs: T, rhs: T) bool,
+    comptime Context: type,
+    comptime cmp: fn (context: Context, lhs: T, rhs: T) bool,
 ) type {
     return struct {
         allocator: std.mem.Allocator,
@@ -165,10 +165,10 @@ fn TimSort(
         pending: usize = 0,
 
         // Comparing information
-        context: @TypeOf(context) = context,
-        cmp: *const fn (@TypeOf(context), T, T) bool = cmp,
+        context: Context,
+        cmp: *const fn (Context, T, T) bool = cmp,
 
-        fn init(allocator: std.mem.Allocator, items: []T) !@This() {
+        fn init(allocator: std.mem.Allocator, context: Context, items: []T) !@This() {
             // Adjust tmp_size
             var tmp_size: usize = TMP_SIZE;
             if (items.len < 2 * tmp_size) tmp_size = items.len / 2;
@@ -177,6 +177,7 @@ fn TimSort(
                 .run_base = try allocator.alloc(usize, STACK_LENGTH),
                 .run_len = try allocator.alloc(usize, STACK_LENGTH),
                 .allocator = allocator,
+                .context = context,
                 .items = items,
             };
         }
@@ -599,11 +600,11 @@ fn TimSort(
             var last_offset: usize = 0;
             var offset: usize = 1;
 
-            if (cmp(context, items[base + hint], key)) {
+            if (cmp(self.context, items[base + hint], key)) {
                 // Gallop right until items[base+hint+last_offset] < key <= items[base+hint+offset]
                 const max_offset = len - hint;
 
-                while (offset < max_offset and self.cmp(context, items[base + hint + offset], key)) {
+                while (offset < max_offset and self.cmp(self.context, items[base + hint + offset], key)) {
                     last_offset = offset;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
@@ -620,7 +621,7 @@ fn TimSort(
             } else { // key <= items[base + hint]
                 // Gallop left until items[base+hint-offset] < key <= items[base+hint-last_offset]
                 const max_offset = hint + 1;
-                while (offset < max_offset and !self.cmp(context, items[base + hint - offset], key)) {
+                while (offset < max_offset and !self.cmp(self.context, items[base + hint - offset], key)) {
                     last_offset = offset;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
@@ -644,7 +645,7 @@ fn TimSort(
             while (last_offset < offset) {
                 const m = last_offset + (offset - last_offset) / 2;
 
-                if (self.cmp(context, items[base + m], key))
+                if (self.cmp(self.context, items[base + m], key))
                     last_offset = m + 1
                 else
                     offset = m;
@@ -666,11 +667,11 @@ fn TimSort(
             var last_offset: usize = 0;
             var offset: usize = 1;
 
-            if (self.cmp(context, key, items[base + hint])) {
+            if (self.cmp(self.context, key, items[base + hint])) {
                 // Gallop left until items[base+hint-offset] <= key < items[base+hint-last_offset]
                 const max_offset = hint + 1;
 
-                while (offset < max_offset and self.cmp(context, key, items[base + hint - offset])) {
+                while (offset < max_offset and self.cmp(self.context, key, items[base + hint - offset])) {
                     last_offset = offset;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
@@ -688,7 +689,7 @@ fn TimSort(
             } else { // items[base + hint] <= key
                 // Gallop right until items[base+hint+last_offset] <= key < items[base+hint+offset]
                 const max_offset = len - hint;
-                while (offset < max_offset and !self.cmp(context, key, items[base + hint + offset])) {
+                while (offset < max_offset and !self.cmp(self.context, key, items[base + hint + offset])) {
                     last_offset = offset;
                     const ov = @shlWithOverflow(offset, @as(u6, 1));
                     if (ov[1] == 1) {
@@ -711,7 +712,7 @@ fn TimSort(
             while (last_offset < offset) {
                 const m = last_offset + (offset - last_offset) / 2;
 
-                if (cmp(context, key, items[base + m]))
+                if (cmp(self.context, key, items[base + m]))
                     offset = m
                 else
                     last_offset = m + 1;
