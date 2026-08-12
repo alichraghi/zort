@@ -198,7 +198,7 @@ fn writeMermaid(allocator: std.mem.Allocator, io: std.Io, results: std.ArrayList
     var buffer = try allocator.alloc(u8, 1024 * 8);
     var stdout_raw = std.Io.File.stdout().writer(io, buffer[0..]);
 
-    var stdout = stdout_raw.interface;
+    var stdout = &stdout_raw.interface;
 
     var curr_type: []const u8 = "";
     var curr_flavor: []const u8 = "";
@@ -218,7 +218,7 @@ fn writeMermaid(allocator: std.mem.Allocator, io: std.Io, results: std.ArrayList
     for (results.items) |res| {
         if (!std.mem.eql(u8, res.tp, curr_type)) {
             if (curr_type.len != 0) {
-                _ = try stdout.write("```\n\n");
+                try stdout.writeAll("```\n\n");
             }
             try stdout.print(
                 "```mermaid\ngantt\n    title Sorting (ascending) {d} {s}\n{s}\n",
@@ -238,7 +238,7 @@ fn writeMermaid(allocator: std.mem.Allocator, io: std.Io, results: std.ArrayList
         });
     }
 
-    _ = try stdout.write("```\n");
+    try stdout.writeAll("```\n");
 
     try stdout_raw.flush();
     allocator.free(buffer);
